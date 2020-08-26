@@ -1,0 +1,15 @@
+{
+	"platform":"wechatgame",
+	"wechatgame": {
+	    "REMOTE_SERVER_ROOT": "https://test.wsg-cu.qcdn.jfmj-sxjz.nbigame.com/ver3",
+	    "appid": "wxa7529ccfea8b759c",
+	    "isSubdomain": false,
+	    "orientation": "portrait",
+	    "subContext": ""
+  	},
+  	
+	"buildPath":"/Volumes/Files/develop/loho/mini-game/miniclient/build/",
+	"debug":false,
+	"title":"miniClient",
+	"md5Cache":true
+}
