@@ -9,8 +9,6 @@ class UnityCSharpAnalyse(BaseService):
     def __init__(self, sm_):
         super().__init__(sm_)
         self.funcRegStr = r'^([=\.\[\] ,<>a-zA-Z0-9_\t]*)\s+([a-zA-Z0-9_]+)\s*\(\s*([^\)]*)\s*\)\s*\{'
-        # self.folder = "/Volumes/18604037792/develop/ShunYuan/farmLua/Assets/Fabric/Editor/GUI/"
-        self.folder = "/Volumes/18604037792/develop/ShunYuan/farmLua/Assets/Fabric/Editor/ThirdParty/"
         self.notFuncNameList = [
             "using", "catch", "lock",
             "if", "switch", "while",
@@ -110,14 +108,6 @@ class UnityCSharpAnalyse(BaseService):
         # _baseCSharpFolderPath = _baseFolderPath+'Assets/Spine/Runtime/'
         # _subFolderPath = ''
 
-        _baseFolderPath = "/Volumes/Files/develop/GitHub/tolua/"
-        _baseCSharpFolderPath = _baseFolderPath + 'Assets/'
-        _subFolderPath = ''
-
-        _targetFolder = _baseCSharpFolderPath + _subFolderPath
-        self.removeComment.removeCSharpCommentInFolder(_targetFolder, _targetFolder)
-        self.adjustClassFunc.adjustClassFuncVariableLineFolder(_targetFolder, _targetFolder)
-
         # # ToLua
         # _fileClassFuncDict = self.analyseStructure.analyseFileInfo(_targetFolder, [
         #     "Core/",
@@ -135,17 +125,51 @@ class UnityCSharpAnalyse(BaseService):
         # ])
 
 
+        # # tolua ------------------------------------------------------------------------------------
+        # _baseFolderPath = "/Volumes/Files/develop/GitHub/tolua/"
+        # _baseCSharpFolderPath = _baseFolderPath + 'Assets/'
+        # _subFolderPath = ''
+        #
+        # _targetFolder = _baseCSharpFolderPath + _subFolderPath
+        # self.removeComment.removeCSharpCommentInFolder(_targetFolder, _targetFolder)
+        # self.adjustClassFunc.adjustClassFuncVariableLineFolder(_targetFolder, _targetFolder)
+        #
+        # _fileClassFuncDict = self.analyseStructure.analyseFileInfo(_targetFolder, [
+        #     "Source/Generate/DelegateFactory.cs",
+        #     "Source/Generate/LuaBinder.cs",
+        #     "ToLua/Editor/",
+        #     "LogUtils.cs",
+        #     "TestDelegate.cs",
+        #     "TestEventListener.cs"
+        # ])
+        #
+        # self.addStackFuncLog.addFuncInOutLogFolder(_targetFolder, _targetFolder, _fileClassFuncDict)
 
-        _fileClassFuncDict = self.analyseStructure.analyseFileInfo(_targetFolder, [
-            "Source/Generate/DelegateFactory.cs",
-            "Source/Generate/LuaBinder.cs",
-            "ToLua/Editor/",
-            "LogUtils.cs",
-            "TestDelegate.cs",
-            "TestEventListener.cs"
+        # FGUI ------------------------------------------------------------------------------------
+        _baseFolderPath = "/Volumes/Files/develop/GitHub/tolua/"
+        _baseCSharpFolderPath = _baseFolderPath + 'Assets/FairyGUI/Scripts/'
+        _subFolderPath = ''
+
+        _targetFolder = _baseCSharpFolderPath + _subFolderPath
+        self.removeComment.removeCSharpCommentInFolder(_targetFolder, _targetFolder)
+        self.adjustClassFunc.adjustClassFuncVariableLineFolder(_targetFolder, _targetFolder)
+
+        _fileClassFuncDict = self.analyseStructure.analyseFileInfo(_targetFolder, ["LogUtils.cs",
+            "Event/",
+            # "Core/",
+            "UI/",
+            "Gesture/",
+            "Filter/",
+            "Editor/",
+            "Tween/",
+            "Utils/",
+            "ByteBuffer.cs",
         ])
 
         self.addStackFuncLog.addFuncInOutLogFolder(_targetFolder, _targetFolder, _fileClassFuncDict)
+
+
+
 
         # print("正在移除注释")
         # self.removeComment.removeCSharpCommentInFolder(
