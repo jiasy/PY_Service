@@ -14,10 +14,13 @@ from urllib.error import HTTPError, URLError
 # json对象的键值对展开，形成参数，访问网址提供的API
 def requestApi(url_: str):
     r = requests.get(url_)
-    # print("Status code:", r.status_code)  # 判断请求是否成功（状态码200时表示请求成功）
-    response_dict = r.json()  # API返回json格式的信息（将响应存储到变量中）
-    # print('response_dict = ' + str(str(json.dumps(response_dict, indent=4, sort_keys=False, ensure_ascii=False))))
-    return response_dict
+    if r.status_code == 200:
+        response_dict = r.json()  # API返回json格式的信息（将响应存储到变量中）
+        # print('response_dict = ' + str(str(json.dumps(response_dict, indent=4, sort_keys=False, ensure_ascii=False))))
+        return response_dict
+    else:
+        print("HttpUtils requestApi status code :", r.status_code)  # 判断请求是否成功（状态码200时表示请求成功）
+        return None
 
 
 def getRequestApiUrl(url_: str, api_: str, paramDict_: dict):
@@ -34,7 +37,7 @@ def getRequestApiUrl(url_: str, api_: str, paramDict_: dict):
 
 def read_whole_data(url):
     the_page = ''
-    values = {'userid': 's124ma', 'pwd': '213123'}
+    values = {'userid': 'userid', 'pwd': 'pwd'}
     data = parse.urlencode(values).encode(encoding='UTF8')
     user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
     headers = {'User-Agent': user_agent, 'Referer': 'http://www.python.org/'}
@@ -67,8 +70,8 @@ if __name__ == "__main__":
       "conv_start_to_tm": "{endDay}+{endTime}",
       "offset": 0,
       "limit": 20,
-      "app_id": "f38b55692574a9c8cc508244c58b91da",
-      "sign": "125f3f66c03736556be4a317f4c0caa5",
+      "app_id": "appId",
+      "sign": "signToken",
       "enterprise_id": "53824"
     }}
         """

@@ -19,7 +19,7 @@ def mergeAToB(jsonDictA_, jsonDictB_):
 def jsonMerge(jsonPathA_, jsonPathB_, jsonPathC_=None):
     _jsonDictA = utils.fileUtils.dictFromJsonFile(jsonPathA_)
     _jsonDictB = utils.fileUtils.dictFromJsonFile(jsonPathB_)
-    _jsonDictB = mergeData(_jsonDictA, _jsonDictB)
+    _jsonDictB = mergeAToB(_jsonDictA, _jsonDictB)
 
     # 获取写入的路径
     _targetPath = None

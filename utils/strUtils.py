@@ -164,3 +164,7 @@ def checkStr(line_: str, idx_: int, checkStr_: str):
         if line_[idx_:idx_ + _commentLiength] == checkStr_:
             return (True, idx_ + _commentLiength)
     return (False, idx_)
+
+# 模板里面的键，替换成给定字典中的对应键的值
+def replaceKeyToValueInTemplate(replaceDict_: dict, templateStr_: str):
+    return templateStr_.format(**replaceDict_)

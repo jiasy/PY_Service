@@ -92,6 +92,11 @@ def datetimeToStr(datetime_, format_: str = None):
     return datetime_.strftime(_format)
 
 
+# 当前时间戳
+def nowTimeStamp():
+    return int(time.time())
+
+
 # 比较两个时间大小
 def compareDatetime(datetime1_, datetime2_):
     return compareTimeStr(datetimeToStr(datetime1_), datetimeToStr(datetime2_))
@@ -157,4 +162,3 @@ if __name__ == "__main__":
     for _i in range(len(_hourList)):
         _hourStr = _hourList[_i]
         print(_hourStr)
-

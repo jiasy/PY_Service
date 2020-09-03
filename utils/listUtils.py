@@ -58,6 +58,16 @@ def joinListToStr(list_: list, joinStr_: str):
     return joinStr_.join(list_)
 
 
+# 打印列表
 def printList(list_: list):
     for _i in range(len(list_)):
         print(str(list_[_i]))
+
+
+# 找到并移除
+def findAndRemove(list_: list, element_):
+    if element_ in list_:
+        list_.pop(list_.index(element_))
+        return True
+    else:
+        return False

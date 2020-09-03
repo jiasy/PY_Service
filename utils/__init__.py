@@ -2,10 +2,12 @@
 # 所能引用的类
 __all__ = [
     "cmdUtils",
-    "codeUtils_sql",
     "codeUtils",
-    "dataUtils_presto",
+    "codeUtils_sql",
+    "commandLineUtils",
     "dataUtils",
+    "dataUtils_HDFS",
+    "dataUtils_presto",
     "dictUtils",
     "disUtils",
     "file_csv",
@@ -15,6 +17,7 @@ __all__ = [
     "ftpUtils",
     "gitUtils",
     "httpUtils",
+    "jsonUtils",
     "listUtils",
     "localStroage",
     "math_linearAlgebra_matrix",
@@ -25,5 +28,6 @@ __all__ = [
     "resUtils",
     "strUtils",
     "sysUtils",
-    "timeUtils"
+    "timeUtils",
+    "xmlUtils"
 ]
