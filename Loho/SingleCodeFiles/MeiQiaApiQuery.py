@@ -203,9 +203,9 @@ if __name__ == "__main__":
       "conv_start_to_tm": "{endDay}+{endTime}",
       "offset": 0,
       "limit": 20,
-      "app_id": "f38b55692574a9c8cc508244c58b91da",
-      "sign": "125f3f66c03736556be4a317f4c0caa5",
-      "enterprise_id": "53824"
+      "app_id": "appId",
+      "sign": "signToken",
+      "enterprise_id": "00000"
     }}
         """
 
@@ -216,9 +216,9 @@ if __name__ == "__main__":
       "ticket_start_to_tm": "{endDay}+{endTime}",
       "offset": 0,
       "limit": 20,
-      "app_id": "3c928588d947f19bb06542e398e3a04b",
-      "sign": "2a1dc6e17fbb40cc03765d9729ed6d82",
-      "enterprise_id": "53824"
+      "app_id": "appId",
+      "sign": "signToken",
+      "enterprise_id": "00000"
     }}
         """
     _templeteJsonStr = ""
