@@ -8,4 +8,5 @@ class SpineApp(App):
         super().__init__(self.__class__.__name__)
 
     def start(self):
-        self.changeAppState("SpineAnalyse")  # 解析 Spine 导出的东西
+        # self.changeAppState("SpineAnalyse")  # 解析 Spine 导出的东西
+        self.changeAppState("SpineExport")  # 执行 Spine 导出命令行

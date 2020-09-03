@@ -45,9 +45,6 @@ class SpineAnalyse(BaseService):
                                 _tempDict[_key][_pngKey] = _pngInfoDict
                 _jsonDict["skins"][0]["attachments"] = _tempDict
 
-
-
-
                 # 更改后的json放置位置
                 _jsonOutputPath = _outputFolderPath + _jsonName + ".json"
                 fileUtils.dictToJsonFile(_jsonOutputPath, _jsonDict)

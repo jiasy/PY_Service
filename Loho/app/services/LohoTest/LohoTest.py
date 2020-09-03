@@ -1,23 +1,8 @@
 #!/usr/bin/env python3
-import os
+
 
 from base.supports.Service.BaseService import BaseService
-
-from pyspark.conf import SparkConf
-from pyspark.context import SparkContext
-from pyspark.sql import SparkSession
-from pyspark.sql import SQLContext
-from pyspark.sql.types import StructField, StructType, IntegerType, StringType, Row
-
-from utils import dictUtils
-from utils import fileUtils
-from utils import resUtils
-import json
-from utils import pyUtils
-from sqlalchemy.engine import create_engine
-import pandas as pd
-import pandas.io.sql as sql
-
+from utils import *
 
 class LohoTest(BaseService):
 

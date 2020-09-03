@@ -15,3 +15,4 @@ class SpineAppState(AppState):
 
     def initAppState(self):
         self.appStateDict["SpineAnalyse"] = ["SpineAnalyse"]
+        self.appStateDict["SpineExport"] = ["SpineExport"]
