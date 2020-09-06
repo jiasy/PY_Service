@@ -42,7 +42,7 @@ def replaceStr(str_: str, sourceStr_: str, targetStr_: str):
 
 # 把 chars 中的字符串做 key，替换成对应 value
 def removeAnnoyingChars(targetStr_):
-    return re.sub('(' + '|'.join(chars.keys()) + ')', replace_chars, targetStr_)
+    return re.sub(r'(' + '|'.join(chars.keys()) + ')', replace_chars, targetStr_)
 
 
 # 首字母小写
@@ -95,7 +95,7 @@ def isStrInFilterList(filterList_, str_):
 
 # 多个连续空格变成一个空格,去两边空格
 def spacesReplaceToSpace(str_):
-    return re.sub(' +', ' ', str_).lstrip().rstrip()
+    return re.sub(r' +', ' ', str_).lstrip().rstrip()
 
 
 # 多行矩阵字符串 转换成 矩阵。每一个行为第二维度，每一行内的通过分割符的构成第一维
@@ -139,13 +139,10 @@ def versionCompare(v1: str = "1.1.1", v2: str = "1.2"):
         pass
     for i in range(len(v1_list)):
         if int(v1_list[i]) > int(v2_list[i]):
-            # v1大
-            return 1
+            return 1  # v1大
         if int(v1_list[i]) < int(v2_list[i]):
-            # v2大
-            return -1
-    # 相等
-    return 0
+            return -1  # v2大
+    return 0  # 相等
 
 
 # 检测当前名称是否是版本号
@@ -165,6 +162,17 @@ def checkStr(line_: str, idx_: int, checkStr_: str):
             return (True, idx_ + _commentLiength)
     return (False, idx_)
 
+
 # 模板里面的键，替换成给定字典中的对应键的值
 def replaceKeyToValueInTemplate(replaceDict_: dict, templateStr_: str):
+    for _key in replaceDict_:
+        print(_key + " : " + replaceDict_[_key])
     return templateStr_.format(**replaceDict_)
+
+
+if __name__ == "__main__":
+    _str = replaceKeyToValueInTemplate(
+        {"aKey": "aValue", "bKey": "bValue"},
+        "{{{aKey}:{bKey}}}"
+    )
+    print(_str)
