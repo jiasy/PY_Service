@@ -54,7 +54,7 @@ class AppError(Exception):
 
 # 装饰器 测量 fn 函数的执行实现。对方法的计时
 '''
-    from base.supports.utils.PythonUtils import timefn
+    from utils.pyUtils import timefn
     @timefn
     def func(parameters):
         # do_something

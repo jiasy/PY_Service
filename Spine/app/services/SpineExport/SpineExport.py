@@ -44,7 +44,7 @@ class SpineExport(BaseService):
             _spinePath = _spineList[_i]
             _spineJustNameList.append(fileUtils.justName(_spinePath))
             _cmd = _cmd + " -i " + _spinePath + " -m -o " + jsonOutputFolderPath_ + " -e " + exportJsonPath_ + " "
-        _pipeLines = commandLineUtils.doStrAsCmdAndGetPipe(_cmd, spineFolderPath_, False)
+        _pipeLines = cmdUtils.doStrAsCmdAndGetPipe(_cmd, spineFolderPath_, False)
         if not _pipeLines:
             sys.exit(1)
         # 发布动画是否和文件名一致，导出的文件是按照动画编辑时的骨骼命名进行的，有可能骨骼和文件的名称不一致，需要提示。
@@ -61,7 +61,7 @@ class SpineExport(BaseService):
         # 根据配置，打包图片
         _cmd = self.spineAppPath
         _cmd = _cmd + " -i " + pngFolderPath_ + " -o " + altasOutputFolderPath_ + " -n " + altasName_ + " -p " + packJsonPath_
-        _pipeLines = commandLineUtils.doStrAsCmdAndGetPipe(_cmd, spineFolderPath_, False)
+        _pipeLines = cmdUtils.doStrAsCmdAndGetPipe(_cmd, spineFolderPath_, False)
         if not _pipeLines:
             sys.exit(1)
 

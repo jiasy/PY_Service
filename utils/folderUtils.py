@@ -196,6 +196,24 @@ def getFilterFilesInPath(folderPath_: str, filters_: list):
     return _allFilePaths
 
 
+# 文件夹 folderPath_ 下的 oldName_ 文件更名为 newName_
+def renameFileInFolder(folderPath_, oldName_, newName_):
+    os.rename(os.path.join(folderPath_, oldName_), os.path.join(folderPath_, newName_))
+
+
+# 文件目录是否有子文件夹
+def isFolderHasSubFolder(folderPath_):
+    if os.path.isdir(folderPath_):
+        _filePathsInDir = os.listdir(folderPath_)
+        for _fileName in _filePathsInDir:
+            _filePath = os.path.join(folderPath_, _fileName)
+            if os.path.isdir(_filePath):
+                return True
+    else:
+        print("WARNING : folderUtils -> isFolderHasSubFolder : 不是一个文件夹 : " + folderPath_ + " ")
+    return False
+
+
 # 获取文件列表
 def getFileListInFolder(folder_: str, filters_: list = None):
     _filePathList = []
@@ -257,7 +275,7 @@ def findStrInFolder(strList_: list, fileFilters_: list, folder_: str, needAll_: 
     return _resultList
 
 
-# 备份文件夹
+# 备份文件夹，在当前文件夹所在的位置下，判断并创建副本
 def folderBackUp(folderPath_):
     _folderParentPath = utils.sysUtils.getParentPath(folderPath_)  # 上层路径
     _backUpPath = os.path.join(_folderParentPath, utils.fileUtils.justName(folderPath_) + "_backUp")  # 搞一份备份
@@ -281,20 +299,23 @@ def folderBackUp(folderPath_):
         utils.fileUtils.writeFileWithStr(folderPath_ + '/backup_created', 'backup end')  # 标记已经备份过了
 
 
-def convertFolderFiles(func_, srcFolderPath_: str, targetFolderPath_: str, filters_: list):
-    _csCodeFolder = utils.fileUtils.getPath(srcFolderPath_, "")
-    _filePathList = getFileListInFolder(_csCodeFolder, filters_)
+# 文件夹中的每一个符合条件的文件，进行内容转换，重新写入另一个文件夹内
+def convertFolderFiles(convertFunc_, srcFolderPath_: str, targetFolderPath_: str, filters_: list):
+    _srcFile = utils.fileUtils.getPath(srcFolderPath_, "")
+    _filePathList = getFileListInFolder(_srcFile, filters_)
     for _path in _filePathList:
         print(_path.split(srcFolderPath_).pop())
-        _content = func_(_path)
+        _convertedStr = convertFunc_(_path)  # 路径指定文件内容转换并输出
         _targetFilePath = targetFolderPath_ + _path.split(srcFolderPath_).pop()  # 写入路径
-        utils.fileUtils.writeFileWithStr(_targetFilePath, _content)
+        utils.fileUtils.writeFileWithStr(_targetFilePath, _convertedStr)
 
 
-def checkFolderFiles(func_, srcFolderPath_: str, filters_: list):
+# 文件夹内的每一个符合条件的文件，执行方法
+def doFunForeachFileInFolder(func_, srcFolderPath_: str, filters_: list):
     _csCodeFolder = utils.fileUtils.getPath(srcFolderPath_, "")
     _filePathList = getFileListInFolder(_csCodeFolder, filters_)
     for _path in _filePathList:
+        print(_path)
         func_(_path)
 
 

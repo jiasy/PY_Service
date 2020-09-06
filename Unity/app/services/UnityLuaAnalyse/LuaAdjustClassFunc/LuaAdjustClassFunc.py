@@ -34,12 +34,12 @@ class LuaAdjustClassFunc(BaseInService):
         self.srcFolderPath = srcFolderPath_
 
         # 先校验 双function 和 双 end
-        folderUtils.checkFolderFiles(self.doubleFuncOrEndInOneLine, srcFolderPath_, [".lua"])
+        folderUtils.doFunForeachFileInFolder(self.doubleFuncOrEndInOneLine, srcFolderPath_, [".lua"])
         if self.getErrorInfo():  # 如果有非法格式
             return
 
         # 再检查 一行内的 开始 和 结束
-        folderUtils.checkFolderFiles(self.funcAndEndInOneLine, srcFolderPath_, [".lua"])
+        folderUtils.doFunForeachFileInFolder(self.funcAndEndInOneLine, srcFolderPath_, [".lua"])
         if self.getErrorInfo():  # 如果有非法格式
             return
 
