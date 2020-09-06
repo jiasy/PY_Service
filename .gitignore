@@ -2,3 +2,4 @@
 /Spark/res/
 *__pycache__
 .idea
+metastore_db

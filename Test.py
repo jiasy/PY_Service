@@ -16,13 +16,13 @@ if __name__ == "__main__":
     # _sparkApp.start()
 
     # _testApp = _main.createAppByName("ExcelWork")
-    # _testApp.start()S
+    # _testApp.start()
 
     # _testApp = _main.createAppByName("Math")
     # _testApp.start()
 
-    # _execlWorkFlowApp = _main.createAppByName("ExcelWorkFlow")
-    # _execlWorkFlowApp.start()
+    _execlWorkFlowApp = _main.createAppByName("ExcelWorkFlow")
+    _execlWorkFlowApp.start()
 
     # _cocosCreatorApp = _main.createAppByName("CocosCreator")
     # _cocosCreatorApp.start()
@@ -33,6 +33,6 @@ if __name__ == "__main__":
     # _spineApp = _main.createAppByName("Spine")
     # _spineApp.start()
 
-    _spineApp = _main.createAppByName("FGUI")
-    _spineApp.start()
+    # _spineApp = _main.createAppByName("FGUI")
+    # _spineApp.start()
 
