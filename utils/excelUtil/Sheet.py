@@ -1,13 +1,28 @@
 # !/usr/bin/env python3
+import utils
+import os
+import json
 from utils import excelUtils
 from utils import pyUtils
 from utils.excelUtil.Cell import Cell
+from enum import Enum
+
+
+class SheetType(Enum):
+    NORMAL = 1
+    LIST = 1
+    DICT = 2
+    KV = 3
+    PROTO = 4
+    STATE = 5
+    WORKFLOW = 6
 
 
 class Sheet:
     def __init__(self):
         # print("> > > >Sheet_init")
         self.sheetName = None
+        self.sheetType = SheetType.NORMAL
         self.cells = []
         self.maxCol = None
         self.maxRow = None
@@ -141,3 +156,11 @@ class Sheet:
     def toJsonDict(self):
         raise pyUtils.AppError("Sheet -> toJsonDict must override")
         return
+
+    def toJsonFile(self, locateFolderPath_: str):
+        _jsonDict = self.toJsonDict()
+        _jsonFilePath = os.path.join(locateFolderPath_, self.sheetName + ".json")
+        utils.fileUtils.writeFileWithStr(
+            _jsonFilePath,
+            str(json.dumps(_jsonDict, indent=4, sort_keys=False, ensure_ascii=False))
+        )

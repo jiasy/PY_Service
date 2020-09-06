@@ -1,7 +1,7 @@
 # !/usr/bin/env python3
 import json
 import os
-import utils.sysUtils
+from utils import sysUtils
 import shutil
 
 
@@ -106,7 +106,7 @@ def dictToJsonFile(filePath_: str, dict_: dict):
 def justName(filePath_: str, folderPath_: str = None):
     _filePath = filePath_
     if folderPath_:
-        _filePath = utils.sysUtils.folderPathFixEnd(folderPath_) + filePath_
+        _filePath = sysUtils.folderPathFixEnd(folderPath_) + filePath_
     if os.path.isfile(_filePath):
         _nameSplitArr = os.path.basename(_filePath).split(".")
         if len(_nameSplitArr) > 1:
@@ -125,7 +125,7 @@ def justName(filePath_: str, folderPath_: str = None):
 def pathWithOutSuffix(filePath_: str, folderPath_: str = None):
     _filePath = filePath_
     if folderPath_:
-        _filePath = utils.sysUtils.folderPathFixEnd(folderPath_) + filePath_
+        _filePath = sysUtils.folderPathFixEnd(folderPath_) + filePath_
     if os.path.isfile(_filePath):
         return _filePath.split("." + os.path.splitext(_filePath)[1])[0]
     else:

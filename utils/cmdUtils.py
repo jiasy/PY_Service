@@ -1,6 +1,6 @@
 # !/usr/bin/env python3
 import os
-import utils.fileUtils
+from utils import fileUtils
 import subprocess
 
 
@@ -39,7 +39,7 @@ def getParameterStr(prefix_, str_, isStringBoo):
 def doCmd(cmd_: str, logPath_: str = None):
     _exeLog = "\n".join(os.popen(cmd_).readlines())
     if logPath_:
-        utils.fileUtils.writeFileWithStr(logPath_, _exeLog)
+        fileUtils.writeFileWithStr(logPath_, _exeLog)
     # 返回输出，可能调用者会有对它的判断处理
     return _exeLog
 

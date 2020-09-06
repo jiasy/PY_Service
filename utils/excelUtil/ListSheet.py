@@ -1,9 +1,15 @@
 # !/usr/bin/env python3
-import utils
+# 常见的属性列表。一般是技能，道具，等等的配置
 from utils.excelUtil.Sheet import Sheet
+from utils.excelUtil.Sheet import SheetType
+import utils
 
 
 class ListSheet(Sheet):
+
+    def __init__(self):
+        super().__init__()
+        self.sheetType = SheetType.LIST
 
     def toJsonDict(self):
         # sheet 是一个列表.
@@ -15,11 +21,11 @@ class ListSheet(Sheet):
             if self.getStrByPos("a2") == "字段名":
                 _list = []
                 _parameterNames = []  # 先获取字段名称
-                for _col in range(1, self.maxCol):
+                for _col in range(1, self.maxCol):  # 数组中的字典对象，其中的属性可以不用判断前缀，因为没有类型判断需求
                     _parameterNames.append(utils.excelUtils.isParNameLegal(self.getStrByCr(_col, 1)))
                 for _row in range(2, self.maxRow):
                     _dataObject = {}  # 创建数据对象
-                    for _col in range(1, self.maxCol):
+                    for _col in range(1, self.maxCol):  # 参数所在位，填入对应的内容
                         _dataObject[_parameterNames[_col - 1]] = self.getStrByCr(_col, _row)  # 识别一行数据,按照第二行的字段名进行写入
                     _list.append(_dataObject)  # 将数据添加到列表
                 return _list

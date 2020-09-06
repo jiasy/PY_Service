@@ -2,8 +2,10 @@
 # excel解析工具
 import re
 from utils import dictUtils
+from utils import strUtils
 from utils.excelUtil import WorkBook
 import json
+import os
 
 # 列名 数字 对应 关系
 colNameList = [
@@ -81,18 +83,14 @@ def isParNameStructure(parameterName_):
 #       将页面内容变成json结构，dict_ 开头的sheet页名称。
 #           连续有值的行为数据。直到出现第一个空行
 #   键值类【kv】
-#       将页面内容变成只有一层的键值结构字典。kv_ 开头的sheet页名称。
-#           只第一列没有第二列，注释
-#           第一列，键名 第二列，值
-#           直到出现第一个空行
+#       每一个Sheet是一个json文件。
+#           每一列为一个类目
+#       按类目形成一个独立的文件夹，放置每个sheet生成的json。
 #   Proto类【proto】(ktv)
 #       页面中有多个键值结构，同一个功能集中在同一个Excel中。proto_ 开头的sheet页名称。
 #           第一列，结构名
 #               第二列，键名 第三列，类型 第四列，值
 #           直到出现第一个空行，或者，第一列出现新结构
-#   交叉类【relation】，横竖交叉点表示是否有关联
-#       将页面内容变成一个关系图，横竖项通过交叉点是否添值关联。relation_ 开头的sheet页名称。
-#           第一列，中文描述。第一行中文描述
 #   状态机【state】，
 #       行列必须一一对应，交叉点表示从行到列的推进驱动字符。state_ 开头的sheet页名称。
 #           第一行，中文描述。第一列的竖向和第二行的横向，逐一匹配一致。
@@ -100,15 +98,25 @@ def isParNameStructure(parameterName_):
 #   工作流【cmd】，通过固定格式的配置 PY_Service 运行
 #       单独运行，或者在Jenkins下运行。cmd_ 开头的sheet页名称。
 if __name__ == "__main__":
+    from utils.excelUtil.Sheet import SheetType
+
+    # excel样例
+    _parentPath = os.path.dirname(os.path.realpath(__file__))
+    _excelUtilResPath = os.path.join(_parentPath, "excelUtil", "res")
+    _excelPath = os.path.join(_excelUtilResPath, "dataBase.xlsx")
+    # 解析样例
     _currentWorkBook = WorkBook.WorkBook()
-    _currentWorkBook.initWithWorkBook("/Users/jiasy/Desktop/dataBase.xlsx")
+    _currentWorkBook.initWithWorkBook(_excelPath)
     _excelDict = {}
     for _sheetName in _currentWorkBook.sheetDict:
         _sheet = _currentWorkBook.sheetDict[_sheetName]
-        _key = _sheetName.split("_")[1]
         _value = _sheet.toJsonDict()
-        print(_sheetName + " -----------------------------------------------")
+        _key = strUtils.removePrefix(_sheetName)
+        print(_key + " -----------------------------------------------")
         dictUtils.showDictStructure(_value)
         _excelDict[_key] = _value
+        if _sheet.sheetType == SheetType.STATE:  # 状态机，还要生成一下图片
+            _sheet.toDotPng("/Users/jiasy/Downloads/")
+
     print(" -----------------------------------------------")
     print(json.dumps(_excelDict, indent=4, sort_keys=False, ensure_ascii=False))

@@ -170,6 +170,10 @@ def replaceKeyToValueInTemplate(replaceDict_: dict, templateStr_: str):
     return templateStr_.format(**replaceDict_)
 
 
+def removePrefix(name_: str, splitStr_: str = "_"):
+    return splitStr_.join(name_.split(splitStr_)[1:])
+
+
 if __name__ == "__main__":
     _str = replaceKeyToValueInTemplate(
         {"aKey": "aValue", "bKey": "bValue"},

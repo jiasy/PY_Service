@@ -6,9 +6,10 @@ import xlrd
 import xlsxwriter
 from utils import fileUtils
 from utils import pyUtils
-from utils.excelUtil.Sheet import Sheet
 from utils.excelUtil.DictSheet import DictSheet
 from utils.excelUtil.ListSheet import ListSheet
+from utils.excelUtil.KVSheet import KVSheet
+from utils.excelUtil.StateSheet import StateSheet
 
 
 class WorkBook(object):
@@ -54,15 +55,15 @@ class WorkBook(object):
             elif _sheetName.startswith("dict_"):
                 _currentSheet = DictSheet()
             elif _sheetName.startswith("kv_"):
-                _currentSheet = Sheet()
+                _currentSheet = KVSheet()
             elif _sheetName.startswith("proto_"):
-                _currentSheet = Sheet()
+                raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not support")
             elif _sheetName.startswith("relation_"):
-                _currentSheet = Sheet()
+                raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not support")
             elif _sheetName.startswith("state_"):
-                _currentSheet = Sheet()
+                _currentSheet = StateSheet()
             elif _sheetName.startswith("cmd_"):
-                _currentSheet = Sheet()
+                raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not support")
             else:
                 raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not support")
 

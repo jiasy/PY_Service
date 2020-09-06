@@ -1,10 +1,16 @@
 # !/usr/bin/env python3
-
+# json结构的复杂列表。
+# 将Excel转换成字典，这里需要有类型指定。因为列表中有各种类型的对象混排时，类型判断会变得十分复杂。
+# 通过前缀来判断类型。属性名大写。
 import utils
 from utils.excelUtil.Sheet import Sheet
+from utils.excelUtil.Sheet import SheetType
 
 
 class DictSheet(Sheet):
+    def __init__(self):
+        super().__init__()
+        self.sheetType = SheetType.DICT
 
     def toJsonDict(self):
         # self是一个字典
