@@ -43,8 +43,8 @@ class DictSheet(Sheet):
     def structDict(self, cell_):
         _dictData = {}
         for _cell in cell_.data["cellList"]:
-            _cellData = _cell.data
-            if _cellData:
+            if hasattr(_cell, 'data'):
+                _cellData = _cell.data
                 if utils.excelUtils.isParNameData(_cellData["parName"]):  # 如果当前是个数据
                     _dictData[_cellData["parName"]] = _cellData["value"]
                 elif utils.excelUtils.isParNameStructure(_cellData["parName"]):
@@ -58,8 +58,8 @@ class DictSheet(Sheet):
     def structList(self, cell_):
         _listData = []
         for _cell in cell_.data["cellList"]:
-            _cellData = _cell.data
-            if _cellData:
+            if hasattr(_cell, 'data'):
+                _cellData = _cell.data
                 if utils.excelUtils.isParNameData(_cellData["parName"]):  # 如果当前是个数据,数组的数据名称没有实际意义,就是个数据类型的标示
                     _listData.append(_cellData["value"])
                 elif utils.excelUtils.isParNameStructure(_cellData["parName"]):

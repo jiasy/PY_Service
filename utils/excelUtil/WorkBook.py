@@ -57,15 +57,15 @@ class WorkBook(object):
             elif _sheetName.startswith("kv_"):
                 _currentSheet = KVSheet()
             elif _sheetName.startswith("proto_"):
-                raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not support")
+                raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not supports")
             elif _sheetName.startswith("relation_"):
-                raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not support")
+                raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not supports")
             elif _sheetName.startswith("state_"):
                 _currentSheet = StateSheet()
             elif _sheetName.startswith("cmd_"):
-                raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not support")
+                raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not supports")
             else:
-                raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not support")
+                raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not supports")
 
             _currentSheet.initWithSheet(
                 self.currentWorkBook.sheet_by_name(_sheetName),

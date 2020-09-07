@@ -57,7 +57,7 @@ class PYService(BaseService):
         _propertyNameOfIdx = _propertyName + "___" + str(_idx + 1)
         print(_dataConnector.resetByStr("当前的第" + str(_idx + 1) + "个活动Id:${" + _propertyNameOfIdx + ".id}")[1])
         # 以某一个层级获取到的数据对象为起始点，通过 相对数据路径 取 数据
-        _activityDict = self.sm.dc.getListElement("user.activityInfo", _idx)
+        _activityDict = self.sm.dc.getListElementByIdx("user.activityInfo", _idx)
         _startTime_low = self.sm.dc.gv("startTime.low", _activityDict)
         print("_startTime_low = " + str(_startTime_low))
 
