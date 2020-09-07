@@ -6,6 +6,8 @@ from base.app.services.base.DataCenter.DataEventMgr.DataEventMgr import DataEven
 from typing import List
 
 
+# dataSet 不是 jsonDict ，因为其中的list转换成了键值对
+
 class DataCenter(BaseService):
 
     def __init__(self, sm_):
@@ -26,8 +28,7 @@ class DataCenter(BaseService):
         super(DataCenter, self).destory()
         self.sm.dc = None
 
-    # ---------------------------------其他 - --------------------------------
-
+    # ---------------------------------其他 ---------------------------------
     def setValueToDataPath(self, dataPath_: str, value_, dataSet_: dict = None):
         if not self.dataPathValidation(dataPath_):
             return None
@@ -35,10 +36,12 @@ class DataCenter(BaseService):
         _changeList: List[str] = []
         # 路径切割层级列表
         _dataPathList: List[str] = []
-        if dataPath_.find(".") > 0:
-            _dataPathList = dataPath_.split(".")
-        else:
-            _dataPathList.append(dataPath_)
+
+        if not dataPath_ == "":
+            if dataPath_.find(".") > 0:
+                _dataPathList = dataPath_.split(".")
+            else:
+                _dataPathList.append(dataPath_)
 
         # 路径初始为整体路径
         _dataPosition: dict = self.dataSet
@@ -48,18 +51,15 @@ class DataCenter(BaseService):
 
         while len(_dataPathList) > 0:
             _currentKey = listUtils.list_shift(_dataPathList)
-            # if _currentKey.find("_") > 0:
-            #     self.raiseError(pyUtils.getCurrentRunningFunctionName(), "字段名不能出现下钢线 : " + _currentKey)
-
             if len(_dataPathList) == 0:
-                if not value_:  # 之前，赋值过数组元素的数据路径，就先清理掉之前的
-                    if str(_currentKey + "[1]") in _dataPosition:
+                if not value_:  # Value_ 为空
+                    if str(_currentKey + "[0]") in _dataPosition:
                         _arrayLength = _dataPosition[_currentKey]
-                        for i in range(_arrayLength):
-                            _tempKey = "[" + str(i + 1) + "]"
+                        for i in range(_arrayLength + 1):  # 多清理一个 0 序号。[0]用来标示当前内容为数组
+                            _tempKey = "[" + str(i) + "]"
                             del _dataPosition[_currentKey + _tempKey]
-                            _changeList.append(dataPath_ + _tempKey)
-
+                            if not i == 0:  # 0位只是一个标示当前为数组的站位符号，用来在数组是0个元素时，指明当前字段为数组
+                                _changeList.append(dataPath_ + _tempKey)
                         del _dataPosition[_currentKey]
                     else:
                         del _dataPosition[_currentKey]
@@ -86,8 +86,10 @@ class DataCenter(BaseService):
                     _dataPosition[_currentKey] = dict({})
                 _dataPosition = _dataPosition[_currentKey]
 
-        for i in range(len(_changeList)):
-            self.dataEventMgr.onDataChange(_changeList[i])
+        # 指定数据源动画，不用分发事件变更。因为数据源不一致
+        if dataSet_ is None:
+            for _idx in range(len(_changeList)):
+                self.dataEventMgr.onDataChange(_changeList[_idx])
         return _changeList
 
     def deleteValueByDataPath(self,
@@ -223,6 +225,7 @@ class DataCenter(BaseService):
             changeList_.append(dataPath_)
 
         dataOnCurrentDataPath_[lastKey_] = len(arrayValue_)
+        dataOnCurrentDataPath_[lastKey_ + "[0]"] = "<LIST_MARK>"
 
         # if not (dataPath_ in changeList_):
         #     changeList_.append(dataPath_)
@@ -308,16 +311,55 @@ class DataCenter(BaseService):
         _keySortedValueArr = self.sm.arrayUtils.getValueListFromDictObject(_dataObject)
         return _keySortedValueArr
 
-    # 获取列表元素
-    def getListElement(self, listDataPath_: str, idx_: int, dataSet_: dict = None):
-        _listLength: int = self.gv(listDataPath_, dataSet_)
-        if not _listLength is None:
-            if idx_ < _listLength:
-                _propertyNameOfIdx = listDataPath_ + "[" + str(idx_ + 1) + "]"
-                return self.gv(_propertyNameOfIdx, dataSet_)
+    # dataSet 转换回 jsonDict
+    def dataSetToJsonDict(self, dataPath_: str, dataSet_: dict = None):
+        _dataSetOnPath = self.getValueByDataPath(dataPath_, dataSet_)
+        _jsonDict = {}
+        self.dataSetDictToJsonDict(_dataSetOnPath, _jsonDict)
+        return _jsonDict
+
+    # dataSet的每一个节点转换
+    def dataSetDictToJsonDict(self, dataSetDict_: dict, jsonDict_: dict):
+        for _key in dataSetDict_:
+            if _key.endswith("]"):
+                continue
+            _value = dataSetDict_[_key]
+            if isinstance(_value, int) and _key + "[0]" in dataSetDict_:  # _key对值为数组
+                _jsonDictList = []  # 组装数组
+                _idx = 0
+                while _key + "[" + str(_idx + 1) + "]" in dataSetDict_:
+                    _indexKey = _key + "[" + str(_idx + 1) + "]"  # 拼接键
+                    _listValue = dataSetDict_[_indexKey]  # 获取当前值
+                    if isinstance(_listValue, dict):  # dataSet中的每一项都转换成字典了。所以，只判断字典
+                        _jsonDict = {}
+                        self.dataSetDictToJsonDict(_listValue, _jsonDict)
+                        _jsonDictList.append(_jsonDict)
+                    else:  # 非字典类直接写入
+                        _jsonDictList.append(_listValue)
+                    _idx += 1
+                jsonDict_[_key] = _jsonDictList
+            elif isinstance(_value, dict):
+                _jsonDict = {}
+                self.dataSetDictToJsonDict(_value, _jsonDict)
+                jsonDict_[_key] = _jsonDict
             else:
-                self.raiseError(pyUtils.getCurrentRunningFunctionName(),
-                                "数组索引越界 _idx ： " + str(idx_) + " ，_listLength : " + str(_listLength))
+                jsonDict_[_key] = _value
+
+    # 获取列表元素
+    def getListElementByIdx(self, listDataPath_: str, idx_: int, dataSet_: dict = None):
+        if self.isDataPathExist(listDataPath_ + "[0]", dataSet_):
+            _listLength: int = self.getValueByDataPath(listDataPath_, dataSet_)
+            if not _listLength is None:
+                if idx_ < _listLength:
+                    _propertyNameOfIdx = listDataPath_ + "[" + str(idx_ + 1) + "]"
+                    return self.getValueByDataPath(_propertyNameOfIdx, dataSet_)
+                else:
+                    self.raiseError(
+                        pyUtils.getCurrentRunningFunctionName(),
+                        "数组索引越界 _idx ： " + str(idx_) + " ，_listLength : " + str(_listLength)
+                    )
+            else:
+                return None
         else:
             return None
 
@@ -325,7 +367,7 @@ class DataCenter(BaseService):
         print("dataSet = " + json.dumps(self.dataSet, indent=4, sort_keys=False, ensure_ascii=False))
 
     def printDataSet(self):
-        self.printData(self.dataSet, "dataSet")
+        self.printData(self.dataSet, "")
 
     def dataPathValidation(self, dataPath_: str):
         if dataPath_.find("..") >= 0:
@@ -336,10 +378,10 @@ class DataCenter(BaseService):
             return False
         return True
 
-    def isDataPathExist(self, dataPath_: str):
+    def isDataPathExist(self, dataPath_: str, dataSet_: dict = None):
         if self.dataPathValidation(dataPath_) is None:
-            return None
-        _dataObject = self.gv(dataPath_)
+            return False
+        _dataObject = self.getValueByDataPath(dataPath_, dataSet_)
         if _dataObject is None:
-            return None
-        return _dataObject
+            return False
+        return True
