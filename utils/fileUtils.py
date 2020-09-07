@@ -33,7 +33,7 @@ def getPath(rootPath_: str, subPath_: str):
         _currentPath = os.path.dirname(os.path.realpath(__file__))
 
     _currentPath = os.path.normpath(_currentPath)
-    _pathPieceList = _path.split("/")
+    _pathPieceList = _path.split(os.path.sep)  # 按照当前系统的分割符号 / 或则 \ 来分割成数组
 
     while len(_pathPieceList) > 0:
         _pathPiece = _pathPieceList.pop(0)

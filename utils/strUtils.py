@@ -1,5 +1,6 @@
 # !/usr/bin/env python3
 import re
+import json
 
 # 移除掉一些麻烦的字符串
 chars = {
@@ -165,8 +166,6 @@ def checkStr(line_: str, idx_: int, checkStr_: str):
 
 # 模板里面的键，替换成给定字典中的对应键的值
 def replaceKeyToValueInTemplate(replaceDict_: dict, templateStr_: str):
-    for _key in replaceDict_:
-        print(_key + " : " + replaceDict_[_key])
     return templateStr_.format(**replaceDict_)
 
 
