@@ -62,8 +62,7 @@ def doStrAsCmdAndGetPipe(cmdStr_: str, whichFolder_: str, printPipeLines_: bool 
             for _i in range(len(_pipeLines)):
                 _pipeLines[_i] = _tabeSpace * 2 + _pipeLines[_i]
                 print(_pipeLines[_i])
-        else:
-            print(_tabeSpace + "- SUCCESS -")  # 打印成功
+        print(_tabeSpace + "- SUCCESS -")  # 打印成功
         return True
 
 

@@ -20,31 +20,31 @@ def showDir(path_: str, reStrList_: list = None, depth_: int = 0):
 
 
 # 显示文件夹结构
-def showDir(path_: str, depth_: int = 0):
+def showDir(path_: str, depth_: int = 0, prefix_: str = ""):
     if depth_ == 0:
-        print("root:[" + path_ + "]")
+        print(prefix_ + "root:[" + path_ + "]")
     for _item in os.listdir(path_):
-        _newitem = path_ + '/' + _item
+        _newitem = path_ + os.sep + _item
         if os.path.isdir(_newitem):
-            print("|      " * depth_ + "+--" + _item)
-            showDir(_newitem, depth_ + 1)
+            print(prefix_ + "|      " * depth_ + "+--" + _item)
+            showDir(_newitem, depth_ + 1, prefix_)
 
 
 # 显示文件结构
-def showDirFile(path_: str, depth_: int = 0):
+def showDirFile(path_: str, depth_: int = 0, prefix_: str = ""):
     if depth_ == 0:
-        print("root:[" + path_ + "]")
+        print(prefix_ + "root:[" + path_ + "]")
     _fileList = []
     for _item in os.listdir(path_):
-        _newitem = path_ + '/' + _item
+        _newitem = path_ + os.sep + _item
         if os.path.isdir(_newitem):
-            print("|      " * depth_ + "+--" + _item)
-            showDirFile(_newitem, depth_ + 1)
+            print(prefix_ + ("|" + " " * 6) * depth_ + "+--" + _item)
+            showDirFile(_newitem, depth_ + 1, prefix_)
         else:
             _fileList.append(_item)
 
     for _file in _fileList:
-        print("|      " * depth_ + "|--" + _file)
+        print(prefix_ + ("|" + " " * 6) * depth_ + "|--" + _file)
 
 
 # 获取文件夹 仅仅 一层文件夹

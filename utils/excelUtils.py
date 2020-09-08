@@ -111,7 +111,7 @@ if __name__ == "__main__":
     for _sheetName in _currentWorkBook.sheetDict:
         _sheet = _currentWorkBook.sheetDict[_sheetName]
         _value = _sheet.toJsonDict()
-        _key = strUtils.removePrefix(_sheetName)
+        _key = _sheetName
         print(_key + " -----------------------------------------------")
         dictUtils.showDictStructure(_value)
         _excelDict[_key] = _value

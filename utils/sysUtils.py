@@ -2,7 +2,7 @@
 import os
 import sys
 import platform
-import subprocess
+from utils import cmdUtils
 
 
 # ------------------------------------系统判断---------------------------------------------------------------------------------------
@@ -46,11 +46,31 @@ def folderPathFixEnd(path_str):
 
 
 # 获取 subFolderPath_ 相对于 folderPath_ 的路径
-def getRelativePath(folderPath_:str, subFolderPath_:str):
+def getRelativePath(folderPath_: str, subFolderPath_: str):
     return str(subFolderPath_).split(folderPath_)[1]
 
 
-
+# 文件变更执行权限
+def chmod(type_: str, filePath_: str, printPipeLines_: bool = False):
+    # 1 可执行 --x
+    # 2 可写 -w-
+    # 3 可写执行 -wx
+    # 4 可读 r--
+    # 5 可读执行 r-x
+    # 6 可读写 rw-
+    # 7 可读写执行 rwx
+    if type_ == "111" or type_ == "222" or type_ == "444" or type_ == "666" or type_ == "777" or type_ == "333" or type_ == "555":
+        if os_is_mac():  # mac多了一步
+            cmdUtils.doStrAsCmdAndGetPipe(
+                "xattr -dr com.apple.quarantine " + os.path.basename(filePath_),  # mac系统下去掉 @ 权限
+                os.path.dirname(filePath_),  # 文件所在的文件夹内执行
+                printPipeLines_  # 打印命令pipeline
+            )
+        cmdUtils.doStrAsCmdAndGetPipe(
+            "chmod -R " + type_ + " " + os.path.basename(filePath_),  # 可读可写不可执行 666
+            os.path.dirname(filePath_),
+            printPipeLines_
+        )
 
 # ------------------------------------管道出入---------------------------------------------------------------------------------------
 # cat filePath | python3.7 py脚本1 脚本参数 | python3.7 py脚本2 脚本参数

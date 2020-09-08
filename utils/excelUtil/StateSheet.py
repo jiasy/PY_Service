@@ -5,6 +5,7 @@ from utils.excelUtil.Sheet import SheetType
 from utils import fileUtils
 from utils import cmdUtils
 from utils import pyUtils
+from utils import strUtils
 import os
 
 
@@ -12,6 +13,10 @@ class StateSheet(Sheet):
     def __init__(self):
         super().__init__()
         self.sheetType = SheetType.STATE
+
+    def toJsonFile(self, locateFolderPath_: str):
+        super().toJsonFile(locateFolderPath_)
+        self.toDotPng(locateFolderPath_)  # 同时，制作一张状态图
 
     # 从左面状态如何去上面的状态
     def toJsonDict(self):

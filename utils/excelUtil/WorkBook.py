@@ -4,6 +4,7 @@ import sys
 import os
 import xlrd
 import xlsxwriter
+from utils import folderUtils
 from utils import fileUtils
 from utils import pyUtils
 from utils.excelUtil.DictSheet import DictSheet
@@ -31,7 +32,7 @@ class WorkBook(object):
         self.currentWorkBook = None
 
     def initWithWorkBook(self, filePath_):
-        print("> WorkBook > initWithWorkBook : " + filePath_)
+        # print("> WorkBook > initWithWorkBook : " + filePath_)
         if not os.path.isfile(filePath_):
             print('WorkBook.initWithWorkBook 文件路径不存在 : ' + filePath_)
             sys.exit()
@@ -50,26 +51,26 @@ class WorkBook(object):
         self.savePath = fileUtils.pathWithOutSuffix(filePath_) + "_save.xlsx"
 
         for _sheetName in self.currentWorkBook.sheet_names():
-            if _sheetName.startswith("list_"):
+            if _sheetName.endswith("<list>"):
                 _currentSheet = ListSheet()
-            elif _sheetName.startswith("dict_"):
+            elif _sheetName.endswith("<dict>"):
                 _currentSheet = DictSheet()
-            elif _sheetName.startswith("kv_"):
+            elif _sheetName.endswith("<kv>"):
                 _currentSheet = KVSheet()
-            elif _sheetName.startswith("proto_"):
+            elif _sheetName.endswith("<proto>"):
                 raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not supports")
-            elif _sheetName.startswith("relation_"):
+            elif _sheetName.endswith("<relation>"):
                 raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not supports")
-            elif _sheetName.startswith("state_"):
+            elif _sheetName.endswith("<state>"):
                 _currentSheet = StateSheet()
-            elif _sheetName.startswith("cmd_"):
+            elif _sheetName.endswith("<cmd>"):
                 raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not supports")
             else:
                 raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not supports")
 
             _currentSheet.initWithSheet(
                 self.currentWorkBook.sheet_by_name(_sheetName),
-                _sheetName
+                _sheetName.split("<")[0]
             )
             self.addSheet(_currentSheet)
 
@@ -105,3 +106,16 @@ class WorkBook(object):
         else:
             self.sheetDict[sheet_.sheetName] = sheet_
         return sheet_
+
+    # 转换成jsonDict
+    def toJsonDict(self):
+        _excelDict = {}
+        for _sheetName in self.sheetDict:
+            _excelDict[_sheetName] = self.sheetDict[_sheetName].toJsonDict()
+        return _excelDict
+
+    # 写入文件夹
+    def toJsonFile(self, locateFolderPath_: str):
+        for _sheetName in self.sheetDict:
+            _sheet = self.sheetDict[_sheetName]
+            _sheet.toJsonFile(locateFolderPath_)

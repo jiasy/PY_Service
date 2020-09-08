@@ -127,7 +127,7 @@ def pathWithOutSuffix(filePath_: str, folderPath_: str = None):
     if folderPath_:
         _filePath = sysUtils.folderPathFixEnd(folderPath_) + filePath_
     if os.path.isfile(_filePath):
-        return _filePath.split("." + os.path.splitext(_filePath)[1])[0]
+        return os.path.splitext(_filePath)[0]
     else:
         raise Exception(
             _filePath + " 不是一个文件，不可能有文件后缀，所以，不用切后缀"
@@ -154,6 +154,22 @@ def fileHasString(filePath_: str, targetStr_: str):
     except Exception as e:
         print(filePath_, e)
     return _returnValue
+
+
+# 保持文件结构，获取新文件名
+def getNewNameKeepFolderStructure(
+        sourceFolderPath_: str,
+        targetFolderPath_: str,
+        filePath_: str,
+        targetSuffix_: str = ""  # 没有后缀就填空，比如，文件对应一个文件夹的时候
+):
+    _sourceFolderPath = sysUtils.folderPathFixEnd(sourceFolderPath_)
+    _targetFolderPath = sysUtils.folderPathFixEnd(targetFolderPath_)
+    _newFileName = pathWithOutSuffix(filePath_).split(_sourceFolderPath)[1] + targetSuffix_
+    return os.path.join(
+        _targetFolderPath,
+        _newFileName
+    )
 
 
 # 将 sourceFolderPath_ 压缩成，zipParentFolderPath_/zipName_.zip 文件

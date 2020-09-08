@@ -28,7 +28,11 @@ class KVSheet(Sheet):
     def toJsonFile(self, locateFolderPath_: str):
         _jsonDict = self.toJsonDict()
         for _classifyName in _jsonDict:
-            _jsonFilePath = os.path.join(locateFolderPath_, _classifyName, self.sheetName + ".json")
+            _jsonFilePath = os.path.join(
+                locateFolderPath_,
+                _classifyName,
+                self.sheetName + ".json"
+            )
             utils.fileUtils.writeFileWithStr(
                 _jsonFilePath,
                 str(json.dumps(_jsonDict[_classifyName], indent=4, sort_keys=False, ensure_ascii=False))
