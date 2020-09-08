@@ -1,0 +1,17 @@
+{
+    "umengAppKey": "umengAppKey_a",
+    "wexinAppId": "weixinAppId_a",
+    "weixinAppSecret": "weixinAppSecret_a",
+    "ossAccessKey": "ossAccessKey_a",
+    "ossSecretKey": "ossSecretKey_a",
+    "ossUrl": "ossUrl_a",
+    "ossBucket": "ossBucket_a",
+    "voiceBucket": "voiceBucket_a",
+    "mcUriScheme": "mcUriScheme_a",
+    "mcAppKey": "mcAppKey_a",
+    "mcLinkKey": "mcLinkKey_a",
+    "applinks": "applinks_a",
+    "iosProduct1": "iosProduct1_a",
+    "iosProduct2": "iosProduct2_a",
+    "iosProduct3": "iosProduct3_a"
+}

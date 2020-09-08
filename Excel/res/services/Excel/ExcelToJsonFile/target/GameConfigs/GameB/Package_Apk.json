@@ -1,0 +1,8 @@
+{
+    "app_id": "com.pyWorkFlow.GameB",
+    "app_name": "GameB",
+    "key_store": "key_store_b",
+    "keystorePassword": "keystorePassword_b",
+    "keystoreAlias": "keystoreAlias_b",
+    "keystoreAliasPassword": "keystoreAliasPassword_b"
+}

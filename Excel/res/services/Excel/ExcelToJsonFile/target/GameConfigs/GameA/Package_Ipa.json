@@ -1,0 +1,19 @@
+{
+    "app_id": "com.pyWorkFlow.GameA",
+    "app_name": "GameA",
+    "project": "GameA.xcodeproj",
+    "scheme": "GameA-mobile",
+    "target": "GameA-mobile",
+    "sdk": "iphoneos",
+    "release_code_sign_identity": "release_code_sign_identity_a",
+    "release_provisioning_profile": "release_provisioning_profile_a",
+    "release_provisioning_name": "release_provisioning_name_a",
+    "debug_code_sign_identity": "debug_code_sign_identity_a",
+    "debug_provisioning_profile": "debug_provisioning_profile_a",
+    "debug_provisioning_name": "debug_provisioning_name_a",
+    "dandelion_upload_url": "dandelion_upload_url_a",
+    "dandelion_api_key": "dandelion_api_key_a",
+    "dandelion_u_key": "dandelion_u_key_a",
+    "dandelion_publish_range": "dandelion_publish_range_a",
+    "dandelion_password": "dandelion_password_a"
+}

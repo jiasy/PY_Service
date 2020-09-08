@@ -1,0 +1,6 @@
+{
+    "app_name": "游戏A",
+    "product_serverUrl": "productUrlA",
+    "develop_serverUrl": "developUrlA",
+    "test_serverUrl": "testUrlA"
+}

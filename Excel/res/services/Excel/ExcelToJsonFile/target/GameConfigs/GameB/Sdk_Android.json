@@ -1,0 +1,15 @@
+{
+    "umengAppKey": "umengAppKey_b",
+    "wexinAppId": "wexinAppId_b",
+    "weixinAppSecret": "weixinAppSecret_b",
+    "ossAccessKey": "ossAccessKey_b",
+    "ossSecretKey": "ossSecretKey_b",
+    "ossUrl": "ossUrl_b",
+    "ossBucket": "ossBucket_b",
+    "voiceBucket": "voiceBucket_b",
+    "mcUriScheme": "mcUriScheme_b",
+    "mcAppKey": "mcAppKey_b",
+    "androidProduct1": "androidProduct1_b",
+    "androidProduct2": "androidProduct2_b",
+    "androidProduct3": "androidProduct3_b"
+}

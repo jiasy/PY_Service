@@ -1,0 +1,36 @@
+{
+    "sStringKey": "stringValue",
+    "tTimeKey": "1234567890",
+    "lListKey": [
+        {
+            "uUniqueID": "1",
+            "iIntKey": 123
+        },
+        {
+            "uUniqueID": "2",
+            "iIntKey": 321
+        },
+        2,
+        true,
+        "strValue"
+    ],
+    "dDictKey": {
+        "lListKey": [
+            {
+                "uUniqueID": "1",
+                "fFloatKey": 2.0
+            },
+            {
+                "uUniqueID": "2",
+                "fFloatKey": 3.4
+            },
+            2,
+            true,
+            "strValue"
+        ]
+    },
+    "dDictBlankKey": {},
+    "bBoolIntKey": true,
+    "bBoolStringLongKey": true,
+    "bBoolStringShortKey": true
+}

@@ -1,0 +1,42 @@
+{
+    "stateList": [
+        "Init",
+        "Login",
+        "Main",
+        "Pop",
+        "Game"
+    ],
+    "transitions": [
+        {
+            "name": "toLogin",
+            "to": "Login",
+            "from": "Init"
+        },
+        {
+            "name": "toMain",
+            "to": "Main",
+            "from": "Login"
+        },
+        {
+            "name": "btn_close",
+            "to": "Main",
+            "from": "Pop"
+        },
+        {
+            "name": "btn_toMain",
+            "to": "Main",
+            "from": "Game"
+        },
+        {
+            "name": "btn_Pop",
+            "to": "Pop",
+            "from": "Main"
+        },
+        {
+            "name": "btn_toGame",
+            "to": "Game",
+            "from": "Main"
+        }
+    ],
+    "init": "Init"
+}

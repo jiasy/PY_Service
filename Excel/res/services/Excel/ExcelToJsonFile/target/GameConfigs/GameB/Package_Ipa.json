@@ -1,0 +1,19 @@
+{
+    "app_id": "com.pyWorkFlow.GameB",
+    "app_name": "GameB",
+    "project": "GameB.xcodeproj",
+    "scheme": "GameB-mobile",
+    "target": "GameB-mobile",
+    "sdk": "iphoneos",
+    "release_code_sign_identity": "release_code_sign_identity_b",
+    "release_provisioning_profile": "release_provisioning_profile_b",
+    "release_provisioning_name": "release_provisioning_name_b",
+    "debug_code_sign_identity": "debug_code_sign_identity_b",
+    "debug_provisioning_profile": "debug_provisioning_profile_b",
+    "debug_provisioning_name": "debug_provisioning_name_b",
+    "dandelion_upload_url": "dandelion_upload_url_b",
+    "dandelion_api_key": "dandelion_api_key_b",
+    "dandelion_u_key": "dandelion_u_key_b",
+    "dandelion_publish_range": "dandelion_publish_range_b",
+    "dandelion_password": "dandelion_password_b"
+}
