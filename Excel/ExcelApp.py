@@ -11,9 +11,11 @@ from base.supports.App.App import App
 from utils import strUtils
 from utils import jsonUtils
 from utils import pyUtils
+from utils import cmdUtils
 from utils.excelUtil.WorkBook import WorkBook
 from utils.excelUtil.Sheet import SheetType
 import os
+import sys
 
 
 class ExcelApp(App):
@@ -96,10 +98,41 @@ class ExcelApp(App):
                 _idx + 1
             ) + "> " + _baseServiceName + " -> " + _baseInServiceName + " " + _comment + "-" * 99)
             _subBaseInService = self.switchTo(_baseServiceName, _baseInServiceName)
-            _subBaseInService.doExcelFunc(_parameterDict)
+
+            try:
+                _subBaseInService.doExcelFunc(_parameterDict)
+            except Exception as e:
+                print("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x ERROR x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x")
+                print(e.args)
+                sys.exit(1)
 
     # 切换到那个服务的，那个子服务上
     def switchTo(self, sBaseService_: str, sBaseInService_: str):
         self.sm.switchRunningServices([])  # 清理原有
         self.sm.switchRunningServices([sBaseService_])  # 重新构建
         return self.sm.getServiceByName(sBaseService_).getSubClassObject(sBaseInService_)
+
+
+if __name__ == "__main__":
+    # res下的Excel文件
+    _excelFileName = "ExecSample"
+    # excel驱动脚本
+    _excelCommandPath = os.path.realpath(os.path.join(
+        os.path.realpath(__file__),  # ExcelApp.py 路径
+        os.pardir,  # Excel Folder
+        os.pardir,  # PY_Service Folder
+        "ExcelCommand.py"  # 执行脚本名
+    ))
+    # 当前执行目录
+    _resFolderPath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "res")
+    # 拼接驱动样例的命令
+    _sampleExcelCommand = "python " + _excelCommandPath + \
+                          " --sProjectFolderPath " + _resFolderPath + \
+                          " --excelPath " + _excelFileName + ".xlsx" + \
+                          " --sExecuteType 工作流测试"
+    # 执行命令
+    cmdUtils.doStrAsCmd(
+        _sampleExcelCommand,  # 执行命令行驱动 Excel 工作流配置
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), "res"),  # Excel 对应的 res 文件夹内执行
+        True
+    )

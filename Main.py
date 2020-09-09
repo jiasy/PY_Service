@@ -82,11 +82,13 @@ def excelProcessStepTest(
 
     # 使用sheet和cmd构成的字典来运行
     _excelApp.runServiceByJsonDict(_sheetAndCmdDict)
-
+    print("<模拟命令行执行>-----------------------------------------------------------------------------------------------")
     # 事例Excel路径
-    _sampleExcelFilePath = utils.sysUtils.folderPathFixEnd(_subBaseInService.resPath) + subBaseInServiceName_ + ".xlsx"
+    _sampleExcelFilePath = os.path.realpath(
+        utils.sysUtils.folderPathFixEnd(_subBaseInService.resPath) + subBaseInServiceName_ + ".xlsx"
+    )
     # excel驱动脚本
-    _excelCommandPath = os.path.join(
+    _excelCommandPath = os.path.realpath(os.path.join(
         _sampleExcelFilePath,  # 资源中的 xlsx 路径
         os.pardir,  # BaseInService Folder
         os.pardir,  # BaseService Folder
@@ -95,8 +97,14 @@ def excelProcessStepTest(
         os.pardir,  # Excel Folder
         os.pardir,  # PY_Service Folder
         "ExcelCommand.py"  # 执行脚本名
-    )
+    ))
     # 拼接驱动样例的命令
-    _sampleExcelCommand = "python " + os.path.realpath(_excelCommandPath) + " --excelPath " + os.path.realpath(
-        _sampleExcelFilePath) + " --sPublicType 单体测试"
-    print('SAMPLE 执行命令 : \n' + str(_sampleExcelCommand))
+    _sampleExcelCommand = "python " + _excelCommandPath + \
+                          " --excelPath " + _sampleExcelFilePath + \
+                          " --sExecuteType 单体测试"
+    # 执行命令
+    utils.cmdUtils.doStrAsCmd(
+        _sampleExcelCommand,  # 执行命令行驱动 Excel 工作流配置
+        _sampleExcelFilePath,  # 在子服务对应的资源目录内
+        True
+    )

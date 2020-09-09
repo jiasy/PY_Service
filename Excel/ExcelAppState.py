@@ -14,4 +14,5 @@ class ExcelAppState(AppState):
         super(ExcelAppState, self).destory()
 
     def initAppState(self):
+        # 服务是动态添加卸载的，不用设置服务状态配置
         return

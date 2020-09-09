@@ -105,7 +105,6 @@ def getOps(opsDict_, parse_):
                 print("ERROR : 必须有 " + _key + " -> " + opsDict_[_key])
                 sys.exit(1)
         else:
-            print('_key = ' + str(_key))
             _opsKeyValueDict[_key] = _ops.__dict__[_key]
 
     return _opsKeyValueDict

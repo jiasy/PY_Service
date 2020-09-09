@@ -55,6 +55,6 @@ if __name__ == "__main__":
             "sTargetFolder": "{sResPath}/target"
         },
         {  # 命令行参数
-            "sPublicType": "test"
+            "sExecuteType": "单体测试"
         }
     )
