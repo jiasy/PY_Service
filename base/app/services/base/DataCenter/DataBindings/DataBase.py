@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 from base.supports.Base.Base import Base
-from utils import *
 from typing import List
+from utils import pyUtils
+from utils import listUtils
+from utils import disUtils
 
 
 class DataBase(Base):

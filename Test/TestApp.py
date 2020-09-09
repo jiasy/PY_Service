@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from base.supports.App.App import App
-from utils import *
 
 
 class TestApp(App):

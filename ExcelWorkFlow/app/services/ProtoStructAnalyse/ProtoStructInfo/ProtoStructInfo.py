@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # Created by jiasy at 2019/3/4
 from base.supports.Base.BaseInService import BaseInService
-from utils import *
+from utils import folderUtils
 import re
-import json
 
 
 class ProtoStructInfo(BaseInService):

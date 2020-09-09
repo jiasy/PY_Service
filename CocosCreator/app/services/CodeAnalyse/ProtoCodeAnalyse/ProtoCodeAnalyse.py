@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # Created by jiasy at 2020/4/21
 from base.supports.Base.BaseInService import BaseInService
-from utils import *
+from utils import folderUtils
+from utils import fileUtils
 import re
 
 

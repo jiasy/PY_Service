@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # Created by jiasy at 2019/1/29
 from base.supports.Base.BaseInService import BaseInService
-from utils import *
+from utils import pyUtils
+from utils import fileUtils
+from utils import dataUtils_presto
 
 
 class OLAP_assets_statistics_D(BaseInService):

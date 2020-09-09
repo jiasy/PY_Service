@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from base.supports.Service.BaseService import BaseService
-from utils import *
 import oss2
 import os
 

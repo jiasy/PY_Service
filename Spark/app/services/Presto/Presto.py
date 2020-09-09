@@ -2,14 +2,12 @@
 from TCLIService.ttypes import TOperationState
 
 from base.supports.Service.BaseService import BaseService
-from utils import *
+from utils import dataUtils_presto
+from utils import dataUtils
+from utils import listUtils
 from sqlalchemy.engine import create_engine
 import pandas as pd
-import json
-
-from pyhive import hive
-from pyhive import presto  # or import hive
-from pyhive.presto import Connection, Cursor
+from pyhive.presto import Cursor
 
 
 class Presto(BaseService):

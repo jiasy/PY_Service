@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from base.supports.Service.BaseService import BaseService
-from utils import *
+from utils import folderUtils
+from utils import fileUtils
+from utils import pyUtils
 
 # 分析界面和组件名称关系，按钮是否按照规范绑定
 class PrefabAnalyse(BaseService):

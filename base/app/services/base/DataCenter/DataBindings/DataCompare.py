@@ -2,7 +2,8 @@
 from typing import List
 
 from base.app.services.base.DataCenter.DataBindings.DataBase import DataBase
-from utils import *
+from utils import strUtils
+from utils import pyUtils
 
 
 class DataCompare(DataBase):

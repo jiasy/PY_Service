@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 from base.supports.Service.BaseService import BaseService
-from utils import *
+from utils import fileUtils
 import re
-import os
 
 
 # 切割文本文件，成零散文件，用来切小说

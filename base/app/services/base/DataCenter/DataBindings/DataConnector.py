@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from base.app.services.base.DataCenter.DataBindings.DataBase import DataBase
-from utils import *
+from utils import pyUtils
 
 
 class DataConnector(DataBase):

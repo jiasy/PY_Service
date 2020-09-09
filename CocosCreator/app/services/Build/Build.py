@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 from base.supports.Service.BaseService import BaseService
-from utils import *
+from utils import fileUtils
+from utils import gitUtils
+from utils import strUtils
+from utils import ftpUtils
+from utils import folderUtils
 import json
 from utils import sysUtils
 from PIL import Image

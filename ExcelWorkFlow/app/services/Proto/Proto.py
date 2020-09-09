@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from base.supports.Service.BaseService import BaseService
-from utils import *
-
+from utils import fileCopyUtils
 
 class Proto(BaseService):
     def __init__(self, sm_):

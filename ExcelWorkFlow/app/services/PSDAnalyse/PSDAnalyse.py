@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from base.supports.Service.BaseService import BaseService
-from utils import *
+from utils import fileUtils
+from utils import pyUtils
 from psd_tools import PSDImage
 from psd_tools.constants import ColorMode
 import io

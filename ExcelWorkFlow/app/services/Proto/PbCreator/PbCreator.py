@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # Created by jiasy at 2020/6/3
 from base.supports.Base.BaseInService import BaseInService
-from utils import *
-import os
+from utils import folderUtils
+from utils import fileCopyUtils
 import subprocess
 
 

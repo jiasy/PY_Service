@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from base.supports.Service.BaseService import BaseService
-from utils import *
+from utils import folderUtils
 import shutil
 import os
 

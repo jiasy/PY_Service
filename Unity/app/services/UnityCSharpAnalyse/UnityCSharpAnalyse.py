@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 from base.supports.Service.BaseService import BaseService
-from utils import *
-import re
 
 
 # 分析 C# 文件，修改其内容，为函数添加输出【最好配合Git，省得在单独备份文件】

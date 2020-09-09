@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from base.supports.Service.BaseService import BaseService
-from utils import *
 
 # 分析 Prefab 文件
 class UnityPrefabAnalyse(BaseService):

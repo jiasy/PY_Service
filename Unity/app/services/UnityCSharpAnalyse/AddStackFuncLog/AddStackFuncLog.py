@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Created by jiasy at 2020/5/24
 from base.supports.Base.BaseInService import BaseInService
-from utils import *
+from utils import fileUtils
 
 
 class AddStackFuncLog(BaseInService):

@@ -2,7 +2,6 @@
 
 
 from base.supports.Service.BaseService import BaseService
-from utils import *
 
 class LohoTest(BaseService):
 
