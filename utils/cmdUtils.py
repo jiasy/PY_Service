@@ -1,6 +1,7 @@
 # !/usr/bin/env python3
 import os
 from utils import fileUtils
+from utils import listUtils
 import subprocess
 import sys
 
@@ -46,7 +47,7 @@ def doCmd(cmd_: str, logPath_: str = None):
 
 
 # 在 whichFolder_ 路径下，执行 cmdStr_ ，printPipeLines_ 为 True 并将内容输出
-def doStrAsCmdAndGetPipe(cmdStr_: str, whichFolder_: str, printPipeLines_: bool = False):
+def doStrAsCmd(cmdStr_: str, whichFolder_: str, printPipeLines_: bool = False):
     _tabeSpace = " " * 4
     print(_tabeSpace + "Running cmd : " + cmdStr_)  # 提示正在执行
     _cmdResult = subprocess.Popen(cmdStr_, shell=True, cwd=whichFolder_, stdout=subprocess.PIPE, encoding='utf-8')
@@ -66,6 +67,18 @@ def doStrAsCmdAndGetPipe(cmdStr_: str, whichFolder_: str, printPipeLines_: bool 
         return True
 
 
+# 执行 cmd 语句，并获得输出
+def doStrAsCmdAndGetPipeline(cmdStr_: str, whichFolder_: str):
+    _cmdResult = subprocess.Popen(cmdStr_, shell=True, cwd=whichFolder_, stdout=subprocess.PIPE, encoding='utf-8')
+    _out, _err = _cmdResult.communicate()
+    return _out.splitlines()
+
+
+# 获取文件夹内的文件，权限信息，苹果环境下，携带@限制权限符
+def showXattr(whichFolder_: str):
+    listUtils.printList(doStrAsCmdAndGetPipeline("ls -laeO@", whichFolder_))
+
+
 # 获取校验参数
 def getOps(opsDict_, parse_):
     # 按照参数指定设置参数解析
@@ -76,6 +89,7 @@ def getOps(opsDict_, parse_):
     # 取得传入的参数
     _ops = parse_.parse_args()[0]  # 这里参数值对应的参数名存储在这个_ops字典里
 
+    _opsKeyValueDict = {}
     # 解析每一个参数
     for _key in opsDict_:
         # 可选项的话，就忽略，进行下一个
@@ -90,8 +104,12 @@ def getOps(opsDict_, parse_):
                 # 如果不在可选项中，那么就报错，停止进程
                 print("ERROR : 必须有 " + _key + " -> " + opsDict_[_key])
                 sys.exit(1)
-    return _ops
+        else:
+            print('_key = ' + str(_key))
+            _opsKeyValueDict[_key] = _ops.__dict__[_key]
+
+    return _opsKeyValueDict
 
 
 if __name__ == "__main__":
-    doStrAsCmdAndGetPipe("PWD", "/Users/jiasy/Documents/develop/", True)
+    doStrAsCmd("PWD", "/Users/jiasy/Documents/develop/", True)

@@ -15,7 +15,7 @@ class SheetType(Enum):
     KV = 3
     PROTO = 4
     STATE = 5
-    WORKFLOW = 6
+    CMD = 6
 
 
 class Sheet:

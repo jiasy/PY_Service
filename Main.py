@@ -2,6 +2,7 @@
 import threading
 import importlib
 import utils
+import os
 
 
 # 根据包路径创建类的实例对象
@@ -53,10 +54,8 @@ def excelProcessStepTest(
     _excelApp.start()
     # 切换到子服务，只为了能取得它的res路径
     _subBaseInService = _excelApp.switchTo(baseServiceName_, subBaseInServiceName_)
-    # 全局常量，将路径指定到
-    _dGlobalDict = {
-        "sResPath": _subBaseInService.resPath
-    }
+    # 全局常量，将路径指定到。测试用的非Excel执行命令，所以，配有配置 dGlobalDict 地方，在这里手动写入。
+    _dGlobalDict = {"sResPath": _subBaseInService.resPath}  # 测试使用的文件夹为子服务所对应的资源文件夹
     # 有指定覆盖的内容，就合并
     if dGlobalDict_:
         utils.jsonUtils.mergeAToB(dGlobalDict_, _dGlobalDict)
@@ -73,7 +72,8 @@ def excelProcessStepTest(
                 {
                     "dServiceInfo": {
                         "sBaseService": baseServiceName_,
-                        "sBaseInService": subBaseInServiceName_
+                        "sBaseInService": subBaseInServiceName_,
+                        "sComment": "【单体测试，非Excel配置】"
                     },
                     "dParameters": dParameters_
                 }
@@ -82,3 +82,21 @@ def excelProcessStepTest(
 
     # 使用sheet和cmd构成的字典来运行
     _excelApp.runServiceByJsonDict(_sheetAndCmdDict)
+
+    # 事例Excel路径
+    _sampleExcelFilePath = utils.sysUtils.folderPathFixEnd(_subBaseInService.resPath) + subBaseInServiceName_ + ".xlsx"
+    # excel驱动脚本
+    _excelCommandPath = os.path.join(
+        _sampleExcelFilePath,  # 资源中的 xlsx 路径
+        os.pardir,  # BaseInService Folder
+        os.pardir,  # BaseService Folder
+        os.pardir,  # services Folder
+        os.pardir,  # res Folder
+        os.pardir,  # Excel Folder
+        os.pardir,  # PY_Service Folder
+        "ExcelCommand.py"  # 执行脚本名
+    )
+    # 拼接驱动样例的命令
+    _sampleExcelCommand = "python " + os.path.realpath(_excelCommandPath) + " --excelPath " + os.path.realpath(
+        _sampleExcelFilePath) + " --sPublicType 单体测试"
+    print('SAMPLE 执行命令 : \n' + str(_sampleExcelCommand))

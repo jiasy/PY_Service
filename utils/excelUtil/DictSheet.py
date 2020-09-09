@@ -13,21 +13,24 @@ class DictSheet(Sheet):
         self.sheetType = SheetType.DICT
 
     def toJsonDict(self):
+        return self.getDict(0, self.maxCol, 0, self.maxRow)
+
+    def getDict(self, colStartIdx_: int, colEndID_: int, rowStartIdx_: int, rowEndID_: int):
         # self是一个字典
         # 靠缩进来进行json的属性归属
         # 数据的字段名必须进行类型指定,这样方面识别
         # 从上向下,进行一次路径识别,确保字典和列表的字段名站整个一行
-        for _currentRow in range(self.maxRow):
-            for _currentCol in range(self.maxCol):
+        for _currentRow in range(rowStartIdx_, rowEndID_):
+            for _currentCol in range(colStartIdx_, colEndID_):
                 if not self.getCellStructureData(_currentCol, _currentRow) is None:  # 当前的字段名,字典和列表,字段名后面不可以有任何字符串
                     break  # 得到了,这一行就结束了
                 elif not self.getCellParData(_currentCol, _currentRow) is None:  # 是数据项,那它右面的第一项就是数据,<再往右面就全都是空>
                     break  # 得到了,这一行就结束了
 
         _dictData = {}  # 开始组装
-        for _currentRow in range(self.maxRow):
-            _cell = self.cells[0][_currentRow]
-            if self.cells[0][_currentRow].strValue:
+        for _currentRow in range(rowStartIdx_,rowEndID_):
+            _cell = self.cells[colStartIdx_][_currentRow]
+            if self.cells[colStartIdx_][_currentRow].strValue:
                 if hasattr(_cell, 'data'):
                     _cellData = _cell.data
                     if utils.excelUtils.isParNameData(_cellData["parName"]):  # 如果当前是个数据

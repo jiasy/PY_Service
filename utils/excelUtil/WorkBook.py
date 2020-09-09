@@ -4,11 +4,11 @@ import sys
 import os
 import xlrd
 import xlsxwriter
-from utils import folderUtils
 from utils import fileUtils
 from utils import pyUtils
 from utils.excelUtil.DictSheet import DictSheet
 from utils.excelUtil.ListSheet import ListSheet
+from utils.excelUtil.CMDSheet import CMDSheet
 from utils.excelUtil.KVSheet import KVSheet
 from utils.excelUtil.StateSheet import StateSheet
 
@@ -64,7 +64,7 @@ class WorkBook(object):
             elif _sheetName.endswith("<state>"):
                 _currentSheet = StateSheet()
             elif _sheetName.endswith("<cmd>"):
-                raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not supports")
+                _currentSheet = CMDSheet()
             else:
                 raise pyUtils.AppError("SheetName : '" + _sheetName + "',prefix is not supports")
 
