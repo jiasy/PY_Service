@@ -44,14 +44,14 @@ def posToCr(posStr_):
         _rowNum -= 1
         return _colNum, _rowNum
     else:
-        raise TypeError("Sheet.getStrByPos posStr_ : " + posStr_ + " 参数不正确")
+        raise Exception("Sheet.getStrByPos posStr_ : " + posStr_ + " 参数不正确")
 
 
 # 字段命名规范 -----------------------------------------------------------------------------------------------------------
 # 判断一个参数的命名是否符合命名规范.
 def isParNameLegal(parameterName_):
     if not isParNameData(parameterName_) and not isParNameStructure(parameterName_):
-        raise TypeError('字段名称必须是t,s,u,i,f,b,d,l中的一个,当前字段名为 : ' + parameterName_)
+        raise Exception('字段名称必须是t,s,u,i,f,b,d,l中的一个,当前字段名为 : ' + parameterName_)
     else:
         return parameterName_
 

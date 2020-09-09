@@ -30,8 +30,8 @@ class ListSheet(Sheet):
                     _list.append(_dataObject)  # 将数据添加到列表
                 return _list
             else:
-                raise TypeError("ERROR 作为 list 结构的Excel数据源，a2 内的字符串必须是 \"字段名\"")
+                raise Exception("ERROR 作为 list 结构的Excel数据源，a2 内的字符串必须是 \"字段名\"")
                 return None
         else:
-            raise TypeError("ERROR 作为 list 结构的Excel数据源，a1 内的字符串必须是 \"中文名\"")
+            raise Exception("ERROR 作为 list 结构的Excel数据源，a1 内的字符串必须是 \"中文名\"")
             return None

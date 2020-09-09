@@ -61,8 +61,9 @@ def doStrAsCmd(cmdStr_: str, whichFolder_: str, printPipeLines_: bool = False):
     else:
         if printPipeLines_:  # 需要输出的话
             for _i in range(len(_pipeLines)):
-                _pipeLines[_i] = _tabeSpace * 2 + _pipeLines[_i]
-                print(_pipeLines[_i])
+                _currentPipLine = _pipeLines[_i]
+                _currentPipLine = _tabeSpace * 2 + _currentPipLine
+                print(_currentPipLine)
         print(_tabeSpace + "- SUCCESS -")  # 打印成功
         return True
 

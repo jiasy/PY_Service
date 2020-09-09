@@ -102,7 +102,7 @@ class WorkBook(object):
     # change --------------------------------------------------------------------------------------------------------
     def addSheet(self, sheet_):
         if sheet_.sheetName in self.sheetDict:
-            raise TypeError("WorkBook 中 已经存在 名称为 : " + sheet_.sheetName + " 的Sheet")
+            raise Exception("WorkBook 中 已经存在 名称为 : " + sheet_.sheetName + " 的Sheet")
         else:
             self.sheetDict[sheet_.sheetName] = sheet_
         return sheet_

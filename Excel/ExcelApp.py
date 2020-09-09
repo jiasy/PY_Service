@@ -25,7 +25,6 @@ class ExcelApp(App):
         super().__init__(self.__class__.__name__)
 
     def start(self):
-        self.currentSheetDict = None
         return
 
     # 运行 Excel
@@ -38,7 +37,11 @@ class ExcelApp(App):
         for _sheetName in _currentWorkBook.sheetDict:
             _sheet = _currentWorkBook.sheetDict[_sheetName]
             if _sheet.sheetType != SheetType.CMD:
-                raise TypeError("ExcelApp -> runExcel : " + _sheetName + " 不是 CMD 类型")
+                self.info.raiseERR(
+                    pyUtils.getCurrentRunningFunctionName() + "\n" +
+                    "ExcelApp -> runExcel : " + _sheetName +
+                    " 不是 CMD 类型"
+                )
             _sheetJsonDict = _sheet.toJsonDict()
             if ("dGlobalDict" in _sheetJsonDict) and ("lProcessSteps" in _sheetJsonDict):
                 _globalDict = _sheetJsonDict["dGlobalDict"]  # 全局参数
@@ -50,7 +53,11 @@ class ExcelApp(App):
                 self.runServiceByJsonDict(_sheetJsonDict)
                 break  # 只执行出现的第一个WORKFLOW页
             else:
-                raise TypeError("ExcelApp -> runExcel : " + _sheetName + " 参数配置必须包含 dGlobalDict lProcessSteps")
+                self.info.raiseERR(
+                    pyUtils.getCurrentRunningFunctionName() + "\n" +
+                    "ExcelApp -> runExcel : " + _sheetName +
+                    " 参数配置必须包含 dGlobalDict lProcessSteps"
+                )
 
     # 通过Json文件的内容来执行服务
     def runServiceByJsonDict(self, sheetAndCmdDict_: dict):
@@ -77,9 +84,11 @@ class ExcelApp(App):
                 _baseInServiceName = _processStep["dServiceInfo"]["sBaseInService"]
                 _comment = _processStep["dServiceInfo"]["sComment"]
                 _parameterDict = _processStep["dParameters"]
-                print("[" + str(
-                    _idx + 1
-                ) + "] " + _baseServiceName + " -> " + _baseInServiceName + " " + _comment + "-" * 99)
+                print(  # 输出分割线，标示当前内容
+                    "[" + str(_idx + 1) + "] " +
+                    _baseServiceName + " -> " + _baseInServiceName +
+                    " " + " ~ " * 30 + "【" + _comment + "】"
+                )
                 print(" " * 4 + " Global ")  # 使用参数打印
                 for _key in _globalDict:
                     print(" " * 8 + _key + " : " + _globalDict[_key])
@@ -87,16 +96,18 @@ class ExcelApp(App):
                 for _key in _parameterDict:
                     _value = _parameterDict[_key]
                     if isinstance(_value, list):
-                        print(" " * 8 + _key + " : \n")
+                        print(" " * 8 + _key + " (" + str(len(_value)) + ") :")
                         listUtils.printList(_value, " " * 12)
                     elif isinstance(_value, dict):
-                        print(" " * 8 + _key + " : \n")
+                        print(" " * 8 + _key + " : ")
                         print(" " * 12 + str(json.dumps(_value, indent=4, sort_keys=False, ensure_ascii=False)))
                     else:
                         print(" " * 8 + _key + " : " + _parameterDict[_key])
             else:
-                raise TypeError(
-                    "ExcelApp -> runServiceByJsonDict : " + str(_idx) + " 参数配置必须包含 dServiceInfo dParameters"
+                self.info.raiseERR(
+                    pyUtils.getCurrentRunningFunctionName() + "\n" +
+                    "ExcelApp -> runServiceByJsonDict : " + str(_idx) +
+                    " 参数配置必须包含 dServiceInfo dParameters"
                 )
         for _idx in range(len(_processSteps)):  # 执行流程
             _processStep = _processSteps[_idx]
@@ -112,9 +123,8 @@ class ExcelApp(App):
             try:
                 _subBaseInService.doExcelFunc(_parameterDict)
             except Exception as e:
-                print("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x ERROR x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x")
-                print(e.args)
-                sys.exit(1)
+                print("x-x x-x x-x x-x x-x x-x x-x [ x-x ERROR x-x ] x-x x-x x-x x-x x-x x-x x-x")
+                self.info.raiseERR(pyUtils.getCurrentRunningFunctionName() + "\n" + e.args)
 
     # 切换到那个服务的，那个子服务上
     def switchTo(self, sBaseService_: str, sBaseInService_: str):

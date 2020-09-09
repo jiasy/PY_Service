@@ -36,20 +36,21 @@ if __name__ == "__main__":
     for _key in _ops:
         print("    " + _key + " : " + _ops[_key])
 
-    # 创建 Excel 工作流
-    _main = Main()
+    _main = Main()  # 创建 Excel 工作流
     _excelApp = _main.createAppByName("Excel")
     _excelApp.start()
 
-    # excel 路径
-    _excelPath = _ops["excelPath"]
-    if os.path.exists(_excelPath):
-        # 通过 解析 Excel 获得 执行命令信息
-        _excelApp.runExcel(
-            _ops["excelPath"],  # excel路径
-            _pwd,  # 执行命令路径
-            _ops  # 命令行参数
-        )
+    _excelPath = _ops["excelPath"]  # excel 路径
+    if os.path.exists(_excelPath):  # 通过 解析 Excel 获得 执行命令信息
+        try:
+            _excelApp.runExcel(
+                _ops["excelPath"],  # excel路径
+                _pwd,  # 执行命令路径
+                _ops  # 命令行参数
+            )
+        except Exception as e:
+            print("ERROR 执行文件错误 : " + _excelPath)
+            sys.exit(1)
     else:
         print("excelPath 文件不存在: \n" + _excelPath)
         sys.exit(1)

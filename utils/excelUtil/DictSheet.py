@@ -81,7 +81,7 @@ class DictSheet(Sheet):
             _dataInfo = {"parName": _cellStr, "type": _cellStr[0:1]}  # 格子中写入数据
             _cellNextColStr = self.getStrByCr(col_ + 1, row_)
             if not _cellNextColStr or (_cellNextColStr == "" and not _dataInfo["type"] == "s"):
-                raise TypeError(utils.excelUtils.crToPos(col_ + 1, row_) + " 没有值")
+                raise Exception(utils.excelUtils.crToPos(col_ + 1, row_) + " 没有值")
             if _dataInfo["type"] == "i":
                 _dataInfo["value"] = utils.convertUtils.strToInt(_cellNextColStr)
             elif _dataInfo["type"] == "f":
@@ -93,7 +93,7 @@ class DictSheet(Sheet):
                 elif _cellValue == 0.0 or _cellValue.lower() == "f" or _cellValue.lower() == "false" or _cellValue == "0":
                     _dataInfo["value"] = True
                 else:
-                    raise TypeError(
+                    raise Exception(
                         utils.excelUtils.crToPos(col_, row_) + " 所在为一个Boolean值,只能是1/0 true/false t/f 中的一个"
                     )
             elif _dataInfo["type"] == "u" or _dataInfo["type"] == "t" or _dataInfo["type"] == "s":
@@ -103,7 +103,7 @@ class DictSheet(Sheet):
             if int(col_ + 2) < self.maxCol:  # <再往后都是空白><但是可能往后超过了列数限制-判断一下>
                 for _currentValueCol in range(col_ + 2, self.maxCol):  # 当前行向后找
                     if not (self.getStrByCr(_currentValueCol, row_) == ""):  # 如果出现不为空的格子,报错
-                        raise TypeError(
+                        raise Exception(
                             utils.excelUtils.crToPos(
                                 _currentValueCol, row_
                             ) + " 不能有值,因为 " + utils.excelUtils.crToPos(
@@ -137,7 +137,7 @@ class DictSheet(Sheet):
             _cell.data = _dataInfo
             for _currentValueCol in range(col_ + 1, self.maxCol):  # 当前行向后找
                 if not (self.getStrByCr(_currentValueCol, row_) == ""):  # 如果出现不为空的格子,报错
-                    raise TypeError(
+                    raise Exception(
                         utils.excelUtils.crToPos(
                             _currentValueCol, row_
                         ) + " 不能有值,因为 " + utils.excelUtils.crToPos(

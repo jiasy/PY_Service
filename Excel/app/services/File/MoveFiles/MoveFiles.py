@@ -57,9 +57,9 @@ import Main
 if __name__ == "__main__":
     # 直接复制，到新文件中，只需要改，所需参数 和 命令行参数
     _folderPath = os.path.dirname(os.path.realpath(__file__))  # 当前执行目录
-    _folderSp = os.path.split(_folderPath)  # 切目录
-    _baseServiceName = os.path.split(_folderSp[0])[1]  # 再切得到上一层文件夹名
-    _subBaseInServiceName = _folderSp[1]  # 切到的后面就是子服务名称
+    _folderSplit = os.path.split(_folderPath)  # 切目录
+    _baseServiceName = os.path.split(_folderSplit[0])[1]  # 再切得到上一层文件夹名
+    _subBaseInServiceName = _folderSplit[1]  # 切到的后面就是子服务名称
     # Main.excelProcessStepTest(
     #     _baseServiceName,
     #     _subBaseInServiceName,

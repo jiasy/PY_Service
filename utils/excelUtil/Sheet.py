@@ -108,9 +108,9 @@ class Sheet:
     def getStrByCr(self, col_, row_):
         # print("> > Sheet > getStrByCr :  _c: " + str(col_) + " _r: " + str(row_))
         if row_ >= self.maxRow:
-            raise TypeError("Sheet.getStrByPos posStr_ : " + str(row_) + " 行数越界 " + str(self.maxRow))
+            raise Exception("Sheet.getStrByPos posStr_ : " + str(row_) + " 行数越界 " + str(self.maxRow))
         if col_ >= self.maxCol:
-            raise TypeError("Sheet.getStrByPos posStr_ : " + str(col_) + " 列数越界 " + str(self.maxCol))
+            raise Exception("Sheet.getStrByPos posStr_ : " + str(col_) + " 列数越界 " + str(self.maxCol))
         _backValue = self.cells[col_][row_].strValue
         return _backValue
 
