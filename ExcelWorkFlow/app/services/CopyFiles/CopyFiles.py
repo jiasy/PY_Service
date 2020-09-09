@@ -4,6 +4,7 @@ from utils import folderUtils
 import shutil
 import os
 
+
 # 拷贝文件
 class CopyFiles(BaseService):
     def __init__(self, sm_):
@@ -13,13 +14,14 @@ class CopyFiles(BaseService):
         super(CopyFiles, self).create()
 
         self.coverFiles(
+            [".json"],  # 拷贝那些类型
             "/Volumes/18604037792/develop/ShunYuan/farm/genXml/json/",  # 从哪里拷贝
             "/Volumes/18604037792/develop/ShunYuan/wxGame/assets/resources/Json/",  # 拷贝去哪里
-            [".json"]  # 拷贝那些类型
+            True
         )
 
     # 拷贝，只拷贝并替换已经存在的文件
-    def coverFiles(self, sourceFolderPath_, targetFolderPath_, typeFilters_):
+    def coverFiles(self, typeFilters_: list, sourceFolderPath_: str, targetFolderPath_: str, isInclode_: bool):
         print("CopyFiles -> coverFiles : \n    " + sourceFolderPath_ + " -> " + targetFolderPath_)
         _filePathDict = folderUtils.getFilePathKeyValue(targetFolderPath_, typeFilters_)
         for _fileName, _filePath in _filePathDict.items():
