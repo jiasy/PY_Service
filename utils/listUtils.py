@@ -59,9 +59,9 @@ def joinListToStr(list_: list, joinStr_: str):
 
 
 # 打印列表
-def printList(list_: list):
+def printList(list_: list, prefix_: str = ""):
     for _i in range(len(list_)):
-        print(str(list_[_i]))
+        print(prefix_ + str(list_[_i]))
 
 
 # 找到并移除

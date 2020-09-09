@@ -45,8 +45,8 @@ def excelProcessStepTest(
         baseServiceName_: str,
         subBaseInServiceName_: str,
         dParameters_: dict = {},
-        dGlobalDict_: dict = None,
-        cmdDict_: dict = None
+        cmdDict_: dict = None,
+        testExcelBool: bool = False
 ):
     # 创建 Excel 工作流
     _main = Main()
@@ -56,9 +56,6 @@ def excelProcessStepTest(
     _subBaseInService = _excelApp.switchTo(baseServiceName_, subBaseInServiceName_)
     # 全局常量，将路径指定到。测试用的非Excel执行命令，所以，配有配置 dGlobalDict 地方，在这里手动写入。
     _dGlobalDict = {"sResPath": _subBaseInService.resPath}  # 测试使用的文件夹为子服务所对应的资源文件夹
-    # 有指定覆盖的内容，就合并
-    if dGlobalDict_:
-        utils.jsonUtils.mergeAToB(dGlobalDict_, _dGlobalDict)
 
     # 有命令行指定参数，使用命令行的指定参数
     if cmdDict_:
@@ -79,6 +76,9 @@ def excelProcessStepTest(
                 }
             ]
         }
+    # 如果不需要 excel 文件驱动测试，那么就返回
+    if not testExcelBool:
+        return
 
     # 使用sheet和cmd构成的字典来运行
     _excelApp.runServiceByJsonDict(_sheetAndCmdDict)
@@ -98,8 +98,10 @@ def excelProcessStepTest(
         os.pardir,  # PY_Service Folder
         "ExcelCommand.py"  # 执行脚本名
     ))
+
     # 拼接驱动样例的命令
-    _sampleExcelCommand = "python " + _excelCommandPath + \
+    _sampleExcelCommand = "cd " + os.path.dirname(_sampleExcelFilePath) + ";" + \
+                          "python " + _excelCommandPath + \
                           " --excelPath " + _sampleExcelFilePath + \
                           " --sExecuteType 单体测试"
     # 执行命令

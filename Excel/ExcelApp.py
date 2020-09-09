@@ -11,11 +11,13 @@ from base.supports.App.App import App
 from utils import strUtils
 from utils import jsonUtils
 from utils import pyUtils
+from utils import listUtils
 from utils import cmdUtils
 from utils.excelUtil.WorkBook import WorkBook
 from utils.excelUtil.Sheet import SheetType
 import os
 import sys
+import json
 
 
 class ExcelApp(App):
@@ -83,7 +85,15 @@ class ExcelApp(App):
                     print(" " * 8 + _key + " : " + _globalDict[_key])
                 print(" " * 4 + " parameter ")
                 for _key in _parameterDict:
-                    print(" " * 8 + _key + " : " + _parameterDict[_key])
+                    _value = _parameterDict[_key]
+                    if isinstance(_value, list):
+                        print(" " * 8 + _key + " : \n")
+                        listUtils.printList(_value, " " * 12)
+                    elif isinstance(_value, dict):
+                        print(" " * 8 + _key + " : \n")
+                        print(" " * 12 + str(json.dumps(_value, indent=4, sort_keys=False, ensure_ascii=False)))
+                    else:
+                        print(" " * 8 + _key + " : " + _parameterDict[_key])
             else:
                 raise TypeError(
                     "ExcelApp -> runServiceByJsonDict : " + str(_idx) + " 参数配置必须包含 dServiceInfo dParameters"
