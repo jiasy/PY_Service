@@ -42,3 +42,12 @@ if __name__ == "__main__":
 
         }
     )
+
+    # Main.execExcelCommand(
+    #     _baseServiceName,
+    #     _subBaseInServiceName,
+    #     {  # 命令行参数
+    #         "sExecuteType": "单体测试"
+    #     }
+    # )
+

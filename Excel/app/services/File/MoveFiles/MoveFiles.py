@@ -60,18 +60,25 @@ if __name__ == "__main__":
     _folderSp = os.path.split(_folderPath)  # 切目录
     _baseServiceName = os.path.split(_folderSp[0])[1]  # 再切得到上一层文件夹名
     _subBaseInServiceName = _folderSp[1]  # 切到的后面就是子服务名称
-    Main.excelProcessStepTest(
+    # Main.excelProcessStepTest(
+    #     _baseServiceName,
+    #     _subBaseInServiceName,
+    #     {  # 所需参数
+    #         "sSourceFolder": "{sResPath}/source",
+    #         "sTargetFolder": "{sResPath}/target",
+    #         "lFilters": [".txt", ".png"],
+    #         "sType": "override",
+    #         # "sType": "replace",
+    #     },
+    #     {  # 命令行参数
+    #         "sExecuteType": "单体测试"
+    #     }
+    # )
+
+    Main.execExcelCommand(
         _baseServiceName,
         _subBaseInServiceName,
-        {  # 所需参数
-            "sSourceFolder": "{sResPath}/source",
-            "sTargetFolder": "{sResPath}/target",
-            "lFilters": [".txt", ".png"],
-            "sType": "override",
-            # "sType": "replace",
-        },
         {  # 命令行参数
             "sExecuteType": "单体测试"
-        },
-        False  # 是否执行Excel驱动测试
+        }
     )

@@ -106,7 +106,7 @@ class ExcelApp(App):
             _parameterDict = _processStep["dParameters"]
             print("<" + str(
                 _idx + 1
-            ) + "> " + _baseServiceName + " -> " + _baseInServiceName + " " + _comment + "-" * 99)
+            ) + "> " + _comment + " - " * 20 + "【" + _baseServiceName + " -> " + _baseInServiceName + "】")
             _subBaseInService = self.switchTo(_baseServiceName, _baseInServiceName)
 
             try:

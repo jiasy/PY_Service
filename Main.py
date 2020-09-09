@@ -45,8 +45,7 @@ def excelProcessStepTest(
         baseServiceName_: str,
         subBaseInServiceName_: str,
         dParameters_: dict = {},
-        cmdDict_: dict = None,
-        testExcelBool: bool = False
+        cmdDict_: dict = None
 ):
     # 创建 Excel 工作流
     _main = Main()
@@ -76,12 +75,21 @@ def excelProcessStepTest(
                 }
             ]
         }
-    # 如果不需要 excel 文件驱动测试，那么就返回
-    if not testExcelBool:
-        return
-
     # 使用sheet和cmd构成的字典来运行
     _excelApp.runServiceByJsonDict(_sheetAndCmdDict)
+
+
+def execExcelCommand(
+        baseServiceName_: str,
+        subBaseInServiceName_: str,
+        cmdDict_: dict = None
+):
+    # 创建 Excel 工作流
+    _main = Main()
+    _excelApp = _main.createAppByName("Excel")
+    _excelApp.start()
+    # 切换到子服务，只为了能取得它的res路径
+    _subBaseInService = _excelApp.switchTo(baseServiceName_, subBaseInServiceName_)
     print("<模拟命令行执行>-----------------------------------------------------------------------------------------------")
     # 事例Excel路径
     _sampleExcelFilePath = os.path.realpath(
@@ -104,9 +112,14 @@ def excelProcessStepTest(
                           "python " + _excelCommandPath + \
                           " --excelPath " + _sampleExcelFilePath + \
                           " --sExecuteType 单体测试"
+
+    # 拼接命令行，
+    for _key in cmdDict_:
+        _sampleExcelCommand += " --" + _key + " : " + cmdDict_[_key]
+
     # 执行命令
     utils.cmdUtils.doStrAsCmd(
         _sampleExcelCommand,  # 执行命令行驱动 Excel 工作流配置
-        _sampleExcelFilePath,  # 在子服务对应的资源目录内
+        os.path.dirname(_sampleExcelFilePath),  # 在子服务对应的资源目录内
         True
     )
