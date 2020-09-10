@@ -1,17 +1,28 @@
 #!/usr/bin/env python3
 # Created by jiasy at 2020/9/9
-from base.supports.Base.BaseInService import BaseInService
 from utils import folderUtils
 from utils import sysUtils
 from utils import fileCopyUtils
 import os
 import shutil
 
+from Excel.ExcelBaseInService import ExcelBaseInService
 
-class MoveFiles(BaseInService):
+
+class MoveFiles(ExcelBaseInService):
 
     def __init__(self, belongToService_):
         super().__init__(belongToService_)
+        self.funcDict = {
+            "Replace": {
+                "sSourceFolder": "源",
+                "sTargetFolder": "目标",
+            },
+            "Override": {
+                "sSourceFolder": "源",
+                "sTargetFolder": "目标",
+            },
+        }
 
     def create(self):
         super(MoveFiles, self).create()
@@ -33,23 +44,25 @@ class MoveFiles(BaseInService):
             else:
                 print('x-      pass : ' + str(_fileName))
 
-    def doExcelFunc(self, dParameters_: dict):
+    def Replace(self, dParameters_: dict):
         _sourceFolderPath = sysUtils.folderPathFixEnd(dParameters_["sSourceFolder"])
         _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["sTargetFolder"])
         _filters = dParameters_["lFilters"]  # 过滤项
-        _type = dParameters_["sType"]  # 覆盖的类型
-        if _type == "override":  # 直接用源保持结构覆盖过去。
-            fileCopyUtils.copyFilesInFolderTo(
-                _filters,
-                _sourceFolderPath,
-                _targetFolderPath
-            )
-        elif _type == "replace":  # 只替源和目标均有的文件。
-            self.replaceFiles(
-                _filters,
-                _sourceFolderPath,
-                _targetFolderPath
-            )
+        self.replaceFiles(
+            _filters,
+            _sourceFolderPath,
+            _targetFolderPath
+        )
+
+    def Override(self, dParameters_: dict):
+        _sourceFolderPath = sysUtils.folderPathFixEnd(dParameters_["sSourceFolder"])
+        _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["sTargetFolder"])
+        _filters = dParameters_["lFilters"]  # 过滤项
+        fileCopyUtils.copyFilesInFolderTo(
+            _filters,
+            _sourceFolderPath,
+            _targetFolderPath
+        )
 
 
 import Main
@@ -63,12 +76,12 @@ if __name__ == "__main__":
     # Main.excelProcessStepTest(
     #     _baseServiceName,
     #     _subBaseInServiceName,
+    #     "Override",
+    #     #"Replace",
     #     {  # 所需参数
     #         "sSourceFolder": "{sResPath}/source",
     #         "sTargetFolder": "{sResPath}/target",
     #         "lFilters": [".txt", ".png"],
-    #         "sType": "override",
-    #         # "sType": "replace",
     #     },
     #     {  # 命令行参数
     #         "sExecuteType": "单体测试"

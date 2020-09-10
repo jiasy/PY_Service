@@ -1,17 +1,25 @@
 #!/usr/bin/env python3
 # Created by jiasy at 2020/9/7
-from base.supports.Base.BaseInService import BaseInService
+
 from utils import sysUtils
 from utils import folderUtils
 from utils import fileUtils
 import os
 from utils.excelUtil import WorkBook
 
+from Excel.ExcelBaseInService import ExcelBaseInService
 
-class ExcelToJsonFile(BaseInService):
+
+class ExcelToJsonFile(ExcelBaseInService):
 
     def __init__(self, belongToService_):
         super().__init__(belongToService_)
+        self.funcDict = {
+            "ToJsonFile": {
+                "sSourceFolder": "xlsx所在的源",
+                "sTargetFolder": "转换成json后，放置于的路径",
+            }
+        }
 
     def create(self):
         super(ExcelToJsonFile, self).create()
@@ -19,7 +27,7 @@ class ExcelToJsonFile(BaseInService):
     def destory(self):
         super(ExcelToJsonFile, self).destory()
 
-    def doExcelFunc(self, dParameters_: dict):
+    def ToJsonFile(self, dParameters_: dict):
         # 确保路径正确
         _sourceFolderPath = sysUtils.folderPathFixEnd(dParameters_["sSourceFolder"])
         _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["sTargetFolder"])
@@ -50,6 +58,7 @@ if __name__ == "__main__":
     Main.excelProcessStepTest(
         _baseServiceName,
         _subBaseInServiceName,
+        "ToJsonFile",
         {  # 所需参数
             "sSourceFolder": "{sResPath}/source",
             "sTargetFolder": "{sResPath}/target"
@@ -66,4 +75,3 @@ if __name__ == "__main__":
             "sExecuteType": "单体测试"
         }
     )
-

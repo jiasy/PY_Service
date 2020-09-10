@@ -82,8 +82,24 @@ class ExcelApp(App):
             if ("dServiceInfo" in _processStep) and ("dParameters" in _processStep):
                 _baseServiceName = _processStep["dServiceInfo"]["sBaseService"]  # 当前进行的参数
                 _baseInServiceName = _processStep["dServiceInfo"]["sBaseInService"]
+                _functionName = _processStep["dServiceInfo"]["sFunctionName"]
                 _comment = _processStep["dServiceInfo"]["sComment"]
                 _parameterDict = _processStep["dParameters"]
+
+                # 子服务是否存在指定功能的判断
+                _subBaseInService = self.switchTo(_baseServiceName, _baseInServiceName)
+                if not _subBaseInService.checkFunction(_functionName):
+                    self.info.raiseERR(
+                        pyUtils.getCurrentRunningFunctionName() + "\n" +
+                        _baseServiceName + "." + _baseInServiceName + " 不存在 " + _functionName
+                    )
+                _parameterErrorInfo = _subBaseInService.checkParameters(_parameterDict)
+                if _parameterErrorInfo:
+                    self.info.raiseERR(
+                        pyUtils.getCurrentRunningFunctionName() + "\n" +
+                        _baseServiceName + "." + _baseInServiceName + " 参数不正确 " + _parameterErrorInfo
+                    )
+
                 print(  # 输出分割线，标示当前内容
                     "[" + str(_idx + 1) + "] " +
                     _baseServiceName + " -> " + _baseInServiceName +
@@ -106,13 +122,14 @@ class ExcelApp(App):
             else:
                 self.info.raiseERR(
                     pyUtils.getCurrentRunningFunctionName() + "\n" +
-                    "ExcelApp -> runServiceByJsonDict : " + str(_idx) +
-                    " 参数配置必须包含 dServiceInfo dParameters"
+                    "[" + str(_idx) + "]" + " 参数配置必须包含 dServiceInfo dParameters"
                 )
+
         for _idx in range(len(_processSteps)):  # 执行流程
             _processStep = _processSteps[_idx]
             _baseServiceName = _processStep["dServiceInfo"]["sBaseService"]  # 当前进行的参数
             _baseInServiceName = _processStep["dServiceInfo"]["sBaseInService"]
+            _functionName = _processStep["dServiceInfo"]["sFunctionName"]
             _comment = _processStep["dServiceInfo"]["sComment"]
             _parameterDict = _processStep["dParameters"]
             print("<" + str(
@@ -121,7 +138,7 @@ class ExcelApp(App):
             _subBaseInService = self.switchTo(_baseServiceName, _baseInServiceName)
 
             try:
-                _subBaseInService.doExcelFunc(_parameterDict)
+                _subBaseInService.doExcelFunc(_functionName, _parameterDict)
             except Exception as e:
                 print("x-x x-x x-x x-x x-x x-x x-x [ x-x ERROR x-x ] x-x x-x x-x x-x x-x x-x x-x")
                 self.info.raiseERR(pyUtils.getCurrentRunningFunctionName() + "\n" + e.args)

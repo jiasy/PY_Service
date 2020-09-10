@@ -2,7 +2,6 @@
 # json结构的复杂列表。
 # 将Excel转换成字典，这里需要有类型指定。因为列表中有各种类型的对象混排时，类型判断会变得十分复杂。
 # 通过前缀来判断类型。属性名大写。
-import utils
 from utils.excelUtil.DictSheet import DictSheet
 from utils.excelUtil.Sheet import SheetType
 
@@ -33,13 +32,14 @@ class CMDSheet(DictSheet):
             _jsonDict["lProcessSteps"].append(  # 添加步骤
                 {
                     "dServiceInfo": {
-                        "sBaseService": self.getStrByCr(0, _processSteps[_i]["startRow"]),
-                        "sBaseInService": self.getStrByCr(1, _processSteps[_i]["startRow"]),
-                        "sComment": self.getStrByCr(2, _processSteps[_i]["startRow"]),
+                        "sBaseService": self.getStrByCr(0, _processSteps[_i]["startRow"]),  # 服务名
+                        "sBaseInService": self.getStrByCr(1, _processSteps[_i]["startRow"]),  # 子服务名
+                        "sFunctionName": self.getStrByCr(2, _processSteps[_i]["startRow"]),  # 功能名
+                        "sComment": self.getStrByCr(1, _processSteps[_i]["startRow"] + 1),  # 子服务名下一格，对应的注释
                     },
                     "dParameters": self.getDict(  # 全局参数获取
-                        2, self.maxCol,
-                        _processSteps[_i]["startRow"] + 1, _processSteps[_i]["endRow"]
+                        2, self.maxCol,  # 第三列开始，就是参数
+                        _processSteps[_i]["startRow"] + 2, _processSteps[_i]["endRow"],  # 一行给服务指定，一行给注释，所以+2
                     )
                 }
             )

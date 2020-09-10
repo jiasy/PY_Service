@@ -42,8 +42,9 @@ class Main(metaclass=SingletonType):
 
 # Excel 测试专用
 def excelProcessStepTest(
-        baseServiceName_: str,
-        subBaseInServiceName_: str,
+        baseServiceName_: str,  # 服务
+        subBaseInServiceName_: str,  # 子服务
+        functionName_: str,  # 功能名
         dParameters_: dict = {},
         cmdDict_: dict = None
 ):
@@ -67,8 +68,9 @@ def excelProcessStepTest(
             "lProcessSteps": [
                 {
                     "dServiceInfo": {
-                        "sBaseService": baseServiceName_,
-                        "sBaseInService": subBaseInServiceName_,
+                        "sBaseService": baseServiceName_,  # 服务
+                        "sBaseInService": subBaseInServiceName_,  # 子服务
+                        "sFunctionName": functionName_,  # 功能名
                         "sComment": "【单体测试，非Excel配置】"
                     },
                     "dParameters": dParameters_
