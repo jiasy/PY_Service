@@ -72,8 +72,8 @@ if __name__ == "__main__":
         _subBaseInServiceName,
         "ToJsonFile",
         {  # 所需参数
-            "sSourceFolder": "{sResPath}/source",
-            "sTargetFolder": "{sResPath}/target"
+            "sSourceFolder": "{sResFolderPath}/source",
+            "sTargetFolder": "{sResFolderPath}/target"
         },
         {  # 命令行参数
             "sExecuteType": "单体测试"
