@@ -93,7 +93,7 @@ class ExcelApp(App):
                         pyUtils.getCurrentRunningFunctionName() + "\n" +
                         _baseServiceName + "." + _baseInServiceName + " 不存在 " + _functionName
                     )
-                _parameterErrorInfo = _subBaseInService.checkParameters(_parameterDict)
+                _parameterErrorInfo = _subBaseInService.checkParameters(_functionName,_parameterDict)
                 if _parameterErrorInfo:
                     self.info.raiseERR(
                         pyUtils.getCurrentRunningFunctionName() + "\n" +

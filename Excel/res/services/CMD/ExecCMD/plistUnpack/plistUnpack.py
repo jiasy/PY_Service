@@ -71,7 +71,7 @@ def gen_png_from_plist(plist_filename, png_filename):
         print(outfile, "generated")
 
 
-# python /Volumes/Files/develop/GitHub/PY_Service/ExcelCommand.py --excelPath /Volumes/Files/develop/GitHub/PY_Service/Excel/res/services/CMD/SelfToolsCMD/plistUnpack/plistUnpack.xlsx --sExecuteType 命令行驱动
+# python /Volumes/Files/develop/GitHub/PY_Service/ExcelCommand.py --excelPath /Volumes/Files/develop/GitHub/PY_Service/Excel/res/services/CMD/ExecCMD/plistUnpack/plistUnpack.xlsx --sExecuteType 命令行驱动
 if __name__ == '__main__':
     baseFilePath = sys.argv[1]
     plist_filePath = baseFilePath + '.plist'

@@ -8,6 +8,7 @@ class ExcelBaseInService(BaseInService):
 
     def __init__(self, belongToService_):
         super().__init__(belongToService_)
+        self.funcDict = None
 
     def create(self):
         super(ExcelBaseInService, self).create()
@@ -31,4 +32,6 @@ class ExcelBaseInService(BaseInService):
         return None
 
     def doExcelFunc(self, sFunctionName_: str, dParameters_: dict):
-        self[sFunctionName_](dParameters_)
+        hasattr(self, sFunctionName_)  # 使用反射
+        _function = getattr(self, sFunctionName_)
+        _function(dParameters_)
