@@ -55,7 +55,7 @@ def excelProcessStepTest(
     # 切换到子服务，只为了能取得它的res路径
     _subBaseInService = _excelApp.switchTo(baseServiceName_, subBaseInServiceName_)
     # 全局常量，将路径指定到。测试用的非Excel执行命令，所以，配有配置 dGlobalDict 地方，在这里手动写入。
-    _dGlobalDict = {"sResPath": _subBaseInService.resPath}  # 测试使用的文件夹为子服务所对应的资源文件夹
+    _dGlobalDict = {"sResFolderPath": _subBaseInService.subResPath}  # 测试使用的文件夹为子服务所对应的资源文件夹
 
     # 有命令行指定参数，使用命令行的指定参数
     if cmdDict_:
@@ -95,7 +95,7 @@ def execExcelCommand(
     print("<模拟命令行执行>-----------------------------------------------------------------------------------------------")
     # 事例Excel路径
     _sampleExcelFilePath = os.path.realpath(
-        utils.sysUtils.folderPathFixEnd(_subBaseInService.resPath) + subBaseInServiceName_ + ".xlsx"
+        utils.sysUtils.folderPathFixEnd(_subBaseInService.subResPath) + subBaseInServiceName_ + ".xlsx"
     )
     # excel驱动脚本
     _excelCommandPath = os.path.realpath(os.path.join(

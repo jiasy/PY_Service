@@ -79,8 +79,8 @@ if __name__ == "__main__":
     #     "Override",
     #     #"Replace",
     #     {  # 所需参数
-    #         "sSourceFolder": "{sResPath}/source",
-    #         "sTargetFolder": "{sResPath}/target",
+    #         "sSourceFolder": "{sResFolderPath}/source",
+    #         "sTargetFolder": "{sResFolderPath}/target",
     #         "lFilters": [".txt", ".png"],
     #     },
     #     {  # 命令行参数

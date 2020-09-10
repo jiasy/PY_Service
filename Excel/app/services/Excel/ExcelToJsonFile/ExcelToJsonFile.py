@@ -15,10 +15,14 @@ class ExcelToJsonFile(ExcelBaseInService):
     def __init__(self, belongToService_):
         super().__init__(belongToService_)
         self.funcDict = {
-            "ToJsonFile": {
+            "Folder": {  # 转换所有文件
                 "sSourceFolder": "xlsx所在的源",
                 "sTargetFolder": "转换成json后，放置于的路径",
-            }
+            },
+            "File": {  # 转换单个文件
+                "sXlsxPath": "xlsx路径",
+                "sTargetFolder": "转换成json后，放置于的路径",
+            },
         }
 
     def create(self):
@@ -27,9 +31,8 @@ class ExcelToJsonFile(ExcelBaseInService):
     def destory(self):
         super(ExcelToJsonFile, self).destory()
 
-    def ToJsonFile(self, dParameters_: dict):
-        # 确保路径正确
-        _sourceFolderPath = sysUtils.folderPathFixEnd(dParameters_["sSourceFolder"])
+    def Folder(self, dParameters_: dict):
+        _sourceFolderPath = sysUtils.folderPathFixEnd(dParameters_["sSourceFolder"])  # 确保路径正确
         _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["sTargetFolder"])
         _xlsxFilePathList = folderUtils.getFileListInFolder(_sourceFolderPath, [".xlsx"])
         for _idx in range(len(_xlsxFilePathList)):
@@ -39,12 +42,21 @@ class ExcelToJsonFile(ExcelBaseInService):
             # sysUtils.chmod("666","["com.apple.quarantine"]", _xlsxFilePath)
             # xlsx文件 -> 文件夹，包含了将要生成json文件。
             _xlsxFolderPath = fileUtils.getNewNameKeepFolderStructure(
-                _sourceFolderPath, _targetFolderPath, _xlsxFilePath
+                _sourceFolderPath, _targetFolderPath, _xlsxFilePath, ""
             )
             _currentWorkBook = WorkBook.WorkBook()  # 解析WorkBook
             _currentWorkBook.initWithWorkBook(_xlsxFilePath)
             _currentWorkBook.toJsonFile(_xlsxFolderPath)  # 内容解析成json，写入给定文件夹
-            print("    【SUCCESS】 : " + _xlsxFilePath)
+
+    def File(self, dParameters_: dict):
+        _xlsxFilePath = dParameters_["sXlsxPath"]
+        _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["sTargetFolder"])
+        # # 变更执行权限
+        # cmdUtils.showXattr(os.path.dirname(_xlsxFilePath))  # Operation not permitted 时放开注释，查阅信息
+        # sysUtils.chmod("666","["com.apple.quarantine"]", _xlsxFilePath)
+        _currentWorkBook = WorkBook.WorkBook()  # 解析WorkBook
+        _currentWorkBook.initWithWorkBook(_xlsxFilePath)
+        _currentWorkBook.toJsonFile(_targetFolderPath)  # 内容解析成json，写入给定文件夹
 
 
 import Main

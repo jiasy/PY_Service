@@ -49,8 +49,8 @@ if __name__ == "__main__":
                 _ops  # 命令行参数
             )
         except Exception as e:
-            print("ERROR 执行文件错误 : " + _excelPath)
+            print("【ERROR】 执行文件错误 : " + _excelPath)
             sys.exit(1)
     else:
-        print("excelPath 文件不存在: \n" + _excelPath)
+        print("【ERROR】 excelPath 文件不存在: \n    " + _excelPath)
         sys.exit(1)

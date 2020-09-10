@@ -11,8 +11,8 @@ class BaseInService(Base):
         # 自己归属于哪个Service
         self.belongToService = belongToService_
         self.objectName: str = strUtils.lowerFirstChar(self.className)
-        self.resPath: str = resUtils.getRestPathForFullClassPath(self.app.resPath, self.fullClassPath)
-        # print("self.resPath = " + str(self.resPath))
+        self.subResPath: str = resUtils.getRestPathForFullClassPath(self.app.resPath, self.fullClassPath)
+        # print("self.subResPath = " + str(self.subResPath))
 
     def create(self):
         self.belongToService.addSubClassObject(self)

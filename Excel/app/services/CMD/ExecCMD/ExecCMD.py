@@ -41,7 +41,7 @@ class ExecCMD(ExcelBaseInService):
     # 执行工程内的有参数的命令
     def CMDInProject(self, dParameters_: dict):
         _toolName = str(dParameters_["sToolName"])
-        _toolPath = os.path.join(self.resPath, _toolName, _toolName + ".py")
+        _toolPath = os.path.join(self.subResPath, _toolName, _toolName + ".py")
         _cmdStr = "python " + _toolPath + " "
         if "lParameterList" in dParameters_:  # 列表形式的参数需求
             _parameterList = dParameters_["lParameterList"]
@@ -98,14 +98,14 @@ if __name__ == "__main__":
         # "JustCMD",
         # {  # 所需参数
         #     "sCMD": "PWD",
-        #     "sExecFolderPath": "{sResPath}",  # 在子服务对应的资源目录中执行代码
+        #     "sExecFolderPath": "{sResFolderPath}",  # 在子服务对应的资源目录中执行代码
         # },
 
         "CMDInProject",
-        {  # 所需参数，{sResPath}为当前子服务对应的资源文件路径
+        {  # 所需参数，{sResFolderPath}为当前子服务对应的资源文件路径
             "sToolName": "plistUnpack",
             "lParameterList": [
-                "{sResPath}/plistUnpack/pack"
+                "{sResFolderPath}/plistUnpack/pack"
             ]
         },
 

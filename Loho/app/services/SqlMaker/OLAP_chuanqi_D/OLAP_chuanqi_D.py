@@ -8,7 +8,7 @@ class OLAP_chuanqi_D(BaseInService):
 
     def __init__(self, belongToService_):
         super().__init__(belongToService_)
-        self.sqlFilePath = fileUtils.getPath(self.resPath, self.className + ".sql")
+        self.sqlFilePath = fileUtils.getPath(self.subResPath, self.className + ".sql")
 
     def create(self):
         super(OLAP_chuanqi_D, self).create()
