@@ -20,6 +20,7 @@ class Info(Base):
 
     def raiseERR(self, errorStr_):
         logging.error(self.app.appName + " : " + errorStr_)
+        print(errorStr_)
         raise AppError(errorStr_)
 
     def log(self, logStr_):

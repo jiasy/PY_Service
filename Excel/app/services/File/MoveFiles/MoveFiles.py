@@ -15,12 +15,12 @@ class MoveFiles(ExcelBaseInService):
         super().__init__(belongToService_)
         self.funcDict = {
             "Replace": {
-                "sSourceFolder": "源",
-                "sTargetFolder": "目标",
+                "sourceFolder": "源",
+                "targetFolder": "目标",
             },
             "Override": {
-                "sSourceFolder": "源",
-                "sTargetFolder": "目标",
+                "sourceFolder": "源",
+                "targetFolder": "目标",
             },
         }
 
@@ -45,8 +45,8 @@ class MoveFiles(ExcelBaseInService):
                 print('x-      pass : ' + str(_fileName))
 
     def Replace(self, dParameters_: dict):
-        _sourceFolderPath = sysUtils.folderPathFixEnd(dParameters_["sSourceFolder"])
-        _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["sTargetFolder"])
+        _sourceFolderPath = sysUtils.folderPathFixEnd(dParameters_["sourceFolder"])
+        _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["targetFolder"])
         _filters = dParameters_["lFilters"]  # 过滤项
         self.replaceFiles(
             _filters,
@@ -55,8 +55,8 @@ class MoveFiles(ExcelBaseInService):
         )
 
     def Override(self, dParameters_: dict):
-        _sourceFolderPath = sysUtils.folderPathFixEnd(dParameters_["sSourceFolder"])
-        _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["sTargetFolder"])
+        _sourceFolderPath = sysUtils.folderPathFixEnd(dParameters_["sourceFolder"])
+        _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["targetFolder"])
         _filters = dParameters_["lFilters"]  # 过滤项
         fileCopyUtils.copyFilesInFolderTo(
             _filters,
@@ -79,12 +79,12 @@ if __name__ == "__main__":
     #     "Override",
     #     #"Replace",
     #     {  # 所需参数
-    #         "sSourceFolder": "{sResFolderPath}/source",
-    #         "sTargetFolder": "{sResFolderPath}/target",
-    #         "lFilters": [".txt", ".png"],
+    #         "sourceFolder": "{resFolderPath}/source",
+    #         "targetFolder": "{resFolderPath}/target",
+    #         "resFolderPath": [".txt", ".png"],
     #     },
     #     {  # 命令行参数
-    #         "sExecuteType": "单体测试"
+    #         "executeType": "单体测试"
     #     }
     # )
 
@@ -92,6 +92,6 @@ if __name__ == "__main__":
         _baseServiceName,
         _subBaseInServiceName,
         {  # 命令行参数
-            "sExecuteType": "单体测试"
+            "executeType": "单体测试"
         }
     )

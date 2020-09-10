@@ -4,6 +4,7 @@
 from utils import sysUtils
 from utils import folderUtils
 from utils import fileUtils
+import sys
 import os
 from utils.excelUtil import WorkBook
 
@@ -16,12 +17,12 @@ class ExcelToJsonFile(ExcelBaseInService):
         super().__init__(belongToService_)
         self.funcDict = {
             "Folder": {  # 转换所有文件
-                "sSourceFolder": "xlsx所在的源",
-                "sTargetFolder": "转换成json后，放置于的路径",
+                "sourceFolder": "xlsx所在的源",
+                "targetFolder": "转换成json后，放置于的路径",
             },
             "File": {  # 转换单个文件
-                "sXlsxPath": "xlsx路径",
-                "sTargetFolder": "转换成json后，放置于的路径",
+                "xlsxPath": "xlsx路径",
+                "targetFolder": "转换成json后，放置于的路径",
             },
         }
 
@@ -32,8 +33,8 @@ class ExcelToJsonFile(ExcelBaseInService):
         super(ExcelToJsonFile, self).destory()
 
     def Folder(self, dParameters_: dict):
-        _sourceFolderPath = sysUtils.folderPathFixEnd(dParameters_["sSourceFolder"])  # 确保路径正确
-        _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["sTargetFolder"])
+        _sourceFolderPath = sysUtils.folderPathFixEnd(dParameters_["sourceFolder"])  # 确保路径正确
+        _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["targetFolder"])
         _xlsxFilePathList = folderUtils.getFileListInFolder(_sourceFolderPath, [".xlsx"])
         for _idx in range(len(_xlsxFilePathList)):
             _xlsxFilePath = _xlsxFilePathList[_idx]
@@ -49,8 +50,8 @@ class ExcelToJsonFile(ExcelBaseInService):
             _currentWorkBook.toJsonFile(_xlsxFolderPath)  # 内容解析成json，写入给定文件夹
 
     def File(self, dParameters_: dict):
-        _xlsxFilePath = dParameters_["sXlsxPath"]
-        _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["sTargetFolder"])
+        _xlsxFilePath = dParameters_["xlsxPath"]
+        _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["targetFolder"])
         # # 变更执行权限
         # cmdUtils.showXattr(os.path.dirname(_xlsxFilePath))  # Operation not permitted 时放开注释，查阅信息
         # sysUtils.chmod("666","["com.apple.quarantine"]", _xlsxFilePath)
@@ -70,20 +71,22 @@ if __name__ == "__main__":
     Main.excelProcessStepTest(
         _baseServiceName,
         _subBaseInServiceName,
-        "ToJsonFile",
+        "Folder",
         {  # 所需参数
-            "sSourceFolder": "{sResFolderPath}/source",
-            "sTargetFolder": "{sResFolderPath}/target"
+            "sourceFolder": "{resFolderPath}/source",
+            # "sourceFolder": "{resFolderPath}/../../CMD/ExecCMD/plistUnpack/",
+            "targetFolder": "{resFolderPath}/target"
         },
         {  # 命令行参数
-            "sExecuteType": "单体测试"
+            "executeType": "单体测试"
         }
     )
+    sys.exit(1)
 
     Main.execExcelCommand(
         _baseServiceName,
         _subBaseInServiceName,
         {  # 命令行参数
-            "sExecuteType": "单体测试"
+            "executeType": "单体测试"
         }
     )

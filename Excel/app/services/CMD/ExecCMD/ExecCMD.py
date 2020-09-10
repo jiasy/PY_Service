@@ -13,16 +13,16 @@ class ExecCMD(ExcelBaseInService):
         super().__init__(belongToService_)
         self.funcDict = {
             "JustCMD": {
-                "sCMD": "指明执行的命令",
-                "sExecFolderPath": "执行方法时的路径",
+                "CMD": "指明执行的命令",
+                "execFolderPath": "执行方法时的路径",
             },
             "CMDInProject": {
-                "sToolName": "工具名称，因为在工程内，所以不用指定路径。但是，路径是要严格按照规范放置于子服务的res内",
-                "lParameterList": "参数列表，按照DictSheet的规则解析出来的JsonDict",
+                "toolName": "工具名称，因为在工程内，所以不用指定路径。但是，路径是要严格按照规范放置于子服务的res内",
+                "parameterList": "参数列表，按照DictSheet的规则解析出来的JsonDict",
             },
             "ToolsInSystem": {
-                "sToolPathOrTooName": "已经配置好的系统命令，或者系统中的工具路径",
-                "lParameterList": "参数列表，按照DictSheet的规则解析出来的JsonDict",
+                "toolPathOrTooName": "已经配置好的系统命令，或者系统中的工具路径",
+                "parameterList": "参数列表，按照DictSheet的规则解析出来的JsonDict",
             },
         }
 
@@ -34,17 +34,17 @@ class ExecCMD(ExcelBaseInService):
 
     # 执行无参数的命令
     def JustCMD(self, dParameters_: dict):
-        _cmdStr = str(dParameters_["sCMD"])
-        _execFolderPath = sysUtils.folderPathFixEnd(dParameters_["sExecFolderPath"])  # 路径需要确保后面有/
+        _cmdStr = str(dParameters_["CMD"])
+        _execFolderPath = sysUtils.folderPathFixEnd(dParameters_["execFolderPath"])  # 路径需要确保后面有/
         cmdUtils.doStrAsCmd(_cmdStr, _execFolderPath, True)
 
     # 执行工程内的有参数的命令
     def CMDInProject(self, dParameters_: dict):
-        _toolName = str(dParameters_["sToolName"])
+        _toolName = str(dParameters_["toolName"])
         _toolPath = os.path.join(self.subResPath, _toolName, _toolName + ".py")
         _cmdStr = "python " + _toolPath + " "
-        if "lParameterList" in dParameters_:  # 列表形式的参数需求
-            _parameterList = dParameters_["lParameterList"]
+        if "parameterList" in dParameters_:  # 列表形式的参数需求
+            _parameterList = dParameters_["parameterList"]
             for _i in range(len(_parameterList)):
                 _parameterElement = _parameterList[_i]
                 if isinstance(_parameterElement, dict):  # 键值对形式的参数
@@ -52,7 +52,7 @@ class ExecCMD(ExcelBaseInService):
                 else:  # 列表形式的参数
                     _cmdStr += str(_parameterElement) + " "
         else:
-            self.raiseError(pyUtils.getCurrentRunningFunctionName(), "必须有 lParameterList 参数")
+            self.raiseError(pyUtils.getCurrentRunningFunctionName(), "必须有 parameterList 参数")
         cmdUtils.doStrAsCmd(
             _cmdStr,
             os.path.dirname(_toolPath),  # 工具所在目录执行工具
@@ -61,12 +61,12 @@ class ExecCMD(ExcelBaseInService):
 
     # 执行系统中配置好的，或者是某些录几个下的一些工具
     def ToolsInSystem(self, dParameters_: dict):
-        _toolPathOrTooName = str(dParameters_["sToolPathOrTooName"])  # 工具路径，或者是全局已经配置好的名称
-        _execFolderPath = sysUtils.folderPathFixEnd(dParameters_["sExecFolderPath"])  # 路径需要确保后面有/
+        _toolPathOrTooName = str(dParameters_["toolPathOrTooName"])  # 工具路径，或者是全局已经配置好的名称
+        _execFolderPath = sysUtils.folderPathFixEnd(dParameters_["execFolderPath"])  # 路径需要确保后面有/
         _cmdStr = _toolPathOrTooName + " "
         # 列表形式的参数需求
-        if "lParameterList" in dParameters_:
-            _parameterList = dParameters_["lParameterList"]
+        if "parameterList" in dParameters_:
+            _parameterList = dParameters_["parameterList"]
             for _i in range(len(_parameterList)):
                 _parameterElement = _parameterList[_i]
                 if isinstance(_parameterElement, dict):  # 键值对形式的参数
@@ -74,7 +74,7 @@ class ExecCMD(ExcelBaseInService):
                 else:  # 列表形式的参数
                     _cmdStr += str(_parameterElement) + " "
         else:
-            self.raiseError(pyUtils.getCurrentRunningFunctionName(), "必须有 lParameterList 参数")
+            self.raiseError(pyUtils.getCurrentRunningFunctionName(), "必须有 parameterList 参数")
         cmdUtils.doStrAsCmd(
             _cmdStr,
             _execFolderPath,
@@ -97,15 +97,15 @@ if __name__ == "__main__":
 
         # "JustCMD",
         # {  # 所需参数
-        #     "sCMD": "PWD",
-        #     "sExecFolderPath": "{sResFolderPath}",  # 在子服务对应的资源目录中执行代码
+        #     "CMD": "PWD",
+        #     "execFolderPath": "{resFolderPath}",  # 在子服务对应的资源目录中执行代码
         # },
 
         "CMDInProject",
-        {  # 所需参数，{sResFolderPath}为当前子服务对应的资源文件路径
-            "sToolName": "plistUnpack",
-            "lParameterList": [
-                "{sResFolderPath}/plistUnpack/pack"
+        {  # 所需参数，{resFolderPath}为当前子服务对应的资源文件路径
+            "toolName": "plistUnpack",
+            "parameterList": [
+                "{resFolderPath}/plistUnpack/pack"
             ]
         },
 
@@ -116,6 +116,6 @@ if __name__ == "__main__":
     # Main.execExcelCommand(
     #     _baseServiceName, _subBaseInServiceName,  # 取得要测试的Excel地址用。服务配置在取得的Excel中，这里不用配置
     #     {  # 命令行参数
-    #         "sExecuteType": "单体测试"
+    #         "executeType": "单体测试"
     #     }
     # )

@@ -35,14 +35,17 @@ class BaseService(Base):
 
     def getSubClassObject(self, subClassName_: str):
         _subObject: BaseInService = self.sm.serviceProvider.getServiceSubObject(self, subClassName_)
-        # 服务中创建的子对象，都必须继承自Base，便于统计管理
-        if not isinstance(_subObject, BaseInService):
-            self.raiseError(pyUtils.getCurrentRunningFunctionName(), "subClassObject is not extends from BaseInService")
-        # 服务中创建的子对象，不能是服务，免得复制粘贴代码导致的基类使用错误
-        if isinstance(_subObject, BaseService):
-            self.raiseError(pyUtils.getCurrentRunningFunctionName(), "subClassObject is BaseService")
-        _subObject.create()
-        return _subObject
+        if _subObject:
+            # 服务中创建的子对象，都必须继承自Base，便于统计管理
+            if not isinstance(_subObject, BaseInService):
+                self.raiseError(pyUtils.getCurrentRunningFunctionName(), "subClassObject is not extends from BaseInService")
+            # 服务中创建的子对象，不能是服务，免得复制粘贴代码导致的基类使用错误
+            if isinstance(_subObject, BaseService):
+                self.raiseError(pyUtils.getCurrentRunningFunctionName(), "subClassObject is BaseService")
+            _subObject.create()
+            return _subObject
+        else:
+            return None
 
     def addSubClassObject(self, subObject_):
         if not (subObject_ in self.subObjects):

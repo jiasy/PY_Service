@@ -7,19 +7,19 @@ import sys
 
 opsDict = {}
 # 执行参数必须预先定义，所以，可以通过命令行替换的参数是固定的。
-opsDict["sProjectFolderPath"] = '工程文件夹'
-opsDict["sExecuteType"] = '执行模式'
+opsDict["projectFolderPath"] = '工程文件夹'
+opsDict["executeType"] = '执行模式'
 opsDict["excelPath"] = 'excel路径'
 # 可选项
 opsDict["__option__"] = [
-    "sProjectFolderPath"  # 工程目录可以不写。
+    "projectFolderPath"  # 工程目录可以不写。
 ]
 
 
 # 获取执行命令的样例
 def getPythonCmdStr():
     _cmdPyFile = os.path.realpath(__file__)
-    print("python " + _cmdPyFile + " --excelPath [替换成Excel文件路径] --sExecuteType 命令行驱动")
+    print("python " + _cmdPyFile + " --excelPath [替换成Excel文件路径] --executeType 命令行驱动")
     sys.exit(1)  # 获取样例直接退出
 
 

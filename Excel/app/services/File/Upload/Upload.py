@@ -14,17 +14,17 @@ class Upload(ExcelBaseInService):
         super().__init__(belongToService_)
         self.funcDict = {
             "OSS": {
-                "sLocalFolderPath": "本地文件夹",
-                "sAccessKeyId": "AccessKeyId",
-                "sAccessKeySecret": "AccessKeySecret",
-                "sEndPoint": 'EndPoint',
-                "sBucketName": "Bucket",
-                "lFilters": "上传文件的后缀过滤",
-                "sRemoteFolderPath": "目标路径",
+                "localFolderPath": "本地文件夹",
+                "accessKeyId": "AccessKeyId",
+                "accessKeySecret": "AccessKeySecret",
+                "endPoint": 'EndPoint',
+                "bucketName": "Bucket",
+                "filters": "上传文件的后缀过滤",
+                "remoteFolderPath": "目标路径",
             },
             "FTP": {
-                "sSourceFolder": "源",
-                "sTargetFolder": "目标",
+                "sourceFolder": "源",
+                "targetFolder": "目标",
             },
         }
 
@@ -63,22 +63,22 @@ class Upload(ExcelBaseInService):
                     print("    " + str(_remoteFilePath) + " 上传失败 x")
 
     def OSS(self, dParameters_: dict):
-        _localFilePath = sysUtils.folderPathFixEnd(dParameters_["sLocalFolderPath"])
-        _remoteFolderPath = sysUtils.folderPathFixEnd(dParameters_["sRemoteFolderPath"])
+        _localFilePath = sysUtils.folderPathFixEnd(dParameters_["localFolderPath"])
+        _remoteFolderPath = sysUtils.folderPathFixEnd(dParameters_["remoteFolderPath"])
         _bucket = oss2.Bucket(
             oss2.Auth(
-                dParameters_["sAccessKeyId"],
-                dParameters_["sAccessKeySecret"]
+                dParameters_["accessKeyId"],
+                dParameters_["accessKeySecret"]
             ),
-            dParameters_["sEndPoint"],
-            bucket_name=dParameters_["sBucketName"]
+            dParameters_["endPoint"],
+            bucket_name=dParameters_["bucketName"]
         )
         self.uploadDir(
             _localFilePath,
             _localFilePath,
             _bucket,
             _remoteFolderPath,
-            dParameters_["lFilters"]
+            dParameters_["filters"]
         )
 
 
@@ -95,18 +95,18 @@ if __name__ == "__main__":
     #     _subBaseInServiceName,
     #     "OSS",
     #     {  # 所需参数
-    #         "sLocalFolderPath": "{sResFolderPath}",
-    #         "sAccessKeyId": "?",
-    #         "sAccessKeySecret": "?",
-    #         "sEndPoint": '?',
-    #         "sBucketName": "?",
-    #         "lFilters": [
+    #         "localFolderPath": "{resFolderPath}",
+    #         "accessKeyId": "?",
+    #         "accessKeySecret": "?",
+    #         "endPoint": '?',
+    #         "bucketName": "?",
+    #         "filters": [
     #             ".txt"
     #         ],
-    #         "sRemoteFolderPath": "farmRemote/test",
+    #         "remoteFolderPath": "farmRemote/test",
     #     },
     #     {  # 命令行参数
-    #         "sExecuteType": "单体测试"
+    #         "executeType": "单体测试"
     #     }
     # )
 
@@ -114,6 +114,6 @@ if __name__ == "__main__":
     #     _baseServiceName,
     #     _subBaseInServiceName,
     #     {  # 命令行参数
-    #         "sExecuteType": "单体测试"
+    #         "executeType": "单体测试"
     #     }
     # )

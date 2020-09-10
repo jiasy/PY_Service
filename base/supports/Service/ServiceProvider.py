@@ -7,7 +7,6 @@ import os
 
 class ServiceProvider(Base):
 
-
     def __init__(self, sm_):
         super().__init__(sm_)
 
@@ -44,7 +43,7 @@ class ServiceProvider(Base):
         # _appStateObject.fullClassPath = _appStatePath  # 变更完整路径名
         return _appStateObject
 
-    def getServiceSubObject(self, serviceObject_:BaseService, subClassName_:str):
+    def getServiceSubObject(self, serviceObject_: BaseService, subClassName_: str):
         # 通过 APP名.app.services.服务名.文件夹名.类文件名.类名 这个类路径，创建一个实例对象
         # 所属 app 名称，转换为路径
         _servicePath = serviceObject_.app.appName + ".app.services"
@@ -53,7 +52,8 @@ class ServiceProvider(Base):
         # 服务所在路径下，取得对象的 文件夹名.类文件名.类名
         _serviceSubClassPath = _serviceClassPath + ("." + subClassName_) * 3
         # 创建对象
-        _serviceSubObject = pyUtils.getObjectByClassPath(_serviceSubClassPath, serviceObject_)
-        # _serviceSubObject.fullClassPath = _serviceSubClassPath  # 变更完整路径名
-        # 返回对象
-        return _serviceSubObject
+        try:
+            _serviceSubObject = pyUtils.getObjectByClassPath(_serviceSubClassPath, serviceObject_)
+            return _serviceSubObject
+        except Exception as _err:
+            print(serviceObject_.className + " 没有子服务 " + subClassName_ + "\n" + str(_err.args))

@@ -26,7 +26,7 @@ class ListSheet(Sheet):
                 for _row in range(2, self.maxRow):
                     _dataObject = {}  # 创建数据对象
                     for _col in range(1, self.maxCol):  # 参数所在位，填入对应的内容
-                        _dataObject[_parameterNames[_col - 1]] = self.getStrByCr(_col, _row)  # 识别一行数据,按照第二行的字段名进行写入
+                        _dataObject[_parameterNames[_col - 1][3:]] = self.getStrByCr(_col, _row)  # 识别一行数据,按照第二行的字段名进行写入
                     _list.append(_dataObject)  # 将数据添加到列表
                 return _list
             else:

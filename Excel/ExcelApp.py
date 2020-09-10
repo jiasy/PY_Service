@@ -29,6 +29,7 @@ class ExcelApp(App):
 
     # 运行 Excel
     def runExcel(self, excelPath_: str, pwd_: str, cmdDict_: dict = {}):
+        print("执行excel配置流程 :" + excelPath_)
         # cmdUtils.showXattr(os.path.dirname(excelPath_))  # Operation not permitted 时放开注释，查阅信息
         # sysUtils.chmod("666", ["com.apple.quarantine"], excelPath_)  # 按照信息删除对应的限制信息
         # Excel 依旧权限不够，强制重新开启 Finder。
@@ -43,6 +44,7 @@ class ExcelApp(App):
                     " 不是 CMD 类型"
                 )
             _sheetJsonDict = _sheet.toJsonDict()
+            print(str(_sheetName) + " 配置解析成功")
             if ("dGlobalDict" in _sheetJsonDict) and ("lProcessSteps" in _sheetJsonDict):
                 _globalDict = _sheetJsonDict["dGlobalDict"]  # 全局参数
                 _cmdInfoDict = {"__folder__": os.path.dirname(excelPath_), "__pwd__": pwd_}
@@ -72,7 +74,10 @@ class ExcelApp(App):
             if isinstance(_changeValue, str):  # 变化后的值是字符串的话，尝试替换字符串值
                 _convertedStr = strUtils.replaceKeyToValueInTemplate(_globalDict, _changeValue)  # 字典内容替换模板
                 if "{" in _convertedStr and "}" in _convertedStr:  # 没有替换的时候，会有{x}这样的字符串残留
-                    raise pyUtils.AppError(_changePath + " : " + _convertedStr + "。可能有未转换的数据残留")
+                    self.info.raiseERR(
+                        pyUtils.getCurrentRunningFunctionName() + "\n" +
+                        _changePath + " : " + _convertedStr + "。可能有未转换的数据残留"
+                    )
                 self.sm.dc.setValueToDataPath(_changePath, _convertedStr, self.dataSetCache)  # 将变换后的值写回数据缓存
         _sheetAndCmdDict = self.sm.dc.dataSetToJsonDict(_pathToSheetAndCmdDict, self.dataSetCache)  # 将缓存转换回json字典对象
         # 流程步骤 ------------------------------------------------------------------------------------------------------
@@ -85,15 +90,19 @@ class ExcelApp(App):
                 _functionName = _processStep["dServiceInfo"]["sFunctionName"]
                 _comment = _processStep["dServiceInfo"]["sComment"]
                 _parameterDict = _processStep["dParameters"]
-
                 # 子服务是否存在指定功能的判断
                 _subBaseInService = self.switchTo(_baseServiceName, _baseInServiceName)
+                if not _subBaseInService:
+                    self.info.raiseERR(
+                        pyUtils.getCurrentRunningFunctionName() + "\n" +
+                        _baseServiceName + " 不存在 " + _baseInServiceName
+                    )
                 if not _subBaseInService.checkFunction(_functionName):
                     self.info.raiseERR(
                         pyUtils.getCurrentRunningFunctionName() + "\n" +
                         _baseServiceName + "." + _baseInServiceName + " 不存在 " + _functionName
                     )
-                _parameterErrorInfo = _subBaseInService.checkParameters(_functionName,_parameterDict)
+                _parameterErrorInfo = _subBaseInService.checkParameters(_functionName, _parameterDict)
                 if _parameterErrorInfo:
                     self.info.raiseERR(
                         pyUtils.getCurrentRunningFunctionName() + "\n" +
@@ -147,7 +156,12 @@ class ExcelApp(App):
     def switchTo(self, sBaseService_: str, sBaseInService_: str):
         self.sm.switchRunningServices([])  # 清理原有
         self.sm.switchRunningServices([sBaseService_])  # 重新构建
-        return self.sm.getServiceByName(sBaseService_).getSubClassObject(sBaseInService_)
+        _baseService = self.sm.getServiceByName(sBaseService_)
+        _baseInService = _baseService.getSubClassObject(sBaseInService_)
+        if _baseInService:
+            return _baseInService
+        else:
+            sys.exit(1)
 
 
 if __name__ == "__main__":
@@ -166,7 +180,7 @@ if __name__ == "__main__":
     _sampleExcelCommand = "python " + _excelCommandPath + \
                           " --sProjectFolderPath " + _resFolderPath + \
                           " --excelPath " + _excelFileName + ".xlsx" + \
-                          " --sExecuteType 工作流测试"
+                          " --executeType 工作流测试"
     # 执行命令
     cmdUtils.doStrAsCmd(
         _sampleExcelCommand,  # 执行命令行驱动 Excel 工作流配置

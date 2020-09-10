@@ -71,14 +71,17 @@ def gen_png_from_plist(plist_filename, png_filename):
         print(outfile, "generated")
 
 
-# python /Volumes/Files/develop/GitHub/PY_Service/ExcelCommand.py --excelPath /Volumes/Files/develop/GitHub/PY_Service/Excel/res/services/CMD/ExecCMD/plistUnpack/plistUnpack.xlsx --sExecuteType 命令行驱动
+# python /Volumes/Files/develop/GitHub/PY_Service/ExcelCommand.py --excelPath /Volumes/Files/develop/GitHub/PY_Service/Excel/res/services/CMD/ExecCMD/plistUnpack/plistUnpack.xlsx --executeType 命令行驱动
 if __name__ == '__main__':
     baseFilePath = sys.argv[1]
     plist_filePath = baseFilePath + '.plist'
-    png_filePath = baseFilePath + '.png'
-    if os.path.exists(plist_filePath) and \
-            os.path.exists(png_filePath) and \
-            os.path.dirname(plist_filePath) == os.path.dirname(png_filePath):
-        gen_png_from_plist(plist_filePath, png_filePath)
+    if os.path.realpath(plist_filePath) == baseFilePath + '.plist':
+        png_filePath = baseFilePath + '.png'
+        if os.path.exists(plist_filePath) and \
+                os.path.exists(png_filePath) and \
+                os.path.dirname(plist_filePath) == os.path.dirname(png_filePath):
+            gen_png_from_plist(plist_filePath, png_filePath)
+        else:
+            print("ERROR 请确保plist和png在同一个文件夹")
     else:
-        print("make sure you have both plist and png files in the same directory")
+        print("ERROR 请使用绝对路径指定plist和png公共路径名称")

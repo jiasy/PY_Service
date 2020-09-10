@@ -51,15 +51,15 @@ def posToCr(posStr_):
 # 判断一个参数的命名是否符合命名规范.
 def isParNameLegal(parameterName_):
     if not isParNameData(parameterName_) and not isParNameStructure(parameterName_):
-        raise Exception('字段名称必须是t,s,u,i,f,b,d,l中的一个,当前字段名为 : ' + parameterName_)
+        raise Exception('字段名称必须是t,s,i,f,b,d,l中的一个,当前字段名为 : ' + parameterName_)
     else:
         return parameterName_
 
 
-# 属性名是一个数据， t 时间 , s 字符串 , u 唯一确定 , i 整形 , f 浮点 , b 布尔
+# 属性名是一个数据， t 时间 , s 字符串 ,i 整形 , f 浮点 , b 布尔
 def isParNameData(parameterName_):
-    if (parameterName_.startswith("t") or parameterName_.startswith("s") or parameterName_.startswith(
-            "u") or parameterName_.startswith("i") or parameterName_.startswith("f") or parameterName_.startswith("b")):
+    if (parameterName_.startswith("<t>") or parameterName_.startswith("<s>") or parameterName_.startswith(
+            "<i>") or parameterName_.startswith("<f>") or parameterName_.startswith("<b>")):
         return True
     else:
         return False
@@ -67,7 +67,7 @@ def isParNameData(parameterName_):
 
 # 属性名是一个结构，d 字典 , l 列表
 def isParNameStructure(parameterName_):
-    if parameterName_.startswith("d") or parameterName_.startswith("l"):
+    if parameterName_.startswith("<d>") or parameterName_.startswith("<l>"):
         return True
     else:
         return False
