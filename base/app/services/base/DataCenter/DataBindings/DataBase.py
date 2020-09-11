@@ -54,7 +54,7 @@ class DataBase(Base):
         if _dataPath.find("this.") == 0:
             if not self.displayObject:
                 self.raiseError(pyUtils.getCurrentRunningFunctionName(),
-                                "ERROR : DataBase " + _dataPath + " 为UI数据路径，没有绑定是哪个UI")
+                                "DataBase " + _dataPath + " 为UI数据路径，没有绑定是哪个UI")
                 return None
             else:
                 # 通过自己绑定的显示对象，获取，显示对象所处的数据路径

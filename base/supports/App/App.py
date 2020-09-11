@@ -44,11 +44,16 @@ class App(object):
             # # 显示当前存在的Base子类对象
             # self.sm.showCurrentBaseObejctsInfo()
         else:
-            raise pyUtils.AppError(stateName_ + " : is not in appState\n" + str(
-                json.dumps(self.appState.appStateDict, indent=4, sort_keys=False, ensure_ascii=False)))
+            self.info.raiseERR(
+                pyUtils.getCurrentRunningFunctionName() + "\n" +
+                stateName_ + " : is not in appState\n" +
+                str(json.dumps(self.appState.appStateDict, indent=4, sort_keys=False, ensure_ascii=False))
+            )
 
     def start(self):
-        raise pyUtils.AppError("App start function must override")
+        self.info.raiseERR(
+            pyUtils.getCurrentRunningFunctionName() + "App start function must override"
+        )
 
     def doTest(self):
         self.changeAppState("test")

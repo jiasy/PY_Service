@@ -53,8 +53,15 @@ class OLAP_assets_statistics_D(BaseInService):
             _result, _errList = dataUtils_presto.executePrestoSQL(_txPrestoInfo, _querySql)
             if _errList:
                 print(_querySql)
-                print("ERROR : \n" + str(_errList))
+                self.raiseError(
+                    pyUtils.getCurrentRunningFunctionName(),
+                    str(_errList)
+                )
             else:
                 if len(_result) == 0:
                     print(_querySql)
-                    print('WARNING : no data')
+                    self.raiseError(
+                        pyUtils.getCurrentRunningFunctionName(),
+                        'WARNING : no data'
+                    )
+

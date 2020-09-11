@@ -289,7 +289,7 @@ class DataCenter(BaseService):
                 print(_currentPath + " : " + str(_value))
             elif isinstance(_value, list):
                 self.raiseError(pyUtils.getCurrentRunningFunctionName(),
-                                "ERROR DataCenter -> printData : 转换完的数据不可能出现 数组")
+                                "DataCenter -> printData : 转换完的数据不可能出现 数组")
             else:
                 self.printData(_value, _currentPath)
 
