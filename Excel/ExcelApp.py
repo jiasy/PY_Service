@@ -29,10 +29,11 @@ class ExcelApp(App):
 
     # 运行 Excel
     def runExcel(self, excelPath_: str, pwd_: str, cmdDict_: dict = {}):
-        print("执行excel配置流程 :" + excelPath_)
-        # cmdUtils.showXattr(os.path.dirname(excelPath_))  # Operation not permitted 时放开注释，查阅信息
-        # sysUtils.chmod("666", ["com.apple.quarantine"], excelPath_)  # 按照信息删除对应的限制信息
+        # cmdUtils.removeMacXattr(excelPath_)# 修改 excel 权限
+        # sys.exit(1)
         # Excel 依旧权限不够，强制重新开启 Finder。
+
+        print("\n1.解析Excel : " + excelPath_ + "\n")
         _currentWorkBook = WorkBook()
         _currentWorkBook.initWithWorkBook(excelPath_)
         for _sheetName in _currentWorkBook.sheetDict:
@@ -82,6 +83,7 @@ class ExcelApp(App):
                 self.sm.dc.setValueToDataPath(_changePath, _convertedStr, self.dataSetCache)  # 将变换后的值写回数据缓存
         _sheetAndCmdDict = self.sm.dc.dataSetToJsonDict(_pathToSheetAndCmdDict, self.dataSetCache)  # 将缓存转换回json字典对象
         # 流程步骤 ------------------------------------------------------------------------------------------------------
+        print("\n2.校验各步骤参数\n")
         _processSteps = _sheetAndCmdDict["lProcessSteps"]  # 获取流程步骤
         for _idx in range(len(_processSteps)):  # 输出参数，校验流程
             _processStep = _processSteps[_idx]
@@ -134,7 +136,7 @@ class ExcelApp(App):
                     pyUtils.getCurrentRunningFunctionName() + "\n" +
                     "[" + str(_idx) + "]" + " 参数配置必须包含 dServiceInfo dParameters"
                 )
-
+        print("\n3.执行步骤\n")
         for _idx in range(len(_processSteps)):  # 执行流程
             _processStep = _processSteps[_idx]
             _baseServiceName = _processStep["dServiceInfo"]["sBaseService"]  # 当前进行的参数
@@ -179,8 +181,8 @@ if __name__ == "__main__":
     _resFolderPath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "res")
     # 拼接驱动样例的命令
     _sampleExcelCommand = "python " + _excelCommandPath + \
-                          " --sProjectFolderPath " + _resFolderPath + \
-                          " --excelPath " + _excelFileName + ".xlsx" + \
+                          " --sProjectFolderPath '" + _resFolderPath + "'" + \
+                          " --excelPath '" + _excelFileName + ".xlsx" + "'" + \
                           " --executeType 工作流测试"
     # 执行命令
     cmdUtils.doStrAsCmd(

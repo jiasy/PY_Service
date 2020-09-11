@@ -55,5 +55,5 @@ class StateSheet(Sheet):
         _targetDotPath = os.path.join(outputFolderPath_, self.sheetName + ".dot")
         _targetPngPath = os.path.join(outputFolderPath_, self.sheetName + ".png")
         fileUtils.writeFileWithStr(_targetDotPath, _dot_state_str)
-        _graphCmd = "dot " + _targetDotPath + " -T png -o " + _targetPngPath
+        _graphCmd = "dot '" + _targetDotPath + "' -T png -o '" + _targetPngPath + "'"
         cmdUtils.doStrAsCmd(_graphCmd, outputFolderPath_, True)

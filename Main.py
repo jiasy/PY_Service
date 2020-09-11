@@ -110,13 +110,13 @@ def execExcelCommand(
     ))
 
     # 拼接驱动样例的命令
-    _sampleExcelCommand = "cd " + os.path.dirname(_sampleExcelFilePath) + ";" + \
-                          "python " + _excelCommandPath + \
-                          " --excelPath " + _sampleExcelFilePath
+    _sampleExcelCommand = "cd '" + os.path.dirname(_sampleExcelFilePath) + "';" + \
+                          "python '" + _excelCommandPath + "'" + \
+                          " --excelPath '" + _sampleExcelFilePath + "'"
 
     # 拼接命令行，
     for _key in cmdDict_:
-        _sampleExcelCommand += " --" + _key + " " + cmdDict_[_key]
+        _sampleExcelCommand += " --" + _key + " '" + cmdDict_[_key] + "'"
 
     # 执行命令
     utils.cmdUtils.doStrAsCmd(

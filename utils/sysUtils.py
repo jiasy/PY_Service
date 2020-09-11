@@ -55,7 +55,7 @@ def chmod(type_: str, filePath_: str, deleteUrlList_: list, printPipeLines_: boo
     if os_is_mac():  # mac多了一步
         for _i in range(len(deleteUrlList_)):
             cmdUtils.doStrAsCmd(
-                "xattr -dr " + deleteUrlList_[_i] + " " + os.path.basename(filePath_),  # mac系统下去掉 @ 权限
+                "xattr -dr '" + deleteUrlList_[_i] + "' '" + os.path.basename(filePath_) + "'",  # mac系统下去掉 @ 权限
                 os.path.dirname(filePath_),  # 文件所在的文件夹内执行
                 printPipeLines_  # 打印命令pipeline
             )
@@ -68,7 +68,7 @@ def chmod(type_: str, filePath_: str, deleteUrlList_: list, printPipeLines_: boo
     # 7 可读写执行 rwx
     if type_ == "111" or type_ == "222" or type_ == "444" or type_ == "666" or type_ == "777" or type_ == "333" or type_ == "555":
         cmdUtils.doStrAsCmd(
-            "chmod -R " + type_ + " " + os.path.basename(filePath_),  # 可读可写不可执行 666
+            "chmod -R " + type_ + " '" + os.path.basename(filePath_) + "'",  # 可读可写不可执行 666
             os.path.dirname(filePath_),
             printPipeLines_
         )

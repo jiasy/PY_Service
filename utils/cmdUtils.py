@@ -90,7 +90,7 @@ def removeMacXattr(filePath_: str):
         _fileLocateFolderPath = os.path.split(filePath_)[0]
         if _pipeline.endswith(" " + _fileNameWithSuffix):  # 找到文件所在行
             doStrAsCmd(
-                "chmod -R 666 " + _fileNameWithSuffix,
+                "chmod -R 666 '" + _fileNameWithSuffix + "'",
                 _fileLocateFolderPath,
                 True
             )
@@ -99,7 +99,7 @@ def removeMacXattr(filePath_: str):
                 _beginTimeResult = re.search(r'^\s+([a-z\.\#A-Z0-9]+)\s+', _pipelineFollow)
                 if _beginTimeResult:
                     _xattr = _beginTimeResult.group(1)
-                    _cmdStr = "xattr -dr " + _xattr + " " + _fileNameWithSuffix
+                    _cmdStr = "xattr -dr '" + _xattr + "' '" + _fileNameWithSuffix + "'"
                     doStrAsCmd(_cmdStr, _fileLocateFolderPath, True)
                 else:
                     _idx = _j - 1  # 当前不是属性，下一个循环，要从不是属性的位置开始。后面加，这里要减

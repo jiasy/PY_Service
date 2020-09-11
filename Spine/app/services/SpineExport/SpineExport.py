@@ -44,7 +44,7 @@ class SpineExport(BaseService):
         for _i in range(len(_spineList)):
             _spinePath = _spineList[_i]
             _spineJustNameList.append(fileUtils.justName(_spinePath))
-            _cmd = _cmd + " -i " + _spinePath + " -m -o " + jsonOutputFolderPath_ + " -e " + exportJsonPath_ + " "
+            _cmd = _cmd + " -i '" + _spinePath + "' -m -o '" + jsonOutputFolderPath_ + "' -e '" + exportJsonPath_ + "' "
         _pipeLines = cmdUtils.doStrAsCmd(_cmd, spineFolderPath_, False)
         if not _pipeLines:
             sys.exit(1)
@@ -61,7 +61,7 @@ class SpineExport(BaseService):
 
         # 根据配置，打包图片
         _cmd = self.spineAppPath
-        _cmd = _cmd + " -i " + pngFolderPath_ + " -o " + altasOutputFolderPath_ + " -n " + altasName_ + " -p " + packJsonPath_
+        _cmd = _cmd + " -i '" + pngFolderPath_ + "' -o '" + altasOutputFolderPath_ + "' -n '" + altasName_ + "' -p '" + packJsonPath_ + "'"
         _pipeLines = cmdUtils.doStrAsCmd(_cmd, spineFolderPath_, False)
         if not _pipeLines:
             sys.exit(1)

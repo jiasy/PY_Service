@@ -7,21 +7,25 @@ from utils import pyUtils
 import os
 
 from Excel.ExcelBaseInService import ExcelBaseInService
+
+
 class ExecCMD(ExcelBaseInService):
 
     def __init__(self, belongToService_):
         super().__init__(belongToService_)
         self.funcDict = {
-            "JustCMD": {
+            "JustCMD": {  # 没有参数的方法，比如 tree ,ls -l 等
                 "CMD": "指明执行的命令",
                 "execFolderPath": "执行方法时的路径",
             },
-            "CMDInProject": {
+            "CMDInProject": {  # 网上找的py脚本，直接拖放到工程里。提供这样一个方式来执行脚本。
                 "toolName": "工具名称，因为在工程内，所以不用指定路径。但是，路径是要严格按照规范放置于子服务的res内",
                 "parameterList": "参数列表，按照DictSheet的规则解析出来的JsonDict",
             },
-            "ToolsInSystem": {
+            "ToolsInSystem": {  # 电脑里的工具，或者是支持命令行的App(比如CocosCreator、Unity、Spine、TexturePacker等)
                 "toolPathOrTooName": "已经配置好的系统命令，或者系统中的工具路径",
+                # 参数列表，一般两种 键值对 或 纯值。这两种需要做到混合。某些工具的键是可以重复的，所以，不能使用平表来做。
+                # 使用数组来设置参数，支持纯值和键值，顺序严格按照数据的摆放顺序排列参数。
                 "parameterList": "参数列表，按照DictSheet的规则解析出来的JsonDict",
             },
         }
@@ -48,9 +52,9 @@ class ExecCMD(ExcelBaseInService):
             for _i in range(len(_parameterList)):
                 _parameterElement = _parameterList[_i]
                 if isinstance(_parameterElement, dict):  # 键值对形式的参数
-                    _cmdStr += "--" + _parameterElement["key"] + " " + _parameterElement["value"]
-                else:  # 列表形式的参数
-                    _cmdStr += str(_parameterElement) + " "
+                    _cmdStr += "--" + _parameterElement["key"] + " '" + _parameterElement["value"] + "' "
+                else:  # 纯值形 参数
+                    _cmdStr += "'" + str(_parameterElement) + "' "
         else:
             self.raiseError(pyUtils.getCurrentRunningFunctionName(), "必须有 parameterList 参数")
         cmdUtils.doStrAsCmd(
@@ -70,9 +74,9 @@ class ExecCMD(ExcelBaseInService):
             for _i in range(len(_parameterList)):
                 _parameterElement = _parameterList[_i]
                 if isinstance(_parameterElement, dict):  # 键值对形式的参数
-                    _cmdStr += "--" + _parameterElement["key"] + " " + _parameterElement["value"]
+                    _cmdStr += "--" + _parameterElement["key"] + " '" + _parameterElement["value"] + "' "
                 else:  # 列表形式的参数
-                    _cmdStr += str(_parameterElement) + " "
+                    _cmdStr += "'" + str(_parameterElement) + "' "
         else:
             self.raiseError(pyUtils.getCurrentRunningFunctionName(), "必须有 parameterList 参数")
         cmdUtils.doStrAsCmd(
