@@ -4,9 +4,11 @@ from utils import fileUtils
 from utils import listUtils
 from utils import pyUtils
 from utils import convertUtils
+from utils import sysUtils
 import subprocess
 import sys
 import re
+import shutil
 
 
 # 将 逗号分割的字符串 加工成 参数输出,最后一个参数判断它是不是需要“'”包裹
@@ -80,37 +82,46 @@ def doStrAsCmdAndGetPipeline(cmdStr_: str, whichFolder_: str):
 
 # 获取文件夹内的文件，权限信息，苹果环境下，携带@限制权限符
 def showXattr(folderPath_: str):
-    listUtils.printList(doStrAsCmdAndGetPipeline("ls -laeO@", folderPath_))
+    if sysUtils.os_is_mac():
+        listUtils.printList(doStrAsCmdAndGetPipeline("ls -laeO@", folderPath_))
 
 
+# 去掉mac的xattr权限
 def removeMacXattr(filePath_: str):
-    _pipelines = doStrAsCmdAndGetPipeline("ls -laeO@", os.path.dirname(filePath_))
-    _idx = 0
-    while (_idx < len(_pipelines)):
-        _pipeline = _pipelines[_idx]
-        _fileNameWithSuffix = os.path.split(filePath_)[1]
-        _fileLocateFolderPath = os.path.split(filePath_)[0]
-        if _pipeline.endswith(" " + _fileNameWithSuffix):  # 找到文件所在行
-            doStrAsCmd(
-                "chmod -R 666 '" + _fileNameWithSuffix + "'",
-                _fileLocateFolderPath,
-                True
-            )
-            for _j in range(_idx + 1, len(_pipelines)):  # 后续有可能是权限描述
-                _pipelineFollow = _pipelines[_j]
-                _beginTimeResult = re.search(r'^\s+([a-z\.\#A-Z0-9]+)\s+([-0-9]+)', _pipelineFollow)
-                if _beginTimeResult:
-                    _id = convertUtils.strToInt(_beginTimeResult.group(2))
-                    if _id > 0:
-                        _xattr = _beginTimeResult.group(1)
-                        _cmdStr = "xattr -dr '" + _xattr + "' '" + _fileNameWithSuffix + "'"
-                        doStrAsCmd(_cmdStr, _fileLocateFolderPath, True)
+    if sysUtils.os_is_mac():
+        _pipelines = doStrAsCmdAndGetPipeline("ls -laeO@", os.path.dirname(filePath_))
+        _idx = 0
+        while (_idx < len(_pipelines)):
+            _pipeline = _pipelines[_idx]
+            _fileNameWithSuffix = os.path.split(filePath_)[1]
+            _fileLocateFolderPath = os.path.split(filePath_)[0]
+            if _pipeline.endswith(" " + _fileNameWithSuffix):  # 找到文件所在行
+                doStrAsCmd(
+                    "chmod -R 666 '" + _fileNameWithSuffix + "'",
+                    _fileLocateFolderPath,
+                    True
+                )
+                for _j in range(_idx + 1, len(_pipelines)):  # 后续有可能是权限描述
+                    _pipelineFollow = _pipelines[_j]
+                    _beginTimeResult = re.search(r'^\s+([a-z\.\#A-Z0-9]+)\s+([-0-9]+)', _pipelineFollow)
+                    if _beginTimeResult:
+                        _id = convertUtils.strToInt(_beginTimeResult.group(2))
+                        if _id > 0:
+                            _xattr = _beginTimeResult.group(1)
+                            _cmdStr = "xattr -dr '" + _xattr + "' '" + _fileNameWithSuffix + "'"
+                            doStrAsCmd(_cmdStr, _fileLocateFolderPath, True)
+                        else:
+                            try:
+                                fileUtils.replaceFileBySelf(filePath_)
+                            except Exception as _err:
+                                raise pyUtils.AppError(
+                                    "权限-1:\n    1.关闭Excel,后重启Finder，再次进行尝试。\n    2.拷贝出来，手动删除原有，再粘贴回去。\n" +
+                                    str(_err.args)
+                                )
                     else:
-                        raise pyUtils.AppError("权限-1可能需要重启Finder，再尝试")
-                else:
-                    _idx = _j - 1  # 当前不是属性，下一个循环，要从不是属性的位置开始。后面加，这里要减
-                    break
-        _idx += 1
+                        _idx = _j - 1  # 当前不是属性，下一个循环，要从不是属性的位置开始。后面加，这里要减
+                        break
+            _idx += 1
 
 
 # 获取校验参数
@@ -146,4 +157,5 @@ def getOps(opsDict_, parse_):
 
 if __name__ == "__main__":
     # doStrAsCmd("PWD", "/Users/jiasy/Documents/develop/", True)
-    removeMacXattr("/Volumes/Files/develop/GitHub/PY_Service/Excel/res/services/File/MoveFiles/MoveFiles.xlsx")
+    # removeMacXattr("/Volumes/Files/develop/GitHub/PY_Service/Excel/res/services/File/MoveFiles/MoveFiles.xlsx")
+    removeMacXattr("/Volumes/Files/develop/GitHub/PY_Service/Excel/res/services/File/Json/Json.xlsx")

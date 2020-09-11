@@ -180,6 +180,24 @@ def zipFolder(sourceFolderPath_: str, zipParentFolderPath_: str, zipName_: str):
     os.chdir(_lastFolder)
 
 
+# 备份文件
+def backUpFile(filePath_: str):
+    _dirName = os.path.dirname(filePath_)
+    _justName = justName(filePath_)
+    _suffix = os.path.splitext(filePath_)[1]
+    _backUpPath = os.path.join(_dirName, _justName + "_backUp." + _suffix)
+    shutil.copy(filePath_, _backUpPath)
+    os.remove(filePath_)
+    return _backUpPath
+
+
+# 自己复制出一个副本，然后，删除掉自己，再用副本替换自己
+def replaceFileBySelf(filePath_: str):
+    _backUpPath = backUpFile(filePath_)
+    shutil.copy(_backUpPath, filePath_)
+    os.remove(_backUpPath)
+
+
 if __name__ == "__main__":
     getPath(None, "./a/b/pk.jpg")
 
