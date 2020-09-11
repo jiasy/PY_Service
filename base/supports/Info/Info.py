@@ -3,7 +3,6 @@ from base.supports.Base.Base import Base
 
 from utils.pyUtils import AppError
 import logging
-import os
 
 
 class Info(Base):
@@ -20,7 +19,6 @@ class Info(Base):
 
     def raiseERR(self, errorStr_):
         logging.error(self.app.appName + " : " + errorStr_)
-        print("【ERROR】" + errorStr_)
         raise AppError(errorStr_)
 
     def log(self, logStr_):

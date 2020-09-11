@@ -2,6 +2,8 @@
 import os
 from utils import fileUtils
 from utils import listUtils
+from utils import pyUtils
+from utils import convertUtils
 import subprocess
 import sys
 import re
@@ -96,11 +98,15 @@ def removeMacXattr(filePath_: str):
             )
             for _j in range(_idx + 1, len(_pipelines)):  # 后续有可能是权限描述
                 _pipelineFollow = _pipelines[_j]
-                _beginTimeResult = re.search(r'^\s+([a-z\.\#A-Z0-9]+)\s+', _pipelineFollow)
+                _beginTimeResult = re.search(r'^\s+([a-z\.\#A-Z0-9]+)\s+([-0-9]+)', _pipelineFollow)
                 if _beginTimeResult:
-                    _xattr = _beginTimeResult.group(1)
-                    _cmdStr = "xattr -dr '" + _xattr + "' '" + _fileNameWithSuffix + "'"
-                    doStrAsCmd(_cmdStr, _fileLocateFolderPath, True)
+                    _id = convertUtils.strToInt(_beginTimeResult.group(2))
+                    if _id > 0:
+                        _xattr = _beginTimeResult.group(1)
+                        _cmdStr = "xattr -dr '" + _xattr + "' '" + _fileNameWithSuffix + "'"
+                        doStrAsCmd(_cmdStr, _fileLocateFolderPath, True)
+                    else:
+                        raise pyUtils.AppError("权限-1可能需要重启Finder，再尝试")
                 else:
                     _idx = _j - 1  # 当前不是属性，下一个循环，要从不是属性的位置开始。后面加，这里要减
                     break

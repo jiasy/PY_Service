@@ -23,7 +23,7 @@ class StateSheet(Sheet):
         _stateInfoDict = {"stateList": [], "transitions": [], "init": self.getStrByCr(1, 0)}
         for _col in range(self.maxCol - 2):  # 左上角第二个格子忽略，它为初始化状态。
             if not self.getStrByCr(_col + 2, 0) == self.getStrByCr(1, 1 + _col):
-                raise pyUtils.AppError("ERROR " + self.sheetName + " : 行列对应值应当相同 ")
+                raise pyUtils.AppError( self.sheetName + " : 行列对应值应当相同 ")
             else:
                 _currentStateName = self.getStrByCr(_col + 2, 0)
                 _stateInfoDict["stateList"].append(_currentStateName)

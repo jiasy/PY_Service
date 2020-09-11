@@ -46,7 +46,8 @@ class SingletonType(type):
 
 class AppError(Exception):
     def __init__(self, value):
-        self.value = value
+        self.value = "【ERROR】" + value
+        print(self.value)
 
     def __str__(self):
         return repr(self.value)

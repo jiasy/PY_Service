@@ -8,9 +8,11 @@ import utils.fileUtils
 # jsonDict 的内容合并
 def mergeAToB(jsonDictA_, jsonDictB_):
     for _key in jsonDictA_:
-        if type(jsonDictA_[_key]) == dict and jsonDictB_.has_key(_key) and type(jsonDictB_[_key]) == dict:
+        # 都是字典，循环键值覆盖
+        if type(jsonDictA_[_key]) == dict and _key in jsonDictB_ and type(jsonDictB_[_key]) == dict:
             mergeAToB(jsonDictA_[_key], jsonDictB_[_key])
         else:
+            # 不都是字典直接覆盖
             jsonDictB_[_key] = jsonDictA_[_key]
     return jsonDictB_
 
