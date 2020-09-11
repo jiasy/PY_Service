@@ -30,6 +30,10 @@ class Sheet:
         self.data = None
         pass
 
+    def raiseAndPrintError(self, errStr_: str):
+        print("【ERROR】" + errStr_)
+        raise Exception(errStr_)
+
     def printSelf(self):
         print("Sheet Name".ljust(20) + " : " + self.sheetName)
         print("col : ".ljust(20) + str(self.maxCol))

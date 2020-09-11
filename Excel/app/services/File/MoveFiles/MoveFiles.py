@@ -47,22 +47,29 @@ class MoveFiles(ExcelBaseInService):
     def Replace(self, dParameters_: dict):
         _sourceFolderPath = sysUtils.folderPathFixEnd(dParameters_["sourceFolder"])
         _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["targetFolder"])
-        _filters = dParameters_["lFilters"]  # 过滤项
-        self.replaceFiles(
-            _filters,
-            _sourceFolderPath,
-            _targetFolderPath
-        )
+        _filters = dParameters_["filters"]  # 过滤项
+        _filePathDict = folderUtils.getFilePathKeyValue(_sourceFolderPath, _filters)
+        for _, _filePath in _filePathDict.items():  # 存在文件，才拷贝
+            _shortPath = _filePath.split(_sourceFolderPath)[1]
+            _tarfilePath = _targetFolderPath + _shortPath
+            _sourcefilePath = _sourceFolderPath + _shortPath
+            if os.path.exists(_tarfilePath):
+                print('        copy to : ' + str(_tarfilePath))
+                shutil.copy(_sourcefilePath, _tarfilePath)
+            else:
+                print('x-      pass : ' + str(_sourcefilePath))
 
     def Override(self, dParameters_: dict):
         _sourceFolderPath = sysUtils.folderPathFixEnd(dParameters_["sourceFolder"])
         _targetFolderPath = sysUtils.folderPathFixEnd(dParameters_["targetFolder"])
-        _filters = dParameters_["lFilters"]  # 过滤项
-        fileCopyUtils.copyFilesInFolderTo(
-            _filters,
-            _sourceFolderPath,
-            _targetFolderPath
-        )
+        _filters = dParameters_["filters"]  # 过滤项
+        _filePathDict = folderUtils.getFilePathKeyValue(_sourceFolderPath, _filters)
+        for _, _filePath in _filePathDict.items():  # 存不存在都拷贝
+            _shortPath = _filePath.split(_sourceFolderPath)[1]
+            _tarfilePath = _targetFolderPath + _shortPath
+            _sourcefilePath = _sourceFolderPath + _shortPath
+            print('        copy to : ' + str(_tarfilePath))
+            shutil.copy(_sourcefilePath, _tarfilePath)
 
 
 import Main
@@ -77,11 +84,11 @@ if __name__ == "__main__":
     #     _baseServiceName,
     #     _subBaseInServiceName,
     #     "Override",
-    #     #"Replace",
+    #     # "Replace",
     #     {  # 所需参数
     #         "sourceFolder": "{resFolderPath}/source",
     #         "targetFolder": "{resFolderPath}/target",
-    #         "resFolderPath": [".txt", ".png"],
+    #         "filters": [".txt", ".png"],
     #     },
     #     {  # 命令行参数
     #         "executeType": "单体测试"

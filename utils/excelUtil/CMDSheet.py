@@ -13,6 +13,7 @@ class CMDSheet(DictSheet):
 
     def toJsonDict(self):
         _processSteps = []
+        print(" " * 8 + " Sheet结构 解析中 ...")
         for _currentRow in range(self.maxRow):
             _crValue = self.getStrByCr(0, _currentRow)
             if _crValue and not _crValue == "":
@@ -21,6 +22,9 @@ class CMDSheet(DictSheet):
                     _processSteps[len(_processSteps) - 1]["endRow"] = _currentRow - 1
                 _processSteps.append(_processStep)
         _processSteps[len(_processSteps) - 1]["endRow"] = self.maxRow  # 结束最后一个步骤信息
+        print(" " * 8 + " Sheet结构 解析完成")
+        print(" " * 8 + " dGlobalDict 解析完成")
+        print(" " * 8 + " dGlobalDict 解析中 ...")
         _jsonDict = {  # 构建结构基础
             "dGlobalDict": self.getDict(  # 全局参数获取
                 2, self.maxCol,
@@ -28,13 +32,21 @@ class CMDSheet(DictSheet):
             ),
             "lProcessSteps": []
         }
+        print(" " * 8 + " dGlobalDict 解析完成")
+        print(" " * 8 + " 步骤 解析中 ...")
         for _i in range(1, len(_processSteps)):  # 跳过第一个
+            _baseServiceName = self.getStrByCr(0, _processSteps[_i]["startRow"])
+            _baseInServiceName = self.getStrByCr(1, _processSteps[_i]["startRow"])
+            _functionName = self.getStrByCr(2, _processSteps[_i]["startRow"])
+            _printStr = " " * 12 + "步骤 [" + str(_i) + "/" + str(len(_processSteps) - 1) + "] "
+            _printStr += _baseServiceName + ":" + _baseInServiceName + " -> " + _functionName + "开始解析"
+            print(_printStr)
             _jsonDict["lProcessSteps"].append(  # 添加步骤
                 {
                     "dServiceInfo": {
-                        "sBaseService": self.getStrByCr(0, _processSteps[_i]["startRow"]),  # 服务名
-                        "sBaseInService": self.getStrByCr(1, _processSteps[_i]["startRow"]),  # 子服务名
-                        "sFunctionName": self.getStrByCr(2, _processSteps[_i]["startRow"]),  # 功能名
+                        "sBaseService": _baseServiceName,  # 服务名
+                        "sBaseInService": _baseInServiceName,  # 子服务名
+                        "sFunctionName": _functionName,  # 功能名
                         "sComment": self.getStrByCr(1, _processSteps[_i]["startRow"] + 1),  # 子服务名下一格，对应的注释
                     },
                     "dParameters": self.getDict(  # 全局参数获取
@@ -43,4 +55,5 @@ class CMDSheet(DictSheet):
                     )
                 }
             )
+            print(" " * 12 + "步骤 [" + str(_i) + "/" + str(len(_processSteps) - 1) + "] 解析完成")
         return _jsonDict

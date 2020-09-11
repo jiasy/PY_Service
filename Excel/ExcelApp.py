@@ -43,8 +43,9 @@ class ExcelApp(App):
                     "ExcelApp -> runExcel : " + _sheetName +
                     " 不是 CMD 类型"
                 )
+            print(" " * 4 + str(_sheetName) + " 配置解析中...")
             _sheetJsonDict = _sheet.toJsonDict()
-            print(str(_sheetName) + " 配置解析成功")
+            print(" " * 4 + str(_sheetName) + " 配置解析成功!")
             if ("dGlobalDict" in _sheetJsonDict) and ("lProcessSteps" in _sheetJsonDict):
                 _globalDict = _sheetJsonDict["dGlobalDict"]  # 全局参数
                 _cmdInfoDict = {"__folder__": os.path.dirname(excelPath_), "__pwd__": pwd_}
@@ -149,8 +150,8 @@ class ExcelApp(App):
             try:
                 _subBaseInService.doExcelFunc(_functionName, _parameterDict)
             except Exception as e:
-                print("x-x x-x x-x x-x x-x x-x x-x [ x-x ERROR x-x ] x-x x-x x-x x-x x-x x-x x-x")
-                self.info.raiseERR(pyUtils.getCurrentRunningFunctionName() + "\n" + e.args)
+                print("【ERROR】")
+                self.info.raiseERR(pyUtils.getCurrentRunningFunctionName() + "\n" + str(e.args))
 
     # 切换到那个服务的，那个子服务上
     def switchTo(self, sBaseService_: str, sBaseInService_: str):

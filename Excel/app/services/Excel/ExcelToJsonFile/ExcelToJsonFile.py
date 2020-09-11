@@ -71,22 +71,29 @@ if __name__ == "__main__":
     Main.excelProcessStepTest(
         _baseServiceName,
         _subBaseInServiceName,
-        "Folder",
+        # "Folder",
+        # {  # 所需参数
+        #     "sourceFolder": "{resFolderPath}/source",
+        #     # "sourceFolder": "{resFolderPath}/../../CMD/ExecCMD/plistUnpack/",
+        #     "targetFolder": "{resFolderPath}/target"
+        # },
+
+        "File",
         {  # 所需参数
-            "sourceFolder": "{resFolderPath}/source",
-            # "sourceFolder": "{resFolderPath}/../../CMD/ExecCMD/plistUnpack/",
+            "xlsxPath": "{resFolderPath}/../../File/MoveFiles/MoveFiles.xlsx",
             "targetFolder": "{resFolderPath}/target"
         },
+
         {  # 命令行参数
             "executeType": "单体测试"
         }
     )
     sys.exit(1)
 
-    Main.execExcelCommand(
-        _baseServiceName,
-        _subBaseInServiceName,
-        {  # 命令行参数
-            "executeType": "单体测试"
-        }
-    )
+    # Main.execExcelCommand(
+    #     _baseServiceName,
+    #     _subBaseInServiceName,
+    #     {  # 命令行参数
+    #         "executeType": "单体测试"
+    #     }
+    # )

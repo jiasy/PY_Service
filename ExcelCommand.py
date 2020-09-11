@@ -49,7 +49,13 @@ if __name__ == "__main__":
                 _ops  # 命令行参数
             )
         except Exception as e:
-            print("【ERROR】 执行文件错误 : " + _excelPath)
+            print("【ERROR】 执行文件错误 : " + _excelPath
+                  + "\n" + " " * 8 + "0.步骤解析未完全结束，查看Excel配置"
+                  + "\n" + " " * 8 + "1.权限问题无法打开Excel"
+                  + "\n" + " " * 12 + "1.1.可能是Excel未关闭"
+                  + "\n" + " " * 12 + "1.2.可能是权限问题"
+                  + "\n" + " " * 12 + "1.3.mac下可尝试，重启Finder解决"
+                  )
             sys.exit(1)
     else:
         print("【ERROR】 excelPath 文件不存在: \n    " + _excelPath)
