@@ -5,7 +5,7 @@ import importlib
 import inspect
 import time
 import cProfile
-import pstats
+import sys
 import math
 
 '''
@@ -48,6 +48,7 @@ class AppError(Exception):
     def __init__(self, value):
         self.value = "【ERROR】" + value
         print(self.value)
+        sys.exit(1)
 
     def __str__(self):
         return repr(self.value)
