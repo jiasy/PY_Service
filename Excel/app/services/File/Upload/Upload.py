@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # Created by jiasy at 2020/9/9
 from utils import sysUtils
+from utils import ftpUtils
 import os
 import oss2
-import sys
 
 from Excel.ExcelBaseInService import ExcelBaseInService
 
@@ -23,8 +23,12 @@ class Upload(ExcelBaseInService):
                 "remoteFolderPath": "目标路径",
             },
             "FTP": {
-                "sourceFolder": "源",
-                "targetFolder": "目标",
+                "localFolderPath": "本地文件夹",
+                "ftpHost": "?",
+                "ftpUserName": "?",
+                "ftpPassWord": "?",
+                "ftpFolder": '?',  # 一级子目录
+                "ftpSubFolder": "?",  # 二级子目录
             },
         }
 
@@ -37,13 +41,13 @@ class Upload(ExcelBaseInService):
     # 当前文件夹 folderPath_
     # 用来裁切相对路径的 resFolderPath_
     # OSS的目标位置 bucket_
-    def uploadDir(self, currentLocalFolderPath_: str, resFolderPath_: str, bucket_, remoteFolderPath_: str,
-                  filters_: list):
+    def uploadDirToOSS(self, currentLocalFolderPath_: str, resFolderPath_: str, bucket_, remoteFolderPath_: str,
+                       filters_: list):
         _filePaths = os.listdir(currentLocalFolderPath_)
         for _filePath in _filePaths:
             _path = currentLocalFolderPath_ + '/' + _filePath
             if os.path.isdir(_path):
-                self.uploadDir(_path, resFolderPath_, bucket_, remoteFolderPath_, filters_)
+                self.uploadDirToOSS(_path, resFolderPath_, bucket_, remoteFolderPath_, filters_)
             else:
                 _haveBoo = False
                 for _i in range(len(filters_)):  # 再过滤列表中查找
@@ -73,12 +77,26 @@ class Upload(ExcelBaseInService):
             dParameters_["endPoint"],
             bucket_name=dParameters_["bucketName"]
         )
-        self.uploadDir(
+        self.uploadDirToOSS(
             _localFilePath,
             _localFilePath,
             _bucket,
             _remoteFolderPath,
             dParameters_["filters"]
+        )
+
+    def FTP(self, dParameters_: dict):
+        _localFilePath = sysUtils.folderPathFixEnd(dParameters_["localFolderPath"])
+        _ftpSync = ftpUtils.getFTPSync(
+            dParameters_["ftpHost"],
+            dParameters_["ftpUserName"],
+            dParameters_["ftpPassWord"],
+            dParameters_["ftpFolder"]
+        )
+        ftpUtils.uploadFolder(
+            _ftpSync,
+            _localFilePath,
+            dParameters_["ftpSubFolder"]
         )
 
 
@@ -90,30 +108,45 @@ if __name__ == "__main__":
     _folderSplit = os.path.split(_folderPath)  # 切目录
     _baseServiceName = os.path.split(_folderSplit[0])[1]  # 再切得到上一层文件夹名
     _subBaseInServiceName = _folderSplit[1]  # 切到的后面就是子服务名称
-    # Main.excelProcessStepTest(
-    #     _baseServiceName,
-    #     _subBaseInServiceName,
-    #     "OSS",
-    #     {  # 所需参数
-    #         "localFolderPath": "{resFolderPath}",
-    #         "accessKeyId": "?",
-    #         "accessKeySecret": "?",
-    #         "endPoint": '?',
-    #         "bucketName": "?",
-    #         "filters": [
-    #             ".txt"
-    #         ],
-    #         "remoteFolderPath": "farmRemote/test",
-    #     },
-    #     {  # 命令行参数
-    #         "executeType": "单体测试"
-    #     }
-    # )
 
-    # Main.execExcelCommand(
-    #     _baseServiceName,
-    #     _subBaseInServiceName,
-    #     {  # 命令行参数
-    #         "executeType": "单体测试"
-    #     }
-    # )
+    # _functionName = "OSS"
+    # _parameterDict = {  # 所需参数
+    #     "localFolderPath": "{resFolderPath}",
+    #     "accessKeyId": "?",
+    #     "accessKeySecret": "?",
+    #     "endPoint": '?',
+    #     "bucketName": "?",
+    #     "filters": [
+    #         ".txt"
+    #     ],
+    #     "remoteFolderPath": "farmRemote/test",
+    # }
+
+    _functionName = "FTP"
+    _parameterDict = {  # 所需参数
+        "localFolderPath": "{resFolderPath}",
+        "ftpHost": "?",
+        "ftpUserName": "?",
+        "ftpPassWord": "?",
+        "ftpFolder": '?',  # 一级子目录
+        "ftpSubFolder": "?",  # 二级子目录
+    }
+
+    Main.excelProcessStepTest(
+        _baseServiceName,
+        _subBaseInServiceName,
+        _functionName,
+        _parameterDict,
+        {  # 命令行参数
+            "executeType": "单体测试"
+        }
+    )
+
+    Main.execExcelCommand(
+        _baseServiceName,
+        _subBaseInServiceName,
+        _functionName,
+        {  # 命令行参数
+            "executeType": "单体测试"
+        }
+    )

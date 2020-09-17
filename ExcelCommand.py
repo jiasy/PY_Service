@@ -10,16 +10,18 @@ opsDict = {}
 opsDict["projectFolderPath"] = '工程文件夹'
 opsDict["executeType"] = '执行模式'
 opsDict["excelPath"] = 'excel路径'
+opsDict["sheetName"] = '指定执行的sheet名称，不指定就是全执行'
 # 可选项
 opsDict["__option__"] = [
-    "projectFolderPath"  # 工程目录可以不写。
+    "projectFolderPath",  # 工程目录可以不写。
+    "sheetName",  # sheet名，可以不指定
 ]
 
 
 # 获取执行命令的样例
 def getPythonCmdStr():
     _cmdPyFile = os.path.realpath(__file__)
-    print("python " + _cmdPyFile + " --excelPath [替换成Excel文件路径] --executeType 命令行驱动")
+    print("python " + _cmdPyFile + " --excelPath [替换成Excel文件路径] --sheetName [sheet名] --executeType 命令行驱动")
     sys.exit(1)  # 获取样例直接退出
 
 
@@ -41,12 +43,14 @@ if __name__ == "__main__":
     _excelApp.start()
 
     _excelPath = _ops["excelPath"]  # excel 路径
+    _sheetName = _ops["sheetName"]  # sheetName 页名
     if os.path.exists(_excelPath):  # 通过 解析 Excel 获得 执行命令信息
         try:
             _excelApp.runExcel(
-                _ops["excelPath"],  # excel路径
+                _excelPath,  # excel路径
                 _pwd,  # 执行命令路径
-                _ops  # 命令行参数
+                _ops,  # 命令行参数
+                _sheetName,  # Sheet页名
             )
         except Exception as e:
             print("【ERROR】 执行文件错误 : " + _excelPath

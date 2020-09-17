@@ -218,7 +218,7 @@ class CocosCreatorCodeAnalyse(BaseService):
         _filePathDict = folderUtils.getFilePathKeyValue(_jsCodeFolder, [".meta"])
         # 移除掉无用的meta文件
         for _keyName, _filePath in _filePathDict.items():
-            fileUtils.removeExistFile(_filePath, True)
+            fileUtils.removeExistFile(_filePath)
 
     def displayJsStructure(self, folderName_: str):
         _jsCodeFolder = fileUtils.getPath(self._assetsFolderPath, folderName_)

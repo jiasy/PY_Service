@@ -28,7 +28,7 @@ def time_stamp():
     if _reg:
         return str(_reg.group(2)) + "_" + str(_reg.group(3)) + "_" + str(_reg.group(4)) + "_" + str(_reg.group(5))
     else:
-        print("ERROR : 时间戳格式错误 ")
+        print("ERROR : 时间格式错误 ")
 
 
 def today_Y_M_D():

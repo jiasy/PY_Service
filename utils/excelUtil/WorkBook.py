@@ -70,7 +70,7 @@ class WorkBook(object):
 
             _currentSheet.initWithSheet(
                 self.currentWorkBook.sheet_by_name(_sheetName),
-                _sheetName.split("<")[0]
+                _sheetName.split("<")[0]  # 去掉类型，指定的部分，为sheetName
             )
             self.addSheet(_currentSheet)
 

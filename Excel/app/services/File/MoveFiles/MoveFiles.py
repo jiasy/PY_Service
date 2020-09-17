@@ -80,24 +80,35 @@ if __name__ == "__main__":
     _folderSplit = os.path.split(_folderPath)  # 切目录
     _baseServiceName = os.path.split(_folderSplit[0])[1]  # 再切得到上一层文件夹名
     _subBaseInServiceName = _folderSplit[1]  # 切到的后面就是子服务名称
-    # Main.excelProcessStepTest(
-    #     _baseServiceName,
-    #     _subBaseInServiceName,
-    #     "Override",
-    #     # "Replace",
-    #     {  # 所需参数
-    #         "sourceFolder": "{resFolderPath}/source",
-    #         "targetFolder": "{resFolderPath}/target",
-    #         "filters": [".txt", ".png"],
-    #     },
-    #     {  # 命令行参数
-    #         "executeType": "单体测试"
-    #     }
-    # )
+
+    _functionName = "Override"
+    _parameterDict = {  # 所需参数
+        "sourceFolder": "{resFolderPath}/source",
+        "targetFolder": "{resFolderPath}/target",
+        "filters": [".txt", ".png"],
+    }
+
+    # _functionName = "Replace"
+    # _parameterDict = {  # 所需参数
+    #     "sourceFolder": "{resFolderPath}/source",
+    #     "targetFolder": "{resFolderPath}/target",
+    #     "filters": [".txt", ".png"],
+    # }
+
+    Main.excelProcessStepTest(
+        _baseServiceName,
+        _subBaseInServiceName,
+        _functionName,
+        _parameterDict,
+        {  # 命令行参数
+            "executeType": "单体测试"
+        }
+    )
 
     Main.execExcelCommand(
         _baseServiceName,
         _subBaseInServiceName,
+        _functionName,
         {  # 命令行参数
             "executeType": "单体测试"
         }

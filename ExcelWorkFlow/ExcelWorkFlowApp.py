@@ -13,5 +13,5 @@ class ExcelWorkFlowApp(App):
         # self.changeAppState("CocosCreatorCodeAnalyse") # 解析 CocosCreator的结构
         # self.changeAppState("SplitTxt")  # 切割小说文本
         # self.changeAppState("Proto")  # Proto相关工具
-        # self.changeAppState("CopyFiles")  # Proto相关工具
+        # self.changeAppState("CopyFiles")  # 拷贝文件夹内容
         # self.changeAppState("PSDAnalyse")  # PSD 工具

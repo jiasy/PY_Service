@@ -1,0 +1,25 @@
+syntax = "proto2";
+option java_package = "com.py.service.test";
+option java_outer_classname="TestPB";
+
+enum TestType {//测试类型
+	LOW = 0;//底
+	NORMAL = 1;//中
+	HIGH = 2;//高
+}
+
+message TestInfo{//测试信息
+	required int32 testId = 1;//测试ID
+
+	message TestItem {//测试道具
+		required int32 testItemId = 1;//道具的编号
+		required int32 num = 2;//道具个数
+	}
+
+	repeated TestItem money = 2;//钱
+	repeated TestItem diamond = 3;//钻
+	required TestType testType = 4;//测试类型
+
+	optional bool testBool = 5;//测试bool
+	optional string testString = 6;//测试string
+}

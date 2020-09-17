@@ -28,7 +28,7 @@ def getObjectByClassPath(classPath_, *args):
     return _object
 
 
-# 获取这个方法所在的当前方法的名称
+# 获取这个方法所在的当前方法的名称runServiceByJsonDict
 def getCurrentRunningFunctionName():
     return inspect.stack()[1][3]
 

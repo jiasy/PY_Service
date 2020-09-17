@@ -83,7 +83,7 @@ def makeSureDirIsExists(path: str):
 def removeFileByFilter(folderPath_: str, fileFilter_: list):
     _filePathList = getFileListInFolder(folderPath_, fileFilter_)
     for _i in range(len(_filePathList)):
-        utils.fileUtils.removeExistFile(_filePathList[_i], True)
+        utils.fileUtils.removeExistFile(_filePathList[_i])
 
 
 # 获取某一类型的文件的大小总和

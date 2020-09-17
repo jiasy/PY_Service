@@ -1,6 +1,6 @@
 import ftplib
 import os
-import utils.sysUtils
+from utils import sysUtils
 
 
 # 获取FTP链接
@@ -10,17 +10,18 @@ def getFTPSync(host_: str, username_: str, password_: str, ftpFolder_: str = Non
     return _ftpSync
 
 
-# ftpUtils.getFTPSync(_ftpSync.ftpConnect,本地路径,FTP服务器的相对路径)
-def uploadFolder(ftpSync_, localFolderPath_, ftpFolderPath_=None):
+# 上传目录
+def uploadFolder(
+        ftpSync_,  # ftpSync 对象
+        localFolderPath_,  # 本地的文件夹路径
+        ftpFolderPath_=None  # ftp对应文件夹中的子文件夹
+):
     _ftpConnect = ftpSync_.ftpConnect
 
-    localFolderPath_ = utils.sysUtils.folderPathFixEnd(localFolderPath_)
-    _fileList = os.listdir(localFolderPath_)
-
-    # 先记住之前在哪个工作目录中
-    _lastFolder = os.path.abspath('.')
-    # 然后切换到目标工作目录
-    os.chdir(localFolderPath_)
+    localFolderPath_ = sysUtils.folderPathFixEnd(localFolderPath_)  # 确保文件夹格式
+    _fileList = os.listdir(localFolderPath_)  # 文件夹中的文件列表
+    _lastFolder = os.path.abspath('.')  # 先记住之前在哪个工作目录中
+    os.chdir(localFolderPath_)  # 然后切换到目标工作目录
 
     if ftpFolderPath_:
         _currentTargetFolderPath = _ftpConnect.pwd()
@@ -35,9 +36,8 @@ def uploadFolder(ftpSync_, localFolderPath_, ftpFolderPath_=None):
         _currentTargetFolderPath = _ftpConnect.pwd()
         _currentLocal = localFolderPath_ + r'/{}'.format(_fileName)
         if os.path.isfile(_currentLocal):
-            uploadFile(ftpSync_, localFolderPath_, _fileName)
+            uploadFile(ftpSync_, localFolderPath_, _fileName, None)
         elif os.path.isdir(_currentLocal):
-            _currentTargetFolderPath = _ftpConnect.pwd()
             try:
                 _ftpConnect.mkd(_fileName)
             except:
@@ -51,18 +51,10 @@ def uploadFolder(ftpSync_, localFolderPath_, ftpFolderPath_=None):
     os.chdir(_lastFolder)
 
 
-def uploadFile(ftpSync_, localFolderPath_, fileName_, ftpFolderPath_=None, callback_=None):
+def uploadFile(ftpSync_, localFolderPath_, fileName_, callback_=None):
     _ftpConnect = ftpSync_.ftpConnect
     # 记录当前 ftp 路径
     _currentFolder = _ftpConnect.pwd()
-
-    if ftpFolderPath_:
-        try:
-            _ftpConnect.mkd(ftpFolderPath_)
-        except:
-            pass
-        finally:
-            _ftpConnect.cwd(os.path.join(_currentFolder, ftpFolderPath_))
 
     print("    %s/%s" % (localFolderPath_, fileName_))
     file = open(os.path.join(localFolderPath_, fileName_), 'rb')  # file to send
@@ -93,7 +85,7 @@ class FTPSync(object):
         self.ftpFolder = ""
         if ftpFolder_:
             # 去掉文件路径后面的 /
-            if ftpFolder_[-1] == "/":
+            while ftpFolder_[-1] == "/" or ftpFolder_[-1] == "\\":
                 ftpFolder_ = ftpFolder_[:-1]
             self.ftpFolder = ftpFolder_
             self.ftpConnect.cwd(self.ftpFolder)  # 远端FTP目录

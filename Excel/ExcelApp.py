@@ -11,6 +11,7 @@ from base.supports.App.App import App
 from utils import strUtils
 from utils import jsonUtils
 from utils import pyUtils
+from utils import timeUtils
 from utils import listUtils
 from utils import cmdUtils
 from utils.excelUtil.WorkBook import WorkBook
@@ -28,7 +29,7 @@ class ExcelApp(App):
         return
 
     # 运行 Excel
-    def runExcel(self, excelPath_: str, pwd_: str, cmdDict_: dict = {}):
+    def runExcel(self, excelPath_: str, pwd_: str, cmdDict_: dict = {}, sheetName_: str = None):
         # cmdUtils.removeMacXattr(excelPath_)# 修改 excel 权限
         # sys.exit(1)
         # Excel 依旧权限不够，强制重新开启 Finder。
@@ -37,6 +38,10 @@ class ExcelApp(App):
         _currentWorkBook = WorkBook()
         _currentWorkBook.initWithWorkBook(excelPath_)
         for _sheetName in _currentWorkBook.sheetDict:
+            if sheetName_:  # 有指定Sheet
+                if not _sheetName == sheetName_:  # 不是指定的Sheet
+                    continue  # 找下一个
+
             _sheet = _currentWorkBook.sheetDict[_sheetName]
             if _sheet.sheetType != SheetType.CMD:
                 self.info.raiseERR(
@@ -49,7 +54,11 @@ class ExcelApp(App):
             print(" " * 4 + str(_sheetName) + " 配置解析成功!")
             if ("dGlobalDict" in _sheetJsonDict) and ("lProcessSteps" in _sheetJsonDict):
                 _globalDict = _sheetJsonDict["dGlobalDict"]  # 全局参数
-                _cmdInfoDict = {"__folder__": os.path.dirname(excelPath_), "__pwd__": pwd_}
+                _cmdInfoDict = {
+                    "__folder__": os.path.dirname(excelPath_),
+                    "__pwd__": pwd_,
+                    "__time__": timeUtils.nowTimeStamp()
+                }
                 for _key in _globalDict:
                     _value = _globalDict[_key]  # 遍历参数，获取值
                     _globalDict[_key] = strUtils.replaceKeyToValueInTemplate(_cmdInfoDict, _value)  # 将运行环境替换到全局变量中
@@ -183,7 +192,7 @@ if __name__ == "__main__":
     _sampleExcelCommand = "python " + _excelCommandPath + \
                           " --sProjectFolderPath '" + _resFolderPath + "'" + \
                           " --excelPath '" + _excelFileName + ".xlsx" + "'" + \
-                          " --executeType 工作流测试"
+                          " --executeType ExcelApp->测试"
     # 执行命令
     cmdUtils.doStrAsCmd(
         _sampleExcelCommand,  # 执行命令行驱动 Excel 工作流配置

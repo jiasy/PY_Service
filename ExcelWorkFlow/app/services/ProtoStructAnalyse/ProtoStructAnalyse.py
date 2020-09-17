@@ -3,6 +3,7 @@ from base.supports.Service.BaseService import BaseService
 from utils import folderUtils
 from utils import fileUtils
 from utils import pyUtils
+from utils import listUtils
 import os
 
 
@@ -14,123 +15,6 @@ class ProtoStructAnalyse(BaseService):
         # self.protobufFolder = fileUtils.getPath(self.resPath, "protobuf")
         self.protobufFolder = "/Volumes/18604037792/develop/ShunYuan/protocol_farm/server/"
         # self._usedTableNameList = [
-        #     "ShareHelpOthersReq",
-        #     "AppJumpReq",
-        #     "AdvertGetRewardReq",
-        #     "PingMsgReq",
-        #     "BuildingGatherReq",
-        #     "BuildBuildingReq",
-        #     "BuildingProductItemReq",
-        #     "ForceAddFriendReq",
-        #     "GetShareToGroupReq",
-        #     "LoginReq",
-        #     "CommonOpensReq",
-        #     "SynShareToGroupReq",
-        #     "SynMiniAdReq",
-        #     "BindStateReq",
-        #     "FriendPageInfoReq",
-        #     "FriendStateReq",
-        #     "FinishGuideReq",
-        #     "GetInviteAvailablePrizeReq",
-        #     "UserCanWithDrawReq",
-        #     "MiniGameShareInfoReq",
-        #     "MiniGameShareAwardReq",
-        #     "SynWatchDogReq",
-        #     "LookAroundOtherFarmReq",
-        #     "FixNpcFarmInfoReq",
-        #     "StealOtherItemReq",
-        #     "StealFixNpcFarmReq",
-        #     "StealRandomNpcFarmReq",
-        #     "UserShareLevelReq",
-        #     "SynAdvertReq",
-        #     "TakeOtherHelpAwardReq",
-        #     "NoteDetailReq",
-        #     "RandomNpcFarmInfoReq",
-        #     "GetMiniGameShareWindfall",
-        #     "TaskHandleUpReq",
-        #     "ErrorReportReq",
-        #     "SmashGoldenEggReq",
-        #     "UserTakeRedGiftReq",
-        #     "BuyStrengthReq",
-        #     "StoreHouseSellItemReq",
-        #     "TaskDelReq",
-        #     "TaskEndDelCDReq",
-        #     "HelpProductItemReq",
-        #     "HelpBuildBuildingReq",
-        #     "RandomBoxHelpOpenReq",
-        #     "GetMiniAdReward",
-        #     "SynBuildingData",
-        #     "BuildingUnLockRes",
-        #     "SynFriendData",
-        #     "AgreeAddFriendRes",
-        #     "FriendStateRes",
-        #     "SynUserGuideInfo",
-        #     "FinishGuideRes",
-        #     "NotifyNewGuideRes",
-        #     "SynInviteFriendsInfo",
-        #     "GetInviteAvailablePrizeRes",
-        #     "SynNewInviteFriend",
-        #     "SynInviteFriendInfoChange",
-        #     "InputInviteCodeRes",
-        #     "SynUserRedGiftInfo",
-        #     "UserTakeRedGiftRes",
-        #     "SynMiniGameShareWindfall",
-        #     "BuildingProductItemRes",
-        #     "BuildingGatherRes",
-        #     "BuildBuildingFinishRes",
-        #     "BuildingFinishProductRes",
-        #     "BuildBuildingRes",
-        #     "RecFriendStealItemRes",
-        #     "HelpProductItemRes",
-        #     "NotifySomeOneHelpProductItemRes",
-        #     "SynUserData",
-        #     "SynUserExpChange",
-        #     "UserCanWithDrawRes",
-        #     "SynSystemTime",
-        #     "PingMsgRes",
-        #     "SynAdvertRes",
-        #     "KickOffRes",
-        #     "LookAroundOtherFarmRes",
-        #     "StealOtherItemRes",
-        #     "BuyStrengthRes",
-        #     "FixNpcFarmInfoRes",
-        #     "StealFixNpcFarmRes",
-        #     "StealRandomNpcFarmRes",
-        #     "SynWatchDogRes",
-        #     "SynUserLevelUp",
-        #     "UserShareLevelRes",
-        #     "NotifySomeoneHelpedRes",
-        #     "ShareHelpOthersRes",
-        #     "HelpBuildBuildingRes",
-        #     "SynShareInfo",
-        #     "TakeOtherHelpAwardRes",
-        #     "CommonRes",
-        #     "SynStoreHouseData",
-        #     "SynStoreHouseItemChange",
-        #     "SynStoreHouseMoneyChange",
-        #     "StoreHouseSellItemRes",
-        #     "SynNormalTaskData",
-        #     "SynNewNormalTask",
-        #     "TaskHandleUpRes",
-        #     "SynGatherTaskData",
-        #     "TaskDelRes",
-        #     "TaskEndDelCDRes",
-        #     "NoteDetailRes",
-        #     "RecNewNoteRes",
-        #     "RandomNpcFarmInfoRes",
-        #     "SynUserWithDrawTimes",
-        #     "UserWithDrawRes",
-        #     "CommonOpensRes",
-        #     "BindStateRes",
-        #     "SynMiniAdRes",
-        #     "SynShareToGroupRes",
-        #     "SynGoldenEgg",
-        #     "LoginRes",
-        #     "MiniGameShareInfoRes",
-        #     "MiniGameShareAwardRes",
-        #     "SmashGoldenEggRes",
-        #     "WatchAdSpeedUpReq",
-        #     "BuildingFinishProductReq"
         # ]
 
         self._tableRequireByOtherList = []  # 被引用的表
@@ -149,12 +33,14 @@ class ProtoStructAnalyse(BaseService):
         self.getSubClassObject("ProtoStructInfo")
         self.getSubClassObject("ToHiveTableSQL")
 
-        # 输出 构建 protol 结构
-        self.buildProtoStructure(self.protobufFolder)
-        #return
+        self.analyseProtoStructureInFolder(self.protobufFolder)
 
-        # 输出文件夹内的所有 protol 结构
-        self.expandTableStructureInFolder(self.protobufFolder)
+        # # 输出 构建 protol 结构
+        # self.buildProtoStructure(self.protobufFolder)
+        # # return
+        #
+        # # 输出文件夹内的所有 protol 结构
+        # self.expandTableStructureInFolder(self.protobufFolder)
 
         # # 将一个文件夹内的所有文件逐个解析，生成HiveSQL---------------------------------------------------------------
         # self.getHiveSQLByProtoFolder(self.protobufFolder)
@@ -165,6 +51,11 @@ class ProtoStructAnalyse(BaseService):
 
     def destory(self):
         super(ProtoStructAnalyse, self).destory()
+
+    # 构建Proto结构，将结构内容返回成字符串列表
+    def analyseProtoStructureInFolder(self, protobufFolderPath_):
+        self.buildProtoStructure(protobufFolderPath_)
+        return self.expandTableStructureInFolder(protobufFolderPath_)
 
     # proto 的基本类型
     def isNormalProperty(self, dataType_):
@@ -203,9 +94,10 @@ class ProtoStructAnalyse(BaseService):
         # 识别 文件夹 结构，按照文件夹的归属，输出proto分类和结构
         _folderList = folderUtils.getFolderListJustOneDepth(protobufFolder_)
         _folderList.sort()
+        _structureStrList = []
         # 文件夹列表
         for _folder in _folderList:
-            print(str(_folder) + " --------------------------------------------------------")
+            _structureStrList.append(str(_folder) + " --------------------------------------------------------")
             _fileList = folderUtils.getFileListJustOneDepth(os.path.join(protobufFolder_, _folder), [".proto"])
             _fileList.sort()
             _mainTableFullNameInFolderList = []
@@ -218,17 +110,17 @@ class ProtoStructAnalyse(BaseService):
                         if _tableInfo["fileName"] == _file:
                             _mainTableFullNameInFolderList.append(_tableFullName)
                             break
-            _baseStr = "        "
+            _baseStr = " " * 4 * 2
             _findBoo = False
             for _mainTableFullName in self._tableNameReqAndResList:
                 if _mainTableFullName in _mainTableFullNameInFolderList:
                     _findBoo = True
                     break
             if _findBoo:
-                print("    Req <-> Res ----------------------------------------")
+                _structureStrList.append(" " * 4 + "Req <-> Res ----------------------------------------")
                 for _mainTableFullName in self._tableNameReqAndResList:
                     if _mainTableFullName in _mainTableFullNameInFolderList:
-                        self.expandTableStructure(_mainTableFullName, 0, _baseStr)
+                        _structureStrList += self.expandTableStructure(_mainTableFullName, 0, _baseStr)
 
             _findBoo = False
             for _mainTableFullName in self._tableNameReqList:
@@ -236,10 +128,10 @@ class ProtoStructAnalyse(BaseService):
                     _findBoo = True
                     break
             if _findBoo:
-                print("    Req -> ---------------------------------------------")
+                _structureStrList.append(" " * 4 + "Req -> ---------------------------------------------")
                 for _mainTableFullName in self._tableNameReqList:
                     if _mainTableFullName in _mainTableFullNameInFolderList:
-                        self.expandTableStructure(_mainTableFullName, 0, _baseStr)
+                        _structureStrList += self.expandTableStructure(_mainTableFullName, 0, _baseStr)
 
             _findBoo = False
             for _mainTableFullName in self._tableNameResList:
@@ -247,10 +139,10 @@ class ProtoStructAnalyse(BaseService):
                     _findBoo = True
                     break
             if _findBoo:
-                print("    Res <- ---------------------------------------------")
+                _structureStrList.append(" " * 4 + "Res <- ---------------------------------------------")
                 for _mainTableFullName in self._tableNameResList:
                     if _mainTableFullName in _mainTableFullNameInFolderList:
-                        self.expandTableStructure(_mainTableFullName, 0, _baseStr)
+                        _structureStrList += self.expandTableStructure(_mainTableFullName, 0, _baseStr)
 
             _findBoo = False
             for _mainTableFullName in self._tableNameOther:
@@ -258,10 +150,11 @@ class ProtoStructAnalyse(BaseService):
                     _findBoo = True
                     break
             if _findBoo:
-                print("    Others ---------------------------------------------")
+                _structureStrList.append(" " * 4 + "Others ---------------------------------------------")
                 for _mainTableFullName in self._tableNameOther:
                     if _mainTableFullName in _mainTableFullNameInFolderList:
-                        self.expandTableStructure(_mainTableFullName, 0, _baseStr)
+                        _structureStrList += self.expandTableStructure(_mainTableFullName, 0, _baseStr)
+        return _structureStrList
 
     # 展开表
     def expandTableStructure(self, tableName_: str, depth_: int = 0, baseStr_: str = ""):
@@ -278,8 +171,7 @@ class ProtoStructAnalyse(BaseService):
                     "|      " * (depth_ + 1),
                     _common
                 ))
-            _logStrList.append(baseStr_ +
-                               "|      " * depth_ + tableName_ + " " + _tableInfo["fileName"])
+            _logStrList.append(baseStr_ + "|      " * depth_ + tableName_ + " " + _tableInfo["fileName"])
         if _tableInfo["type"] == "table":
             if 'propertyList' in _tableInfo:
                 _propertyList = _tableInfo["propertyList"]
@@ -313,8 +205,7 @@ class ProtoStructAnalyse(BaseService):
                     ))
                     if not self.isNormalProperty(_dataType):
                         _subLogStrList = self.expandTableStructure(_dataType, (depth_ + 1), baseStr_)
-                        for _subLogStr in _subLogStrList:
-                            _logStrList.append(_subLogStr)
+                        _logStrList += _subLogStrList
         else:
             if _tableInfo["type"] == "enum":
                 if 'propertyList' in _tableInfo:
@@ -340,8 +231,7 @@ class ProtoStructAnalyse(BaseService):
 
         if depth_ == 0:
             _lenMax = 0
-            # 整理格式
-            for _i in range(len(_logStrList)):
+            for _i in range(len(_logStrList)):  # 整理格式
                 if _logStrList[_i].find("//") > 0:
                     continue
                 _logStrSplitList = _logStrList[_i].split(" ")
@@ -352,6 +242,7 @@ class ProtoStructAnalyse(BaseService):
                     _lenMax = _lenWithOutLast
             _lenMax += 1
             _lastCommon = ""
+            _newLogStrList = []
             for _logStr in _logStrList:
                 if _logStr.find("//") > 0:
                     _lastCommon = _logStr.split("//")[1]
@@ -367,14 +258,16 @@ class ProtoStructAnalyse(BaseService):
                 _newLogStr = _logStrWithOutLast + " " + (
                         _lenMax - len(_logStrWithOutLast)) * "-" + " " + _logStrSplitLast
                 if _lastCommon == "":
-                    print(_newLogStr)
+                    _newLogStrList.append(_newLogStr)
                 else:
-                    print(_newLogStr + " // " + _lastCommon)
+                    _newLogStrList.append(_newLogStr + " // " + _lastCommon)
                     _lastCommon = ""
-
-        return _logStrList
+            return _newLogStrList
+        else:
+            return _logStrList
 
     def buildProtoStructure(self, protoFolderPath_: str):
+        _printInfo = False
         _tableDict = self.getTableInfoDictFormFolder(protoFolderPath_)
 
         for _shortTableName, _tableInfo in _tableDict.items():
@@ -392,7 +285,8 @@ class ProtoStructAnalyse(BaseService):
             _common = ''
             if "common" in _tableInfo:
                 _common = _tableInfo["common"]
-            print("{0} [{1}] - {2}".format(_tableFullName, _type, _common))
+            if _printInfo:
+                print("{0} [{1}] - {2}".format(_tableFullName, _type, _common))
 
             if _type == "table" and 'propertyList' in _tableInfo:
                 _propertyList = _tableInfo["propertyList"]
@@ -405,29 +299,25 @@ class ProtoStructAnalyse(BaseService):
                     if not self.isNormalProperty(_dataType):
                         if not (_dataType in self._tableRequireByOtherList):
                             self._tableRequireByOtherList.append(_dataType)
-                    print(
-                        "    {0} : {1}[{2}/{3}] - {4}".format(_index, _propertyName, _dataType, _needType,
-                                                              _common))
+                    if _printInfo:
+                        print("    {0} : {1}[{2}/{3}] - {4}".format(_index, _propertyName, _dataType, _needType,
+                                                                    _common))
             if _type == "enum" and 'propertyList' in _tableInfo:
                 _propertyList = _tableInfo["propertyList"]
                 for _property in _propertyList:
                     _propertyName = _property["propertyName"]
                     _index = _property["index"]
                     _common = _property["common"]
-                    if not self.isNormalProperty(_dataType):
-                        if not (_dataType in self._tableRequireByOtherList):
-                            self._tableRequireByOtherList.append(_dataType)
-                    print(
-                        "    {0} : {1}[{2}/{3}] - {4}".format(_index, _propertyName, _dataType, _needType,
-                                                              _common))
+                    if _printInfo:
+                        print("    {0} : {1} - {2}".format(_index, _propertyName, _common))
 
-        print("被引用的proto文件 ----------------------------------------")
-        for _tableRequireByOther in self._tableRequireByOtherList:
-            print(str(_tableRequireByOther))
-
-        print("为枚举的文件 ---------------------------------------------")
-        for _enumTable in self._enumTableList:
-            print(str(_enumTable))
+        if _printInfo:
+            print("被引用的proto文件 ----------------------------------------")
+            for _tableRequireByOther in self._tableRequireByOtherList:
+                print(str(_tableRequireByOther))
+            print("为枚举的文件 ---------------------------------------------")
+            for _enumTable in self._enumTableList:
+                print(str(_enumTable))
 
         for _tableName, _tableInfo in self._tableFullNameDict.items():
             if not (_tableName in self._tableRequireByOtherList):
@@ -435,7 +325,8 @@ class ProtoStructAnalyse(BaseService):
                     # if _tableName in self._usedTableNameList:  # js中使用了
                     self._mainTableShortNameList.append(_tableName)
 
-        print("为主文件 ---------------------------------------------")
+        if _printInfo:
+            print("为主文件 ---------------------------------------------")
         self._mainTableShortNameList.sort()
         _reqTableList = []
         _resTableList = []
@@ -462,21 +353,22 @@ class ProtoStructAnalyse(BaseService):
             if not _tableNameRes in self._tableNameReqAndResList:
                 self._tableNameResList.append(_tableNameRes)
 
-        print("    Req <-> Res ----------------------------------------")
-        for _tableName in self._tableNameReqAndResList:
-            print(_tableName)
+        if _printInfo:
+            print("    Req <-> Res ----------------------------------------")
+            for _tableName in self._tableNameReqAndResList:
+                print(_tableName)
 
-        print("    Req -> ---------------------------------------------")
-        for _tableName in self._tableNameReqList:
-            print(_tableName)
+            print("    Req -> ---------------------------------------------")
+            for _tableName in self._tableNameReqList:
+                print(_tableName)
 
-        print("    Res <- ---------------------------------------------")
-        for _tableName in self._tableNameResList:
-            print(_tableName)
+            print("    Res <- ---------------------------------------------")
+            for _tableName in self._tableNameResList:
+                print(_tableName)
 
-        print("    Others ---------------------------------------------")
-        for _tableName in self._tableNameOther:
-            print(_tableName)
+            print("    Others ---------------------------------------------")
+            for _tableName in self._tableNameOther:
+                print(_tableName)
 
     # 将一个proto文件转换成HiveTable的建表语句
     def getHiveSQLByProtoPath(self, protoPath_: str):

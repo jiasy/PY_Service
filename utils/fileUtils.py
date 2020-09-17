@@ -3,6 +3,8 @@ import json
 import os
 from utils import sysUtils
 import shutil
+import chardet
+import sys
 
 
 def removeBomInUTF8(filePath_: str):
@@ -47,10 +49,32 @@ def getPath(rootPath_: str, subPath_: str):
     return _currentPath
 
 
+def getFileEncode(filePath_: str):
+    if os.path.exists(filePath_):
+        _encodeInfo = None
+        try:
+            _file = open(filePath_, 'rb')
+            try:
+                _encodeInfo = chardet.detect(_file.read())  # 得到编码信息
+            finally:
+                _file.close()
+        except Exception as e:
+            print(filePath_, e)
+        if _encodeInfo:
+            return _encodeInfo["encoding"]
+        else:
+            print(filePath_ + " : 无法获取编码信息。")
+            sys.exit(1)
+    else:
+        print(filePath_ + " : 文件不存在。")
+        sys.exit(1)
+
+
 def readFromFile(filePath_: str):
+    _encodeType = getFileEncode(filePath_)
     _contentStr = None
     try:
-        _file = open(filePath_, 'r')
+        _file = open(file=filePath_, mode='r', encoding=_encodeType)  # 按照编码打开
         try:
             _contentStr = _file.read()
         finally:
@@ -62,13 +86,18 @@ def readFromFile(filePath_: str):
 
 # 读取文件的每一行
 def linesFromFile(filePath_: str):
-    return open(filePath_, 'r').readlines()
+    _encodeType = getFileEncode(filePath_)
+    _lines = open(file=filePath_, mode='r', encoding=_encodeType).readlines()  # 按照编码打开
+    return _lines
 
 
-def removeExistFile(path: str, isExist: bool):
-    if isExist:
-        os.remove(path)
-    return False
+# 移除存在文件
+def removeExistFile(path_: str):
+    if os.path.exists(path_):
+        os.remove(path_)
+        return True
+    else:
+        return False
 
 
 # json文件直接读取成字典

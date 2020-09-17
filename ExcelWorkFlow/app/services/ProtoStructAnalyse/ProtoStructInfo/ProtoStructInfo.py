@@ -2,6 +2,7 @@
 # Created by jiasy at 2019/3/4
 from base.supports.Base.BaseInService import BaseInService
 from utils import folderUtils
+from utils import fileUtils
 import re
 
 

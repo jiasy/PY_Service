@@ -7,16 +7,15 @@ import time
 
 # 一次解析一个 protobuf 的 结构信息
 class ToHiveTableSQL(BaseInService):
-
     def __init__(self, belongToService_):
         super().__init__(belongToService_)
-        # 读取 SQL 模板 内容。
-        self._sqlTemplete = fileUtils.readFromFile(
-            fileUtils.getPath(
-                self.belongToService.resPath,
-                "HiveSql/SqlTemplete"
-            )
-        )
+        # # 读取 SQL 模板 内容。
+        # self._sqlTemplete = fileUtils.readFromFile(
+        #     fileUtils.getPath(
+        #         self.belongToService.resPath,
+        #         "HiveSql/SqlTemplete"
+        #     )
+        # )
 
     def create(self):
         super(ToHiveTableSQL, self).create()

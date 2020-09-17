@@ -95,31 +95,35 @@ if __name__ == "__main__":
     _baseServiceName = os.path.split(_folderSplit[0])[1]  # 再切得到上一层文件夹名
     _subBaseInServiceName = _folderSplit[1]  # 切到的后面就是子服务名称
 
+    # _functionName = "JustCMD"
+    # _parameterDict = {  # 所需参数
+    #     "CMD": "PWD",
+    #     "execFolderPath": "{resFolderPath}",  # 在子服务对应的资源目录中执行代码
+    # }
+
+    _functionName = "CMDInProject"
+    _parameterDict = {  # 所需参数
+        "toolName": "plistUnpack",
+        "parameterList": [
+            "{resFolderPath}/plistUnpack/pack"
+        ]
+    }
+
     Main.excelProcessStepTest(
         _baseServiceName,
         _subBaseInServiceName,
-
-        # "JustCMD",
-        # {  # 所需参数
-        #     "CMD": "PWD",
-        #     "execFolderPath": "{resFolderPath}",  # 在子服务对应的资源目录中执行代码
-        # },
-
-        "CMDInProject",
-        {  # 所需参数，{resFolderPath}为当前子服务对应的资源文件路径
-            "toolName": "plistUnpack",
-            "parameterList": [
-                "{resFolderPath}/plistUnpack/pack"
-            ]
-        },
-
+        _functionName,
+        _parameterDict,
         {  # 命令行参数
+            "executeType": "单体测试"
         }
     )
 
-    # Main.execExcelCommand(
-    #     _baseServiceName, _subBaseInServiceName,  # 取得要测试的Excel地址用。服务配置在取得的Excel中，这里不用配置
-    #     {  # 命令行参数
-    #         "executeType": "单体测试"
-    #     }
-    # )
+    Main.execExcelCommand(
+        _baseServiceName,
+        _subBaseInServiceName,
+        _functionName,
+        {  # 命令行参数
+            "executeType": "单体测试"
+        }
+    )

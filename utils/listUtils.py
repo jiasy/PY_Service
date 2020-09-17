@@ -15,7 +15,6 @@ def list_pop(list_):
 def getValueListFromDictObject(dictObject_: dict):
     return [_value for _, _value in dictObject_.items()]
 
-
 '''
 _sourceStrList = [
     "+ - - * / // ** %"

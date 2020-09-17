@@ -16,9 +16,9 @@ class Json(ExcelBaseInService):
     def __init__(self, belongToService_):
         super().__init__(belongToService_)
         self.funcDict = {
-            "OverridePathValue": {
+            "MargeJsonDict": {
                 "jsonFilePath": "json文件路径",
-                "overrideDict": "json结构的DictSheet配置",
+                "margeJsonDict": "json结构的DictSheet配置",
             },
         }
 
@@ -28,15 +28,27 @@ class Json(ExcelBaseInService):
     def destory(self):
         super(Json, self).destory()
 
-    def OverridePathValue(self, dParameters_: dict):
+    def MargeJsonFile(self, dParameters_: dict):
         _jsonFilePath = dParameters_["jsonFilePath"]
-        _overrideDict = dParameters_["overrideDict"]
+        _margeJsonFilePath = dParameters_["margeJsonFilePath"]
         _jsonDict = fileUtils.dictFromJsonFile(_jsonFilePath)
-        _jsonDict = jsonUtils.mergeAToB(_overrideDict, _jsonDict)  # 合并
+        _margeJsonDict = fileUtils.dictFromJsonFile(_margeJsonFilePath)
+        _jsonDict = jsonUtils.mergeAToB(_margeJsonDict, _jsonDict)  # 合并
         fileUtils.writeFileWithStr(  # 写回去
             _jsonFilePath,
             str(json.dumps(_jsonDict, indent=4, sort_keys=False, ensure_ascii=False))
         )
+
+    def MargeJsonDict(self, dParameters_: dict):
+        _jsonFilePath = dParameters_["jsonFilePath"]
+        _margeJsonDict = dParameters_["margeJsonDict"]
+        _jsonDict = fileUtils.dictFromJsonFile(_jsonFilePath)
+        _jsonDict = jsonUtils.mergeAToB(_margeJsonDict, _jsonDict)  # 合并
+        fileUtils.writeFileWithStr(  # 写回去
+            _jsonFilePath,
+            str(json.dumps(_jsonDict, indent=4, sort_keys=False, ensure_ascii=False))
+        )
+
 
 import Main
 
@@ -46,35 +58,40 @@ if __name__ == "__main__":
     _folderSplit = os.path.split(_folderPath)  # 切目录
     _baseServiceName = os.path.split(_folderSplit[0])[1]  # 再切得到上一层文件夹名
     _subBaseInServiceName = _folderSplit[1]  # 切到的后面就是子服务名称
+
+    _functionName = "MargeJsonDict"
+    _parameterDict = {  # 所需参数
+        "jsonFilePath": "{resFolderPath}/jsconfig.json",
+        "margeJsonDict": {
+            "exclude": [
+                "node_modules",
+                ".vscode",
+                "library",
+                "local",
+                "settings",
+                "temp"
+            ],
+            "compilerOptions": {
+                "addParameter": "added",  # 添加一个参数
+                "target": "es5"  # 修改一个参数
+            }
+        }
+    }
+
     Main.excelProcessStepTest(
         _baseServiceName,
         _subBaseInServiceName,
-        "OverridePathValue",
-        {  # 所需参数
-            "jsonFilePath": "{resFolderPath}/jsconfig.json",
-            "overrideDict": {
-                "exclude": [
-                    "node_modules",
-                    ".vscode",
-                    "library",
-                    "local",
-                    "settings",
-                    "temp"
-                ],
-                "compilerOptions": {
-                    "addParameter": "added",  # 添加一个参数
-                    "target": "es5"  # 修改一个参数
-                }
-            }
-        },
+        _functionName,
+        _parameterDict,
         {  # 命令行参数
             "executeType": "单体测试"
         }
     )
-    sys.exit(1)
+
     Main.execExcelCommand(
         _baseServiceName,
         _subBaseInServiceName,
+        _functionName,
         {  # 命令行参数
             "executeType": "单体测试"
         }

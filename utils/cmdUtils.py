@@ -62,7 +62,7 @@ def doStrAsCmd(cmdStr_: str, whichFolder_: str, printPipeLines_: bool = False):
         print(_tabeSpace + "- ERROR -")  # 打印错误
         for _i in range(len(_pipeLines)):
             print(_tabeSpace * 2 + _pipeLines[_i])
-        return False
+        sys.exit(1)
     else:
         if printPipeLines_:  # 需要输出的话
             for _i in range(len(_pipeLines)):
@@ -70,7 +70,7 @@ def doStrAsCmd(cmdStr_: str, whichFolder_: str, printPipeLines_: bool = False):
                 _currentPipLine = _tabeSpace * 2 + _currentPipLine
                 print(_currentPipLine)
         print(_tabeSpace + "- SUCCESS -")  # 打印成功
-        return True
+        return _pipeLines
 
 
 # 执行 cmd 语句，并获得输出

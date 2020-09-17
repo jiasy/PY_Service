@@ -39,6 +39,15 @@ class Main(metaclass=SingletonType):
         self.appDict[appName_] = _app
         return _app
 
+    def removeAppByName(self, appName_):
+        del self.appDict[appName_]
+
+    def getAppWithService(self, appName_: str, serviceName_: str):
+        _app = self.createAppByName(appName_)
+        _app.start()
+        _app.sm.switchRunningServices([serviceName_])
+        return _app.sm.getServiceByName(serviceName_)
+
 
 # Excel 测试专用
 def excelProcessStepTest(
@@ -84,6 +93,7 @@ def excelProcessStepTest(
 def execExcelCommand(
         baseServiceName_: str,
         subBaseInServiceName_: str,
+        functionName_: str,
         cmdDict_: dict = None
 ):
     # 创建 Excel 工作流
@@ -95,32 +105,43 @@ def execExcelCommand(
     print("<模拟命令行执行>-----------------------------------------------------------------------------------------------")
     # 事例Excel路径
     _sampleExcelFilePath = os.path.realpath(
-        utils.sysUtils.folderPathFixEnd(_subBaseInService.subResPath) + subBaseInServiceName_ + ".xlsx"
+        os.path.join(
+            utils.sysUtils.folderPathFixEnd(_subBaseInService.subResPath),
+            subBaseInServiceName_ + ".xlsx"
+        )
     )
-    # excel驱动脚本
-    _excelCommandPath = os.path.realpath(os.path.join(
-        _sampleExcelFilePath,  # 资源中的 xlsx 路径
-        os.pardir,  # BaseInService Folder
-        os.pardir,  # BaseService Folder
-        os.pardir,  # services Folder
-        os.pardir,  # res Folder
-        os.pardir,  # Excel Folder
-        os.pardir,  # PY_Service Folder
-        "ExcelCommand.py"  # 执行脚本名
-    ))
+    # 存在这个路径
+    if os.path.exists(_sampleExcelFilePath):
+        # excel驱动脚本
+        _excelCommandPath = os.path.realpath(os.path.join(
+            _sampleExcelFilePath,  # 资源中的 xlsx 路径
+            os.pardir,  # BaseInService Folder
+            os.pardir,  # BaseService Folder
+            os.pardir,  # services Folder
+            os.pardir,  # res Folder
+            os.pardir,  # Excel Folder
+            os.pardir,  # PY_Service Folder
+            "ExcelCommand.py"  # 执行脚本名
+        ))
 
-    # 拼接驱动样例的命令
-    _sampleExcelCommand = "cd '" + os.path.dirname(_sampleExcelFilePath) + "';" + \
-                          "python '" + _excelCommandPath + "'" + \
-                          " --excelPath '" + _sampleExcelFilePath + "'"
+        # 拼接驱动样例的命令
+        _sampleExcelCommand = "cd '" + os.path.dirname(_sampleExcelFilePath) + "';" + \
+                              "python '" + _excelCommandPath + "'" + \
+                              " --excelPath '" + _sampleExcelFilePath + "'" + \
+                              " --sheetName '" + functionName_ + "'" + \
+                              " --executeType Main->测试"
 
-    # 拼接命令行，
-    for _key in cmdDict_:
-        _sampleExcelCommand += " --" + _key + " '" + cmdDict_[_key] + "'"
+        # 拼接命令行，
+        for _key in cmdDict_:
+            _sampleExcelCommand += " --" + _key + " '" + cmdDict_[_key] + "'"
 
-    # 执行命令
-    utils.cmdUtils.doStrAsCmd(
-        _sampleExcelCommand,  # 执行命令行驱动 Excel 工作流配置
-        os.path.dirname(_sampleExcelFilePath),  # 在子服务对应的资源目录内
-        True
-    )
+        # 执行命令
+        utils.cmdUtils.doStrAsCmd(
+            _sampleExcelCommand,  # 执行命令行驱动 Excel 工作流配置
+            os.path.dirname(_sampleExcelFilePath),  # 在子服务对应的资源目录内
+            True
+        )
+    else:
+        # 不存在
+        print(
+            "资源路径，对应的Excel不存在 : \n" + baseServiceName_ + "->" + subBaseInServiceName_ + "->" + functionName_ + "\n" + _sampleExcelFilePath)
