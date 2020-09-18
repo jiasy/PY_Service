@@ -37,10 +37,17 @@ class ExcelApp(App):
         print("\n1.解析Excel : " + excelPath_ + "\n")
         _currentWorkBook = WorkBook()
         _currentWorkBook.initWithWorkBook(excelPath_)
+
+        # 是否执行过
+        _isExecute = False
+
+        # 循环Sheet页
         for _sheetName in _currentWorkBook.sheetDict:
             if sheetName_:  # 有指定Sheet
                 if not _sheetName == sheetName_:  # 不是指定的Sheet
                     continue  # 找下一个
+
+            _isExecute = True  # 执行
 
             _sheet = _currentWorkBook.sheetDict[_sheetName]
             if _sheet.sheetType != SheetType.CMD:
@@ -71,6 +78,9 @@ class ExcelApp(App):
                     "ExcelApp -> runExcel : " + _sheetName +
                     " 参数配置必须包含 dGlobalDict lProcessSteps"
                 )
+
+        if sheetName_ and not _isExecute:
+            print("待执行功能 : " + sheetName_ + " 不存在于当前Excel中")
 
     # 通过Json文件的内容来执行服务
     def runServiceByJsonDict(self, sheetAndCmdDict_: dict):

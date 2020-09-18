@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Created by jiasy at 2020/9/10
 from base.supports.Base.BaseInService import BaseInService
-import utils
+from utils import pyUtils
 
 
 class ExcelBaseInService(BaseInService):
@@ -32,6 +32,8 @@ class ExcelBaseInService(BaseInService):
         return None
 
     def doExcelFunc(self, sFunctionName_: str, dParameters_: dict):
-        hasattr(self, sFunctionName_)  # 使用反射
-        _function = getattr(self, sFunctionName_)
-        _function(dParameters_)
+        if hasattr(self, sFunctionName_):  # 使用反射
+            _function = getattr(self, sFunctionName_)
+            _function(dParameters_)
+        else:
+            self.raiseError(pyUtils.getCurrentRunningFunctionName(), " excel 不存在这个方法 : " + sFunctionName_)

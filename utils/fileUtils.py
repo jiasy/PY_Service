@@ -190,14 +190,17 @@ def getNewNameKeepFolderStructure(
         sourceFolderPath_: str,
         targetFolderPath_: str,
         filePath_: str,
-        targetSuffix_: str = ""  # 没有后缀就填空，比如，文件对应一个文件夹的时候
+        targetSuffix_: str = None  # 需要转换后缀时，填写后缀名
 ):
     _sourceFolderPath = sysUtils.folderPathFixEnd(sourceFolderPath_)
     _targetFolderPath = sysUtils.folderPathFixEnd(targetFolderPath_)
-    _newFileName = pathWithOutSuffix(filePath_).split(_sourceFolderPath)[1] + targetSuffix_
+    if targetSuffix_:  # 有后缀的话，就改一下
+        _newFilePath = pathWithOutSuffix(filePath_).split(_sourceFolderPath)[1] + targetSuffix_
+    else:  # 无后缀变换的需求，就直接用了
+        _newFilePath = filePath_.split(_sourceFolderPath)[1]
     return os.path.join(
         _targetFolderPath,
-        _newFileName
+        _newFilePath
     )
 
 

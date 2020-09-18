@@ -69,7 +69,7 @@ def doStrAsCmd(cmdStr_: str, whichFolder_: str, printPipeLines_: bool = False):
                 _currentPipLine = _pipeLines[_i]
                 _currentPipLine = _tabeSpace * 2 + _currentPipLine
                 print(_currentPipLine)
-        print(_tabeSpace + "- SUCCESS -")  # 打印成功
+        print(_tabeSpace + "- EXECUTE END -")  # 执行结束
         return _pipeLines
 
 

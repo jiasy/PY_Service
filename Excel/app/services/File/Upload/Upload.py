@@ -2,10 +2,13 @@
 # Created by jiasy at 2020/9/9
 from utils import sysUtils
 from utils import ftpUtils
+from utils import folderUtils
+from utils import fileUtils
 import os
 import oss2
 
 from Excel.ExcelBaseInService import ExcelBaseInService
+import paramiko
 
 
 class Upload(ExcelBaseInService):
@@ -24,11 +27,20 @@ class Upload(ExcelBaseInService):
             },
             "FTP": {
                 "localFolderPath": "本地文件夹",
-                "ftpHost": "?",
-                "ftpUserName": "?",
-                "ftpPassWord": "?",
-                "ftpFolder": '?',  # 一级子目录
-                "ftpSubFolder": "?",  # 二级子目录
+                "ftpHost": "ftpHost",
+                "ftpUserName": "ftpUserName",
+                "ftpPassWord": "ftpPassWord",
+                "ftpFolder": 'ftpFolder',  # 一级子目录
+                "ftpSubFolder": "ftpSubFolder",  # 二级子目录
+            },
+            "SFTP": {
+                "localFolderPath": "本地放置的要上传的文件",
+                "filters": "用来过滤的后缀",
+                "upToFolderPath": "上传到哪里",
+                "ip": "ip地址",
+                "port": "端口",
+                "username": "root",
+                "pKeyFilePath": "id_rsa 秘钥的本机路径",
             },
         }
 
@@ -99,6 +111,38 @@ class Upload(ExcelBaseInService):
             dParameters_["ftpSubFolder"]
         )
 
+    def SFTP(self, dParameters_: dict):
+        # 本地路径 和 上传路径
+        _localFolderPath = sysUtils.folderPathFixEnd(dParameters_["localFolderPath"])
+        _upToFolderPath = sysUtils.folderPathFixEnd(dParameters_["upToFolderPath"])
+
+        # 传送对象
+        _transport = paramiko.Transport(
+            (dParameters_["ip"], int(dParameters_["port"]))  # 这个括号不能拆
+        )
+
+        # 链接
+        _transport.connect(
+            username=dParameters_["username"],
+            pkey=paramiko.RSAKey.from_private_key_file(dParameters_["pKeyFilePath"])
+        )
+        # 创建sftp
+        _sftp = paramiko.SFTPClient.from_transport(_transport)
+
+        # 遍历本地路径，获取文件列表
+        _filePathList = folderUtils.getFileListInFolder(
+            _localFolderPath,
+            dParameters_["filters"]
+        )
+        # 依次发送到FTP
+        for _idx in range(len(_filePathList)):
+            _filePath = _filePathList[_idx]
+            _upToFilePath = fileUtils.getNewNameKeepFolderStructure(
+                _localFolderPath, _upToFolderPath, _filePath
+            )
+            _sftp.put(_filePath, _upToFilePath, confirm=True)
+            print(_filePath + " -> " + _upToFilePath)
+
 
 import Main
 
@@ -122,14 +166,25 @@ if __name__ == "__main__":
     #     "remoteFolderPath": "farmRemote/test",
     # }
 
-    _functionName = "FTP"
+    # _functionName = "FTP"
+    # _parameterDict = {  # 所需参数
+    #     "localFolderPath": "{resFolderPath}",
+    #     "ftpHost": "?",
+    #     "ftpUserName": "?",
+    #     "ftpPassWord": "?",
+    #     "ftpFolder": '?',  # 一级子目录
+    #     "ftpSubFolder": "?",  # 二级子目录
+    # }
+
+    _functionName = "SFTP"
     _parameterDict = {  # 所需参数
-        "localFolderPath": "{resFolderPath}",
-        "ftpHost": "?",
-        "ftpUserName": "?",
-        "ftpPassWord": "?",
-        "ftpFolder": '?',  # 一级子目录
-        "ftpSubFolder": "?",  # 二级子目录
+        "localFolderPath": "/Volumes/18604037792/develop/ShunYuan/杂项/icons/",
+        "filters": [".png", ".jpg"],
+        "upToFolderPath": "/home/www/farm/static/icons/",
+        "ip": "111.11.111.11",
+        "port": 22,
+        "username": "root",
+        "pKeyFilePath": "/Volumes/18604037792/develop/ShunYuan/杂项/id_rsa",
     }
 
     Main.excelProcessStepTest(

@@ -151,3 +151,19 @@ class FTPSync(object):
             os.chdir(local_curr_dir)  # 切换本地的当前工作目录为d的父文件夹
             self.ftpConnect.cwd(ftp_curr_dir)  # 切换ftp的当前工作目录为d的父文件夹
             self.syncToLocal(d)  # 在这个递归里面，本地和ftp的当前工作目录都会被更改
+
+
+if __name__ == "__main__":
+    import paramiko
+
+    _transport = paramiko.Transport(("111.11.111.11", 22))
+    _transport.connect(
+        username='username',
+        pkey=paramiko.RSAKey.from_private_key_file("/Users/jiasy/Downloads/id_rsa")
+    )
+    _sftp = paramiko.SFTPClient.from_transport(_transport)
+    _sftp.put(
+        "/Users/jiasy/Downloads/XKXKXKXKX.png",
+        "/home/www/farm/static/icons/XKXKXKXKX.png",
+        confirm=True
+    )

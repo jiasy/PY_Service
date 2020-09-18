@@ -43,7 +43,7 @@ class ExcelToJsonFile(ExcelBaseInService):
             # sysUtils.chmod("666","["com.apple.quarantine"]", _xlsxFilePath)
             # xlsx文件 -> 文件夹，包含了将要生成json文件。
             _xlsxFolderPath = fileUtils.getNewNameKeepFolderStructure(
-                _sourceFolderPath, _targetFolderPath, _xlsxFilePath, ""
+                _sourceFolderPath, _targetFolderPath, _xlsxFilePath
             )
             _currentWorkBook = WorkBook.WorkBook()  # 解析WorkBook
             _currentWorkBook.initWithWorkBook(_xlsxFilePath)
