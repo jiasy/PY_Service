@@ -37,9 +37,12 @@ class Main(metaclass=SingletonType):
         _app = getObjectByClassPath(_appClassPath)
         # Main 的 appDict 字典中， 会保留创建的 app 实例引用
         self.appDict[appName_] = _app
+        _app.main = self
         return _app
 
     def removeAppByName(self, appName_):
+        _app = self.appDict[appName_]
+        _app.main = None
         del self.appDict[appName_]
 
     def getAppWithService(self, appName_: str, serviceName_: str):
@@ -128,8 +131,7 @@ def execExcelCommand(
         _sampleExcelCommand = "cd '" + os.path.dirname(_sampleExcelFilePath) + "';" + \
                               "python '" + _excelCommandPath + "'" + \
                               " --excelPath '" + _sampleExcelFilePath + "'" + \
-                              " --sheetName '" + functionName_ + "'" + \
-                              " --executeType Main->测试"
+                              " --sheetName '" + functionName_ + "'"
 
         # 拼接命令行，
         for _key in cmdDict_:

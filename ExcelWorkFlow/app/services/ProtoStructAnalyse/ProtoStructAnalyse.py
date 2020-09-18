@@ -33,7 +33,7 @@ class ProtoStructAnalyse(BaseService):
         self.getSubClassObject("ProtoStructInfo")
         self.getSubClassObject("ToHiveTableSQL")
 
-        self.analyseProtoStructureInFolder(self.protobufFolder)
+        # self.analyseProtoStructureInFolder(self.protobufFolder)
 
         # # 输出 构建 protol 结构
         # self.buildProtoStructure(self.protobufFolder)
@@ -55,9 +55,10 @@ class ProtoStructAnalyse(BaseService):
     # 构建Proto结构，将结构内容返回成字符串列表
     def analyseProtoStructureInFolder(self, protobufFolderPath_):
         self.buildProtoStructure(protobufFolderPath_)
-        return self.expandTableStructureInFolder(protobufFolderPath_)
+        _tableStructureStrList = self.expandTableStructureInFolder(protobufFolderPath_)
+        return _tableStructureStrList
 
-    # proto 的基本类型
+        # proto 的基本类型
     def isNormalProperty(self, dataType_):
         return (dataType_ == "int64") or \
                (dataType_ == "int32") or \

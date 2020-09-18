@@ -29,6 +29,8 @@ class App(object):
         # 创建 App 状态集合
         self.appState = self.sm.serviceProvider.getAppStateObject(self.appName)
         self.appState.create()
+        # 相互关联
+        self.main = None
 
     def __del__(self):
         self.appState.destory()

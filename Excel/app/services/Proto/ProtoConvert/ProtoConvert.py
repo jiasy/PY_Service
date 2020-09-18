@@ -58,7 +58,8 @@ class ProtoConvert(ExcelBaseInService):
         # 创建 Excel 工作流
         _appName = "ExcelWorkFlow"
         _baseServiceName = "ProtoStructAnalyse"
-        _baseService = Main().getAppWithService(_appName, _baseServiceName)
+        _baseService = self.app.main.getAppWithService(_appName, _baseServiceName)
+        
         _structureStrList = _baseService.analyseProtoStructureInFolder(_protoFolderPath)
         fileUtils.writeFileWithStr(
             _structureDescriptionPath,
