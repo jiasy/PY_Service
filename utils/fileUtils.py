@@ -281,3 +281,15 @@ print("Yay, the file exists!")
 
 print(file_to_open.read_text())
 '''
+'''
+from pathlib import Path
+p = Path(r'd:\test\tt.txt.bk')
+p.name       # 获取文件名 # tt.txt.bk
+p.stem       # 获取文件名除后缀的部分 # tt.txt
+p.suffix     # 文件后缀 # .bk
+p.suffixs    # 文件的后缀们... # ['.txt', '.bk']
+p.parent     # 相当于dirnanme # WindowsPath('d:/test')
+p.parents    # 返回一个iterable, 包含所有父目录 # <WindowsPath.parents>
+p.parents    # 返回向上的目录递归路径，['d:\test','d:\']
+a.parts      # 将路径通过分隔符分割成一个元祖 # ('d:\\', 'test', 'tt.txt.bk')
+'''
