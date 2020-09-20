@@ -1,13 +1,19 @@
 {
-    "product_redisUrl": "product_b_redis4",
-    "product_redisPort": "product_b_redis5",
-    "product_redisPasswd": "product_b_redis6",
-    "develop_redisUrl": "develop_b_redis4",
-    "develop_redisPort": "develop_b_redis5",
-    "develop_redisPasswd": "develop_b_redis6",
-    "test_redisUrl": "test_b_redis4",
-    "test_redisPort": "test_b_redis5",
-    "test_redisPasswd": "test_b_redis6",
+    "product": {
+        "redisUrl": "product_b_redis4",
+        "redisPort": "product_b_redis5",
+        "redisPasswd": "product_b_redis6"
+    },
+    "develop": {
+        "redisUrl": "develop_b_redis4",
+        "redisPort": "develop_b_redis5",
+        "redisPasswd": "develop_b_redis6"
+    },
+    "test": {
+        "redisUrl": "test_b_redis4",
+        "redisPort": "test_b_redis5",
+        "redisPasswd": "test_b_redis6"
+    },
     "product_mysqlUrl": "product_b_mysql1",
     "product_mysqlPort": "product_b_mysql2",
     "product_mysqlUserName": "product_b_mysql3",

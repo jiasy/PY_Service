@@ -23,11 +23,15 @@ class DictSheet(Sheet):
         # 靠缩进来进行json的属性归属
         # 数据的字段名必须进行类型指定,这样方面识别
         # 从上向下,进行一次路径识别,确保字典和列表的字段名站整个一行
-        for _currentRow in range(rowStartIdx_, rowEndID_):
-            for _currentCol in range(colStartIdx_, colEndID_):
-                if not self.getCellStructureData(_currentCol, _currentRow) is None:  # 当前的字段名,字典和列表,字段名后面不可以有任何字符串
+        for _currentRow in range(rowStartIdx_, rowEndID_):  # 一行一行向下找
+            for _currentCol in range(colStartIdx_, colEndID_):  # 每一行，要么是个结构，要么是列表，要么是一个数据
+                if not self.getCellStructureData(  # 当前的字段名,字典和列表,字段名后面不可以有任何字符串
+                        _currentCol, _currentRow
+                ) is None:
                     break  # 得到了,这一行就结束了
-                elif not self.getCellParData(_currentCol, _currentRow) is None:  # 是数据项,那它右面的第一项就是数据,<再往右面就全都是空>
+                elif not utils.excelUtils.getCellParData(  # 是数据项,那它右面的第一项就是数据,<再往右面就全都是空>
+                        self, _currentCol, _currentRow
+                ) is None:
                     break  # 得到了,这一行就结束了
 
         _dictData = {}  # 开始组装
@@ -68,60 +72,6 @@ class DictSheet(Sheet):
                 else:
                     _listData.append(_cell.data["value"])
         return _listData
-
-    # cell里面是一个数据名,那么取得它的数据信息并且返回
-    def getCellParData(self, col_, row_):
-        _dataInfo = None
-        _cellStr = self.getStrByCr(col_, row_)
-        if utils.excelUtils.isParNameData(_cellStr):  # 当前的字段名,字典和列表,字段名后面不可以有任何字符串
-            _cell = self.cells[col_][row_]  # 获取格子
-            _dataInfo = {"parName": _cellStr[3:], "type": _cellStr[0:3]}  # 格子中写入数据
-            _cellNextColStr = self.getStrByCr(col_ + 1, row_)
-            if _cellNextColStr == "" and not _dataInfo["type"] == "<s>":
-                self.raiseAndPrintError(
-                    utils.excelUtils.crToPos(col_, row_) + "不为<s>键" + "，" +
-                    utils.excelUtils.crToPos(col_ + 1, row_) + " 没有值，只有<s>才能有空字符串"
-                )
-            if not _cellNextColStr:
-                self.raiseAndPrintError(
-                    utils.excelUtils.crToPos(col_, row_) + " " + _cellStr + " -> " +
-                    utils.excelUtils.crToPos(col_ + 1, row_) + " 没有值"
-                )
-            if _dataInfo["type"] == "<i>":
-                _dataInfo["value"] = utils.convertUtils.strToInt(_cellNextColStr)
-            elif _dataInfo["type"] == "<f>":
-                _dataInfo["value"] = utils.convertUtils.strToFloat(_cellNextColStr)
-            elif _dataInfo["type"] == "<b>":
-                _cellValue = _cellNextColStr
-                if _cellValue == 1.0 or _cellValue.lower() == "t" or \
-                        _cellValue.lower() == "true" or \
-                        _cellValue == "1":
-                    _dataInfo["value"] = True
-                elif _cellValue == 0.0 or \
-                        _cellValue.lower() == "f" or \
-                        _cellValue.lower() == "false" or \
-                        _cellValue == "0":
-                    _dataInfo["value"] = True
-                else:
-                    self.raiseAndPrintError(
-                        utils.excelUtils.crToPos(col_, row_) + " 所在为一个Boolean值,只能是1/0 true/false t/f 中的一个"
-                    )
-            elif _dataInfo["type"] == "<t>" or \
-                    _dataInfo["type"] == "<s>":
-                _dataInfo["value"] = _cellNextColStr
-
-            _cell.data = _dataInfo
-            if int(col_ + 2) < self.maxCol:  # <再往后都是空白><但是可能往后超过了列数限制-判断一下>
-                for _currentValueCol in range(col_ + 2, self.maxCol):  # 当前行向后找
-                    if not (self.getStrByCr(_currentValueCol, row_) == ""):  # 如果出现不为空的格子,报错
-                        self.raiseAndPrintError(
-                            utils.excelUtils.crToPos(
-                                _currentValueCol, row_
-                            ) + " 不能有值,因为 " + utils.excelUtils.crToPos(
-                                col_, row_
-                            ) + " 是一个数据")
-            # print("data : " + str(_dataInfo))
-        return _dataInfo
 
     def getCellStructureData(self, col_, row_):  # cell里面是一个结构名,获取它所持有的数据
         _dataInfo = None

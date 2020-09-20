@@ -3,7 +3,7 @@
 import re
 import json
 
-import utils.dataUtils
+import utils.sqlDataUtils
 import utils.pyUtils
 
 from pyhive import hive
@@ -72,4 +72,4 @@ def getConnectionAndCursor(
 def executePrestoSQL(prestoInfo_, sql_):
     # 获取 数据库 链接
     _connection, _cursor = getConnectionAndCursor("presto", **prestoInfo_)
-    return utils.dataUtils.executeSQL(_cursor, sql_)
+    return utils.sqlDataUtils.executeSQL(_cursor, sql_)

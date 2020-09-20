@@ -2,7 +2,8 @@
 # excel解析工具
 import re
 from utils import dictUtils
-from utils import strUtils
+from utils import convertUtils
+from utils.excelUtil import Sheet
 from utils.excelUtil import WorkBook
 import json
 import os
@@ -58,8 +59,13 @@ def isParNameLegal(parameterName_):
 
 # 属性名是一个数据， t 时间 , s 字符串 ,i 整形 , f 浮点 , b 布尔
 def isParNameData(parameterName_):
-    if (parameterName_.startswith("<t>") or parameterName_.startswith("<s>") or parameterName_.startswith(
-            "<i>") or parameterName_.startswith("<f>") or parameterName_.startswith("<b>")):
+    if (
+            parameterName_.startswith("<t>") or
+            parameterName_.startswith("<s>") or
+            parameterName_.startswith("<i>") or
+            parameterName_.startswith("<f>") or
+            parameterName_.startswith("<b>")
+    ):
         return True
     else:
         return False
@@ -71,6 +77,93 @@ def isParNameStructure(parameterName_):
         return True
     else:
         return False
+
+
+# 设置键值对儿
+def setKeyValue(dict_: dict, key_: str, sheet_, colNum_, rowNum_):
+    _cellStr = sheet_.getStrByCr(colNum_, rowNum_)
+    if isParNameData(key_):
+        _value = None
+        _type = key_[0:3]
+        if _type == "<i>":
+            _value = convertUtils.strToInt(_cellStr)
+        elif _type == "<f>":
+            _value = convertUtils.strToFloat(_cellStr)
+        elif _type == "<b>":
+            _cellValue = _cellStr
+            if _cellValue == 1.0 or _cellValue.lower() == "t" or \
+                    _cellValue.lower() == "true" or \
+                    _cellValue == "1":
+                _value = True
+            elif _cellValue == 0.0 or \
+                    _cellValue.lower() == "f" or \
+                    _cellValue.lower() == "false" or \
+                    _cellValue == "0":
+                _value = True
+            else:
+                sheet_.raiseAndPrintError(
+                    crToPos(colNum_, rowNum_) + " 所在为一个Boolean值,只能是1/0 true/false t/f 中的一个"
+                )
+        elif _type == "<t>" or _type == "<s>":
+            _value = _cellStr
+        dict_[key_[3:]] = _value
+    else:
+        dict_[key_] = sheet_.getStrByCr(colNum_, rowNum_)
+
+
+# cell里面是一个数据名,那么取得它的数据信息并且返回
+def getCellParData(sheet_: Sheet, col_, row_):
+    _dataInfo = None
+    _cellStr = sheet_.getStrByCr(col_, row_)
+    if isParNameData(_cellStr):  # 当前的字段名,字典和列表,字段名后面不可以有任何字符串
+        _cell = sheet_.cells[col_][row_]  # 获取格子
+        _dataInfo = {"parName": _cellStr[3:], "type": _cellStr[0:3]}  # 格子中写入数据
+        _cellNextColStr = sheet_.getStrByCr(col_ + 1, row_)
+        if _cellNextColStr == "" and not _dataInfo["type"] == "<s>":
+            sheet_.raiseAndPrintError(
+                crToPos(col_, row_) + "不为<s>键" + "，" +
+                crToPos(col_ + 1, row_) + " 没有值，只有<s>才能有空字符串"
+            )
+        if not _cellNextColStr:
+            sheet_.raiseAndPrintError(
+                crToPos(col_, row_) + " " + _cellStr + " -> " +
+                crToPos(col_ + 1, row_) + " 没有值"
+            )
+        if _dataInfo["type"] == "<i>":
+            _dataInfo["value"] = convertUtils.strToInt(_cellNextColStr)
+        elif _dataInfo["type"] == "<f>":
+            _dataInfo["value"] = convertUtils.strToFloat(_cellNextColStr)
+        elif _dataInfo["type"] == "<b>":
+            _cellValue = _cellNextColStr
+            if _cellValue == 1.0 or _cellValue.lower() == "t" or \
+                    _cellValue.lower() == "true" or \
+                    _cellValue == "1":
+                _dataInfo["value"] = True
+            elif _cellValue == 0.0 or \
+                    _cellValue.lower() == "f" or \
+                    _cellValue.lower() == "false" or \
+                    _cellValue == "0":
+                _dataInfo["value"] = True
+            else:
+                sheet_.raiseAndPrintError(
+                    crToPos(col_, row_) + " 所在为一个Boolean值,只能是1/0 true/false t/f 中的一个"
+                )
+        elif _dataInfo["type"] == "<t>" or \
+                _dataInfo["type"] == "<s>":
+            _dataInfo["value"] = _cellNextColStr
+
+        _cell.data = _dataInfo
+        if int(col_ + 2) < sheet_.maxCol:  # <再往后都是空白><但是可能往后超过了列数限制-判断一下>
+            for _currentValueCol in range(col_ + 2, sheet_.maxCol):  # 当前行向后找
+                if not (sheet_.getStrByCr(_currentValueCol, row_) == ""):  # 如果出现不为空的格子,报错
+                    sheet_.raiseAndPrintError(
+                        crToPos(
+                            _currentValueCol, row_
+                        ) + " 不能有值,因为 " + crToPos(
+                            col_, row_
+                        ) + " 是一个数据")
+        # print("data : " + str(_dataInfo))
+    return _dataInfo
 
 
 # sheet页面规范，分以下几种。识别到固定的命名，做固定的操作。

@@ -194,7 +194,7 @@ def getNewNameKeepFolderStructure(
 ):
     _sourceFolderPath = sysUtils.folderPathFixEnd(sourceFolderPath_)
     _targetFolderPath = sysUtils.folderPathFixEnd(targetFolderPath_)
-    if targetSuffix_:  # 有后缀的话，就改一下
+    if targetSuffix_ == "" or targetSuffix_:  # 有后缀的话，就改一下
         _newFilePath = pathWithOutSuffix(filePath_).split(_sourceFolderPath)[1] + targetSuffix_
     else:  # 无后缀变换的需求，就直接用了
         _newFilePath = filePath_.split(_sourceFolderPath)[1]

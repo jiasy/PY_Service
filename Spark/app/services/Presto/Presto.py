@@ -3,7 +3,7 @@ from TCLIService.ttypes import TOperationState
 
 from base.supports.Service.BaseService import BaseService
 from utils import dataUtils_presto
-from utils import dataUtils
+from utils import sqlDataUtils
 from utils import listUtils
 from sqlalchemy.engine import create_engine
 import pandas as pd
@@ -157,13 +157,13 @@ class Presto(BaseService):
     # 获取数据库的所有表名
     def getTableNameList(self, cursor_: Cursor):
         _showTablesSQL = "show tables"
-        _tableNames, _errList = dataUtils.executeSQL(cursor_, _showTablesSQL)
+        _tableNames, _errList = sqlDataUtils.executeSQL(cursor_, _showTablesSQL)
         return [_tableTuple[0] for _tableTuple in _tableNames]
 
     # 获取表的结构描述
     def getTableDescribe(self, cursor_: Cursor, catalog_: str, schema_: str, tableName_: str):
         _descTableSQL = "describe " + tableName_
-        _fatchAll, _errList = dataUtils.executeSQL(cursor_, _descTableSQL)
+        _fatchAll, _errList = sqlDataUtils.executeSQL(cursor_, _descTableSQL)
         _tableDescribeInfo = self.table_describe_info(catalog_, schema_, tableName_, _fatchAll)
         return _tableDescribeInfo
 
@@ -251,7 +251,7 @@ class Presto(BaseService):
             )
             # print('counting : ' + _fullTableName)
             # 返回数据 [(行数,)]
-            _countInfo, _errList = dataUtils.executeSQL(_cursor, _countSQL)
+            _countInfo, _errList = sqlDataUtils.executeSQL(_cursor, _countSQL)
             _dict = dict({})
             _dict["tableName"] = _fullTableName
             _dict["rowCount"] = int(_countInfo[0][0])

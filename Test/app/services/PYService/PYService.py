@@ -36,8 +36,8 @@ class PYService(BaseService):
         # print('_dataSetStr = \n' + str(_dataSetStr))
 
         # 取得没有转换的源数据
-        _activityInfoList = self.sm.dc.listDict["user.activityInfo"]
-        print('_activityInfoList = \n' + str(_activityInfoList))
+        _activityInfoListLength = self.sm.dc.gv("user.activityInfo")
+        print('_activityInfoListLength = \n' + str(_activityInfoListLength))
         print('self.sm.dc.ds.activityInfo = ' + str(self.sm.dc.ds["user"]["activityInfo"]))
 
         # 用于数据比较的数据绑定 -----------------------------------------------------------------

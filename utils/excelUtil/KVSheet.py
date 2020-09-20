@@ -12,7 +12,10 @@
 #           每列的参数，会写入这个文件夹下Sheet同名文件内
 # 如果，字段为空的话。必须写入 - 值，标示当前参数为空
 #       因为，判断条件是 != ""，所以当第一个类目的某个字段为 ""，会认为当前行没有数据，所以，用 - 来标示空数据
-import utils
+from utils import dataSetUtils
+from utils import fileUtils
+from utils import pyUtils
+from utils import excelUtils
 import os
 import json
 from utils.excelUtil.Sheet import Sheet
@@ -33,7 +36,7 @@ class KVSheet(Sheet):
                 _classifyName,
                 self.sheetName + ".json"
             )
-            utils.fileUtils.writeFileWithStr(
+            fileUtils.writeFileWithStr(
                 _jsonFilePath,
                 str(json.dumps(_jsonDict[_classifyName], indent=4, sort_keys=False, ensure_ascii=False))
             )
@@ -52,21 +55,35 @@ class KVSheet(Sheet):
                             if self.isRowContainsData(_rowNum):  # 当前行是数据行，进行数据录入
                                 _valueStr = self.getStrByCr(_colNum, _rowNum)
                                 if _valueStr == "":  # 纯空报错
-                                    raise utils.pyUtils.AppError(
-                                        "类目必须填写 - 标示空数据 " + self.sheetName +
+                                    raise pyUtils.AppError(
+                                        "类目必须填写 '-' 标示空数据 " + self.sheetName +
                                         " -> " + _classifyName +
-                                        " : " + utils.excelUtils.crToPos(_colNum, _rowNum)
+                                        " : " + excelUtils.crToPos(_colNum, _rowNum)
                                     )
                                 elif _valueStr != "-":  # 不是空数据，就录入
-                                    _configDict[self.getStrByCr(3, _rowNum)] = self.getStrByCr(_colNum, _rowNum)
+                                    excelUtils.setKeyValue(
+                                        _configDict,  # 向字典设置
+                                        self.getStrByCr(3, _rowNum),  # 未转换键
+                                        self,  # 当前sheet
+                                        _colNum,  # 列
+                                        _rowNum  # 行
+                                    )
                     else:
                         break
                 break
+
+        _tempDict = {}  # 缓存当前Sheet的字典
+        for _classifyName in _sheetDict:
+            _singleSheetDict = _sheetDict[_classifyName]  # 取得类别
+            for _dataPath in _singleSheetDict:  # 循环每一个键值
+                # 类目.数据路径 关联 到值上
+                dataSetUtils.sv(_classifyName + "." + _dataPath, _singleSheetDict[_dataPath], _tempDict)
+                # 将类目转换后的缓存还原给类目
+            _sheetDict[_classifyName] = dataSetUtils.dataSetToJsonDict(_classifyName, _tempDict)
         return _sheetDict
 
     def isRowContainsData(self, rowNum_):
-        if self.getStrByCr(2, rowNum_) != "" and \
-                self.getStrByCr(3, rowNum_) != "" and \
+        if self.getStrByCr(2, rowNum_) != "" and self.getStrByCr(3, rowNum_) != "" and \
                 self.getStrByCr(4, rowNum_) != "":
             return True
         else:

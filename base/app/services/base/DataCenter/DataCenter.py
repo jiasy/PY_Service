@@ -16,7 +16,6 @@ class DataCenter(BaseService):
         self.dataSet: dict = dict({})
         self.ds: dict = self.dataSet
         self.dataEventMgr: DataEventMgr = DataEventMgr(self.sm)
-        self.listDict: dict = dict({})
 
     def create(self):
         self.sm.dc = self
@@ -236,8 +235,6 @@ class DataCenter(BaseService):
         if not (_arrayPath in changeList_):
             changeList_.append(_arrayPath)
 
-        self.listDict[_arrayPath] = arrayValue_
-
         for i in range(len(arrayValue_)):
             _tempKey = "[" + str(i + 1) + "]"
             _dataPath = lastKey_ + _tempKey
@@ -309,7 +306,7 @@ class DataCenter(BaseService):
     # 将数据key排序，然后，获取排序后的Value构成的list
     def gvDictAsList(self, dataPath_: str, dataSet_: dict = None):
         _dataObject = self.gv(dataPath_, dataSet_)
-        _keySortedValueArr = self.sm.arrayUtils.getValueListFromDictObject(_dataObject)
+        _keySortedValueArr = listUtils.getValueListFromDictObject(_dataObject)
         return _keySortedValueArr
 
     # dataSet 转换回 jsonDict

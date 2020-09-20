@@ -40,7 +40,7 @@ class CMDSheet(DictSheet):
             _functionName = self.getStrByCr(2, _processSteps[_i]["startRow"])
             _printStr = " " * 12 + "步骤 [" + str(_i) + "/" + str(len(_processSteps) - 1) + "] "
             _printStr += _baseServiceName + ":" + _baseInServiceName + " -> " + _functionName + "开始解析"
-            print(_printStr)
+            print(_printStr)  # 输出步骤
             _jsonDict["lProcessSteps"].append(  # 添加步骤
                 {
                     "dServiceInfo": {
