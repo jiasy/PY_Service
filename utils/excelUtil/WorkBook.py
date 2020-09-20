@@ -12,7 +12,8 @@ from utils.excelUtil.CMDSheet import CMDSheet
 from utils.excelUtil.KVSheet import KVSheet
 from utils.excelUtil.StateSheet import StateSheet
 
-
+# 将一个Excel格式规范化
+#   固定几个类型的Sheet
 class WorkBook(object):
     def __init__(self):
         self.currentWorkBook = None
@@ -117,5 +118,7 @@ class WorkBook(object):
     # 写入文件夹
     def toJsonFile(self, locateFolderPath_: str):
         for _sheetName in self.sheetDict:
+            print(_sheetName + " -> begin")
             _sheet = self.sheetDict[_sheetName]
             _sheet.toJsonFile(locateFolderPath_)
+            print(_sheetName + " <- end")

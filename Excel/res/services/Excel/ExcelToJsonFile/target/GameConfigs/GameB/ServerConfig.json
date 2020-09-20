@@ -2,33 +2,33 @@
     "product": {
         "redisUrl": "product_b_redis4",
         "redisPort": "product_b_redis5",
-        "redisPasswd": "product_b_redis6"
+        "redisPasswd": "product_b_redis6",
+        "mysqlUrl": "product_b_mysql1",
+        "mysqlPort": "product_b_mysql2",
+        "mysqlUserName": "product_b_mysql3",
+        "mysqlDatabase": "product_b_mysql4",
+        "mysqlUserPasswd": "product_b_mysql5"
     },
     "develop": {
         "redisUrl": "develop_b_redis4",
         "redisPort": "develop_b_redis5",
-        "redisPasswd": "develop_b_redis6"
+        "redisPasswd": "develop_b_redis6",
+        "mysqlUrl": "develop_b_mysql1",
+        "mysqlPort": "develop_b_mysql2",
+        "mysqlUserName": "develop_b_mysql3",
+        "mysqlDatabase": "develop_b_mysql4",
+        "mysqlUserPasswd": "develop_b_mysql5"
     },
     "test": {
         "redisUrl": "test_b_redis4",
         "redisPort": "test_b_redis5",
-        "redisPasswd": "test_b_redis6"
+        "redisPasswd": "test_b_redis6",
+        "mysqlUrl": "test_b_mysql1",
+        "mysqlPort": "test_b_mysql2",
+        "mysqlUserName": "test_b_mysql3",
+        "mysqlDatabase": "test_b_mysql4",
+        "mysqlUserPasswd": "test_b_mysql5"
     },
-    "product_mysqlUrl": "product_b_mysql1",
-    "product_mysqlPort": "product_b_mysql2",
-    "product_mysqlUserName": "product_b_mysql3",
-    "product_mysqlDatabase": "product_b_mysql4",
-    "product_mysqlUserPasswd": "product_b_mysql5",
-    "develop_mysqlUrl": "develop_b_mysql1",
-    "develop_mysqlPort": "develop_b_mysql2",
-    "develop_mysqlUserName": "develop_b_mysql3",
-    "develop_mysqlDatabase": "develop_b_mysql4",
-    "develop_mysqlUserPasswd": "develop_b_mysql5",
-    "test_mysqlUrl": "test_b_mysql1",
-    "test_mysqlPort": "test_b_mysql2",
-    "test_mysqlUserName": "test_b_mysql3",
-    "test_mysqlDatabase": "test_b_mysql4",
-    "test_mysqlUserPasswd": "test_b_mysql5",
     "aliAccessKeyID": "aliAccessKeyID_b",
     "aliAccessKeySecret": "aliAccessKeySecret_b",
     "aliAccessRegion": "aliAccessRegion_b",

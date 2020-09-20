@@ -1,17 +1,30 @@
 # !/usr/bin/env python3
-# 键值对，平表配置。
+# 键值对，按照平表配置。
+#       键通过'.'分割，来构建出结构。这里的结构最好是字典结构。
+#           配置 dict.structure.a = "a"
+#           {"dict":{"structure":{"a":a}}}
+#       如果配置数组结构，比如：dict.list
+#           配置 dict.list = 2                    数组长度
+#               dict.list[0] = "<LIST_MARK>"     用来标示当前 dict.list 是个数组[因为长度0时，无法直接判断字段是数组还是0数字]
+#               dict.list[1].a = "1_a"           数组内容要连续
+#               dict.list[1].b = "1_b"
+#               dict.list[2].a = "2_a"
+#               dict.list[2].b = "2_b"
+
 # 一般是配置总汇，同一套键值对，可能有不同的配置。比如:
 #       同一个app的多个环境的不同配置。
 #           本机开发，内网测试，外网测试，仿真环境，真实环境。
 #       同一个IOS/APK工程，嵌入不同的游戏。维护一个打包工程，通过脚本构建修改参数，拷贝内容来切换游戏。
 #           同一套SDK的不同参数，资源的不同Git地址等等。
 #       同一个app的多国语言
-#
+
 # 通过列名来划分分组
 #       每出现一个分组，会创建一个文件夹。
 #           每列的参数，会写入这个文件夹下Sheet同名文件内
+
 # 如果，字段为空的话。必须写入 - 值，标示当前参数为空
 #       因为，判断条件是 != ""，所以当第一个类目的某个字段为 ""，会认为当前行没有数据，所以，用 - 来标示空数据
+
 from utils import dataSetUtils
 from utils import fileUtils
 from utils import pyUtils
@@ -71,7 +84,7 @@ class KVSheet(Sheet):
                     else:
                         break
                 break
-
+        # 键值，中键是可以用逗号分割的，逗号会被切割并加工成json结构。
         _tempDict = {}  # 缓存当前Sheet的字典
         for _classifyName in _sheetDict:
             _singleSheetDict = _sheetDict[_classifyName]  # 取得类别

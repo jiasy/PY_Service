@@ -135,7 +135,8 @@ def getCellParData(sheet_: Sheet, col_, row_):
             _dataInfo["value"] = convertUtils.strToFloat(_cellNextColStr)
         elif _dataInfo["type"] == "<b>":
             _cellValue = _cellNextColStr
-            if _cellValue == 1.0 or _cellValue.lower() == "t" or \
+            if _cellValue == 1.0 or \
+                    _cellValue.lower() == "t" or \
                     _cellValue.lower() == "true" or \
                     _cellValue == "1":
                 _dataInfo["value"] = True
