@@ -1,6 +1,6 @@
 {
     "key": "stringValue",
-    "time": "1234567890",
+    "time": 1234567890,
     "list": [
         {
             "id": 1,

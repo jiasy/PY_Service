@@ -1,6 +1,7 @@
-# !/usr/bin/env python3
+from decimal import Decimal
+
 def strToInt(str_: str):
-    return int(str_)
+    return int(Decimal(str_))
 
 
 def strToFloat(str_):

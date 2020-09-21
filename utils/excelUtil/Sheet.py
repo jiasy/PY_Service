@@ -11,11 +11,12 @@ from enum import Enum
 class SheetType(Enum):
     NORMAL = 1
     LIST = 1
-    DICT = 2
-    KV = 3
-    PROTO = 4
-    STATE = 5
-    CMD = 6
+    DICTLIST = 2
+    DICT = 3
+    KV = 4
+    PROTO = 5
+    STATE = 6
+    CMD = 7
 
 
 class Sheet:

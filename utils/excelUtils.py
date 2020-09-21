@@ -104,8 +104,11 @@ def setKeyValue(dict_: dict, key_: str, sheet_, colNum_, rowNum_):
                 sheet_.raiseAndPrintError(
                     crToPos(colNum_, rowNum_) + " 所在为一个Boolean值,只能是1/0 true/false t/f 中的一个"
                 )
-        elif _type == "<t>" or _type == "<s>":
+        elif _type == "<t>":
+            _value = convertUtils.strToInt(_cellStr)
+        elif _type == "<s>":
             _value = _cellStr
+
         dict_[key_[3:]] = _value
     else:
         dict_[key_] = sheet_.getStrByCr(colNum_, rowNum_)
@@ -149,8 +152,9 @@ def getCellParData(sheet_: Sheet, col_, row_):
                 sheet_.raiseAndPrintError(
                     crToPos(col_, row_) + " 所在为一个Boolean值,只能是1/0 true/false t/f 中的一个"
                 )
-        elif _dataInfo["type"] == "<t>" or \
-                _dataInfo["type"] == "<s>":
+        elif _dataInfo["type"] == "<t>":
+            _dataInfo["value"] = convertUtils.strToInt(_cellNextColStr)
+        elif _dataInfo["type"] == "<s>":
             _dataInfo["value"] = _cellNextColStr
 
         _cell.data = _dataInfo

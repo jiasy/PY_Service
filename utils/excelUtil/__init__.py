@@ -3,5 +3,6 @@ __all__ = [
     "Sheet",
     "DictSheet",
     "ListSheet",
+    "DictListSheet",
     "WorkBook",
 ]

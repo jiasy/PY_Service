@@ -7,10 +7,12 @@ import xlsxwriter
 from utils import fileUtils
 from utils import pyUtils
 from utils.excelUtil.DictSheet import DictSheet
+from utils.excelUtil.DictListSheet import DictListSheet
 from utils.excelUtil.ListSheet import ListSheet
 from utils.excelUtil.CMDSheet import CMDSheet
 from utils.excelUtil.KVSheet import KVSheet
 from utils.excelUtil.StateSheet import StateSheet
+
 
 # 将一个Excel格式规范化
 #   固定几个类型的Sheet
@@ -54,6 +56,8 @@ class WorkBook(object):
         for _sheetName in self.currentWorkBook.sheet_names():
             if _sheetName.endswith("<list>"):
                 _currentSheet = ListSheet()
+            elif _sheetName.endswith("<dictlist>"):
+                _currentSheet = DictListSheet()
             elif _sheetName.endswith("<dict>"):
                 _currentSheet = DictSheet()
             elif _sheetName.endswith("<kv>"):
@@ -118,7 +122,7 @@ class WorkBook(object):
     # 写入文件夹
     def toJsonFile(self, locateFolderPath_: str):
         for _sheetName in self.sheetDict:
-            print(_sheetName + " -> begin")
+            print(" " * 4 + _sheetName + " ->")
             _sheet = self.sheetDict[_sheetName]
             _sheet.toJsonFile(locateFolderPath_)
-            print(_sheetName + " <- end")
+            print(" " * 4 + "<- " + _sheetName)
