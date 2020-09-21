@@ -122,7 +122,7 @@ class WorkBook(object):
     # 写入文件夹
     def toJsonFile(self, locateFolderPath_: str):
         for _sheetName in self.sheetDict:
-            print(" " * 4 + _sheetName + " ->")
+            print(" " * 4 + " -> " + _sheetName + " -> 开始解析 A")
             _sheet = self.sheetDict[_sheetName]
             _sheet.toJsonFile(locateFolderPath_)
-            print(" " * 4 + "<- " + _sheetName)
+            print(" " * 4 + " <- " + _sheetName + " <- 解析完成 V")
