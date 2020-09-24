@@ -5,6 +5,7 @@ import utils.strUtils
 import utils.listUtils
 import utils.sysUtils
 import shutil
+import sys
 
 
 # 显示文件夹结构 有正则过滤
@@ -165,6 +166,9 @@ def gci(filepath_: str, fileFilter_: list, fileList_: list = None):
 
 # 将符合后缀类型的文件，构成 名称:路径 这样的键值对。
 def getFilePathKeyValue(folder_: str, filters_: list):
+    if not os.path.isdir(folder_):
+        print("ERROR 不是目录 : " + folder_)
+        sys.exit(1)
     _filePathList = getFileListInFolder(folder_, filters_)
     _keyValueDict = {}
     # 文件列表 转换 键值对 <文件名:路径>

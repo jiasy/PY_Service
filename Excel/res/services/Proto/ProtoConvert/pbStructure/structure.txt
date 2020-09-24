@@ -1,0 +1,16 @@
+Test --------------------------------------------------------
+    Others ---------------------------------------------
+        TestInfo ----------------------- TestInfo.proto
+        |      1 <!> testId ------------ int32 //  测试ID
+        |      2 [*] money ------------- TestInfo.TestItem //  钱
+        |      |      1 <!> testItemId - int32 //  道具的编号
+        |      |      2 <!> num -------- int32 //  道具个数
+        |      3 [*] diamond ----------- TestInfo.TestItem //  钻
+        |      |      1 <!> testItemId - int32 //  道具的编号
+        |      |      2 <!> num -------- int32 //  道具个数
+        |      4 <!> testType ---------- TestType //  测试类型
+        |      |      LOW -------------- 0 //  底
+        |      |      NORMAL ----------- 1 //  中
+        |      |      HIGH ------------- 2 //  高
+        |      5 <?> testBool ---------- bool //  测试bool
+        |      6 <?> testString -------- string //  测试string

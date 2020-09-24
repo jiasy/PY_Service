@@ -50,7 +50,7 @@ class ProtoStructInfo(BaseInService):
         # message name[...]
         # ->
         # message name[...]//comment
-        regex = r"\t*//(.*)\n(\t*)message\s*([1-9a-zA-Z_]+)(.*)\n"
+        regex = r"^\t*//(.*)\n(\t*)message\s*([1-9a-zA-Z_]+)(.*)\n"
         _protoStr = re.sub(regex, r'\2message \3\4//\1\n', _protoStr)
 
         # message name{//comment
@@ -130,7 +130,8 @@ class ProtoStructInfo(BaseInService):
         _tableNameStackList: list = []  # 表结构嵌套的列表
         _tableLineStackList: list = []  # 表的行缓存
         _tableDict: dict = {}
-        _lines = protocolStr_.split("\n")
+        _protocolStr = protocolStr_.replace("\t", "\n")
+        _lines = _protocolStr.split("\n")
         for _line in _lines:
             _tableReg = re.search(r'(message|enum)\s*([1-9a-zA-Z_]+).*', _line)
             if _tableReg:

@@ -146,4 +146,4 @@ def execExcelCommand(
     else:
         # 不存在
         print(
-            "资源路径，对应的Excel不存在 : \n" + baseServiceName_ + "->" + subBaseInServiceName_ + "->" + functionName_ + "\n" + _sampleExcelFilePath)
+            "资源路径，对应的Excel不存在 : \n    " + _sampleExcelFilePath + "\n    " + baseServiceName_ + "->" + subBaseInServiceName_ + "->" + functionName_)

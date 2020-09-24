@@ -8,6 +8,10 @@ class CocosCreatorApp(App):
         super().__init__(self.__class__.__name__)
 
     def start(self):
+        return
+
+    def testStart(self):
+        self.start()
         # # 解析 meta
         # self.changeAppState("MetaAnalyse")
 

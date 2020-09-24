@@ -36,6 +36,11 @@ class App(object):
         self.appState.destory()
         self.sm.destory()
 
+    # 程序状态重置成唯一一个服务运行
+    def getSingleRunningService(self, serviceName_: str):
+        self.sm.switchRunningServices([])  # 清理当前
+        return self.sm.switchRunningServices([serviceName_])[0]  # 替换上新的
+
     # 变更 App 状态
     def changeAppState(self, stateName_):
         if stateName_ in self.appState.appStateDict:

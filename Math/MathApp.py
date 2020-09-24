@@ -8,6 +8,10 @@ class MathApp(App):
         super().__init__(self.__class__.__name__)
 
     def start(self):
+        return
+
+    def testStart(self):
+        self.start()
         # LinearAlgebra 线性代数，模块
         # self.changeAppState("LinearAlgebra")
         # NumPy 模块

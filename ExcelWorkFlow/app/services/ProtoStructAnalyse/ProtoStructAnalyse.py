@@ -37,8 +37,7 @@ class ProtoStructAnalyse(BaseService):
 
         # # 输出 构建 protol 结构
         # self.buildProtoStructure(self.protobufFolder)
-        # # return
-        #
+
         # # 输出文件夹内的所有 protol 结构
         # self.expandTableStructureInFolder(self.protobufFolder)
 
@@ -53,12 +52,20 @@ class ProtoStructAnalyse(BaseService):
         super(ProtoStructAnalyse, self).destory()
 
     # 构建Proto结构，将结构内容返回成字符串列表
+    # 这里的文件夹结构一定是
+    # Folder
+    # |____Type
+    #      |____xxRes.proto
+    #      |____xxReq.proto
+    #      |____xxSync.proto
+    # 这样的结构，嵌套的结构。
     def analyseProtoStructureInFolder(self, protobufFolderPath_):
         self.buildProtoStructure(protobufFolderPath_)
         _tableStructureStrList = self.expandTableStructureInFolder(protobufFolderPath_)
         return _tableStructureStrList
 
         # proto 的基本类型
+
     def isNormalProperty(self, dataType_):
         return (dataType_ == "int64") or \
                (dataType_ == "int32") or \

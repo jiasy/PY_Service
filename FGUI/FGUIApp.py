@@ -8,4 +8,8 @@ class FGUIApp(App):
         super().__init__(self.__class__.__name__)
 
     def start(self):
+        return
+
+    def testStart(self):
+        self.start()
         self.changeAppState("PackageAnalyse")

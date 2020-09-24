@@ -8,5 +8,9 @@ class LohoApp(App):
         super().__init__(self.__class__.__name__)
 
     def start(self):
+        return
+
+    def testStart(self):
+        self.start()
         # self.changeAppState("SqlMaker")
         self.changeAppState("LohoTest")

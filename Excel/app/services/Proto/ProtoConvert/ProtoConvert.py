@@ -33,7 +33,13 @@ class ProtoConvert(ExcelBaseInService):
 
     def PbStructure(self, dParameters_: dict):
         '''
-        将文件夹内的proto文件结构整理成文本
+        1.文件夹结构，必须是二级结构
+        Folder
+        |____Type
+             |____xxRes.proto
+             |____xxReq.proto
+             |____xxSync.proto
+        2.将文件夹内的proto文件结构整理成文本
             1.按照文件夹分类
             2.按照后缀区分类型
                 请求种类

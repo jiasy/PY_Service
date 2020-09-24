@@ -28,6 +28,10 @@ class ExcelApp(App):
     def start(self):
         return
 
+    def testStart(self):
+        self.start()
+        return
+
     # 运行 Excel
     def runExcel(self, excelPath_: str, pwd_: str, cmdDict_: dict = {}, sheetName_: str = None):
         # cmdUtils.removeMacXattr(excelPath_)# 修改 excel 权限
@@ -176,9 +180,7 @@ class ExcelApp(App):
 
     # 切换到那个服务的，那个子服务上
     def switchTo(self, sBaseService_: str, sBaseInService_: str):
-        self.sm.switchRunningServices([])  # 清理原有
-        self.sm.switchRunningServices([sBaseService_])  # 重新构建
-        _baseService = self.sm.getServiceByName(sBaseService_)
+        _baseService = self.getSingleRunningService(sBaseService_)
         _baseInService = _baseService.getSubClassObject(sBaseInService_)
         if _baseInService:
             return _baseInService
