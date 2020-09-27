@@ -21,7 +21,7 @@ class ProtoConvert(ExcelBaseInService):
             },
             "PbStructure": {
                 "protoFolderPath": "proto文件路径",
-                "structureDescription": "生成结构描述文件路径",
+                "structureDescriptionFilePath": "生成结构描述文件路径",
             },
         }
 
@@ -59,7 +59,7 @@ class ProtoConvert(ExcelBaseInService):
             5.被嵌套的结构一定要先定义，再使用
         '''
         _protoFolderPath = sysUtils.folderPathFixEnd(dParameters_["protoFolderPath"])
-        _structureDescriptionPath = dParameters_["structureDescription"]
+        _structureDescriptionFilePathPath = dParameters_["structureDescriptionFilePath"]
 
         # 创建 Excel 工作流
         _appName = "ExcelWorkFlow"
@@ -68,7 +68,7 @@ class ProtoConvert(ExcelBaseInService):
         
         _structureStrList = _baseService.analyseProtoStructureInFolder(_protoFolderPath)
         fileUtils.writeFileWithStr(
-            _structureDescriptionPath,
+            _structureDescriptionFilePathPath,
             listUtils.joinListToStr(_structureStrList, "\n")
         )
 
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     _folderPath = os.path.dirname(os.path.realpath(__file__))  # 当前执行目录
     _folderSplit = os.path.split(_folderPath)  # 切目录
     _baseServiceName = os.path.split(_folderSplit[0])[1]  # 再切得到上一层文件夹名
-    _subBaseInServiceName = _folderSplit[1]  # 切到的后面就是子服务名称
+    _subBaseInServiceName = _folderSplit[1]  # 切到的后面就是子服务名称资源路径，对应的Excel不存在
 
     # _functionName = "PbCreator"
     # _parameterDict = {  # 所需参数
@@ -109,18 +109,18 @@ if __name__ == "__main__":
     _functionName = "PbStructure"
     _parameterDict = {  # 所需参数
         "protoFolderPath": "{resFolderPath}/proto",
-        "structureDescription": "{resFolderPath}/pbStructure/structure.txt",
+        "structureDescriptionFilePath": "{resFolderPath}/pbStructure/structure.txt",
     }
-
-    Main.excelProcessStepTest(
-        _baseServiceName,
-        _subBaseInServiceName,
-        _functionName,
-        _parameterDict,
-        {  # 命令行参数
-            "executeType": "单体测试"
-        }
-    )
+    #
+    # Main.excelProcessStepTest(
+    #     _baseServiceName,
+    #     _subBaseInServiceName,
+    #     _functionName,
+    #     _parameterDict,
+    #     {  # 命令行参数
+    #         "executeType": "单体测试"
+    #     }
+    # )
 
     Main.execExcelCommand(
         _baseServiceName,

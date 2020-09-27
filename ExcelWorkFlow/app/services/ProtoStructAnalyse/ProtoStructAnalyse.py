@@ -12,10 +12,6 @@ import os
 class ProtoStructAnalyse(BaseService):
     def __init__(self, sm_):
         super().__init__(sm_)
-        # self.protobufFolder = fileUtils.getPath(self.resPath, "protobuf")
-        self.protobufFolder = "/Volumes/18604037792/develop/ShunYuan/protocol_farm/server/"
-        # self._usedTableNameList = [
-        # ]
 
         self._tableRequireByOtherList = []  # 被引用的表
         self._enumTableList = []  # 枚举表
@@ -33,13 +29,8 @@ class ProtoStructAnalyse(BaseService):
         self.getSubClassObject("ProtoStructInfo")
         self.getSubClassObject("ToHiveTableSQL")
 
-        # self.analyseProtoStructureInFolder(self.protobufFolder)
-
         # # 输出 构建 protol 结构
         # self.buildProtoStructure(self.protobufFolder)
-
-        # # 输出文件夹内的所有 protol 结构
-        # self.expandTableStructureInFolder(self.protobufFolder)
 
         # # 将一个文件夹内的所有文件逐个解析，生成HiveSQL---------------------------------------------------------------
         # self.getHiveSQLByProtoFolder(self.protobufFolder)
@@ -64,8 +55,7 @@ class ProtoStructAnalyse(BaseService):
         _tableStructureStrList = self.expandTableStructureInFolder(protobufFolderPath_)
         return _tableStructureStrList
 
-        # proto 的基本类型
-
+    # proto 的基本类型
     def isNormalProperty(self, dataType_):
         return (dataType_ == "int64") or \
                (dataType_ == "int32") or \
@@ -330,7 +320,6 @@ class ProtoStructAnalyse(BaseService):
         for _tableName, _tableInfo in self._tableFullNameDict.items():
             if not (_tableName in self._tableRequireByOtherList):
                 if not (_tableName in self._enumTableList):
-                    # if _tableName in self._usedTableNameList:  # js中使用了
                     self._mainTableShortNameList.append(_tableName)
 
         if _printInfo:

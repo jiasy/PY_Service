@@ -14,6 +14,7 @@ from utils import pyUtils
 from utils import timeUtils
 from utils import listUtils
 from utils import cmdUtils
+from utils import dataSetUtils
 from utils.excelUtil.WorkBook import WorkBook
 from utils.excelUtil.Sheet import SheetType
 import os
@@ -92,10 +93,10 @@ class ExcelApp(App):
         # 替换参数 ------------------------------------------------------------------------------------------------------
         _globalDict = sheetAndCmdDict_["dGlobalDict"]  # 全局参数
         _pathToSheetAndCmdDict = "excelData"  # 缓存字典的键
-        _changeList = self.sm.dc.setValueToDataPath(_pathToSheetAndCmdDict, sheetAndCmdDict_, self.dataSetCache)
+        _changeList = dataSetUtils.setValueToDataPath(_pathToSheetAndCmdDict, sheetAndCmdDict_, self.dataSetCache)
         for _idx in range(len(_changeList)):  # 遍历值变化过的路径
             _changePath = _changeList[_idx]
-            _changeValue = self.sm.dc.getValueByDataPath(_changePath, self.dataSetCache)  # 通过变化过的路径，获取变化过的值
+            _changeValue = dataSetUtils.getValueByDataPath(_changePath, self.dataSetCache)  # 通过变化过的路径，获取变化过的值
             if isinstance(_changeValue, str):  # 变化后的值是字符串的话，尝试替换字符串值
                 _convertedStr = strUtils.replaceKeyToValueInTemplate(_globalDict, _changeValue)  # 字典内容替换模板
                 if "{" in _convertedStr and "}" in _convertedStr:  # 没有替换的时候，会有{x}这样的字符串残留
@@ -103,8 +104,8 @@ class ExcelApp(App):
                         pyUtils.getCurrentRunningFunctionName() + "\n" +
                         _changePath + " : " + _convertedStr + "。可能有未转换的数据残留"
                     )
-                self.sm.dc.setValueToDataPath(_changePath, _convertedStr, self.dataSetCache)  # 将变换后的值写回数据缓存
-        _sheetAndCmdDict = self.sm.dc.dataSetToJsonDict(_pathToSheetAndCmdDict, self.dataSetCache)  # 将缓存转换回json字典对象
+                dataSetUtils.setValueToDataPath(_changePath, _convertedStr, self.dataSetCache)  # 将变换后的值写回数据缓存
+        _sheetAndCmdDict = dataSetUtils.dataSetToJsonDict(_pathToSheetAndCmdDict, self.dataSetCache)  # 将缓存转换回json字典对象
         # 流程步骤 ------------------------------------------------------------------------------------------------------
         print("\n2.校验各步骤参数\n")
         _processSteps = _sheetAndCmdDict["lProcessSteps"]  # 获取流程步骤

@@ -28,7 +28,7 @@ def setValueToDataPath(dataPath_: str, value_, dataSet_: dict):
     while len(_dataPathList) > 0:
         _currentKey = listUtils.list_shift(_dataPathList)
         if len(_dataPathList) == 0:
-            if not value_:  # Value_ 为空
+            if not value_ == "" and not value_:  # Value_ 为空
                 if str(_currentKey + "[0]") in _dataPosition:
                     _arrayLength = _dataPosition[_currentKey]
                     for i in range(_arrayLength + 1):  # 多清理一个 0 序号。[0]用来标示当前内容为数组
@@ -145,11 +145,9 @@ def recursiveDataPath(
         _value = valueDict_[_key]
         if isinstance(_value, list):
             resetlistOnDataPath(dataOnParentPath_, dataPath_, _key, _value, changeList_)
-        elif isinstance(_value, bool):
-            dataOnParentPath_[_key] = _value
-            changeList_.append(_currentPath)
         elif (
                 isinstance(_value, str) or
+                isinstance(_value, bool) or
                 isinstance(_value, int) or
                 isinstance(_value, float) or
                 isinstance(_value, complex)
@@ -189,16 +187,11 @@ def resetlistOnDataPath(
                 _tempKey = "[" + str(i + 1) + "]"
                 _dataPath = lastKey_ + _tempKey
                 del dataOnCurrentDataPath_[_dataPath]
-                # _elementPath = dataPath_ + "." + _dataPath
-                # changeList_.append(_elementPath)
 
         changeList_.append(dataPath_)
 
     dataOnCurrentDataPath_[lastKey_] = len(arrayValue_)
     dataOnCurrentDataPath_[lastKey_ + "[0]"] = "<LIST_MARK>"
-
-    # if not (dataPath_ in changeList_):
-    #     changeList_.append(dataPath_)
 
     _arrayPath = dataPath_ + "." + lastKey_
 
@@ -209,12 +202,9 @@ def resetlistOnDataPath(
         _tempKey = "[" + str(i + 1) + "]"
         _dataPath = lastKey_ + _tempKey
         _dataElement = arrayValue_[i]
-        if isinstance(_dataElement, bool):
-            dataOnCurrentDataPath_[_dataPath] = _dataElement
-            _elementPath = dataPath_ + "." + _dataPath
-            changeList_.append(_elementPath)
-        elif (
+        if (
                 isinstance(_dataElement, str) or
+                isinstance(_dataElement, bool) or
                 isinstance(_dataElement, int) or
                 isinstance(_dataElement, float) or
                 isinstance(_dataElement, complex)

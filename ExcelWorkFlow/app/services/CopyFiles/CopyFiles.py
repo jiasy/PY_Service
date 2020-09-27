@@ -13,13 +13,6 @@ class CopyFiles(BaseService):
     def create(self):
         super(CopyFiles, self).create()
 
-        self.coverFiles(
-            [".json"],  # 拷贝那些类型
-            "/Volumes/18604037792/develop/ShunYuan/farm/genXml/json/",  # 从哪里拷贝
-            "/Volumes/18604037792/develop/ShunYuan/wxGame/assets/resources/Json/",  # 拷贝去哪里
-            True
-        )
-
     # 拷贝，只拷贝并替换已经存在的文件
     def coverFiles(self, typeFilters_: list, sourceFolderPath_: str, targetFolderPath_: str, isInclode_: bool):
         print("CopyFiles -> coverFiles : \n    " + sourceFolderPath_ + " -> " + targetFolderPath_)
@@ -33,7 +26,7 @@ class CopyFiles(BaseService):
                 print('        copy : ' + str(_fileName))
                 shutil.copy(_sourcefilePath, _tarfilePath)
             else:
-                print('x-      pass : ' + str(_fileName))
+                print('x-      pass : ' + str(_fileName)+" not exist.")
 
     def destory(self):
         super(CopyFiles, self).destory()
