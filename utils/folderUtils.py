@@ -147,15 +147,18 @@ def getSuffixsInFolder(filePath_: str):
 
 
 # 遍历文件夹，按照后缀获取文件列表
-def gci(filepath_: str, fileFilter_: list, fileList_: list = None):
+def gci(folderPath_: str, fileFilter_: list, fileList_: list = None):
+    if not os.path.isdir(folderPath_):
+        print("ERROR 不是目录 : " + folderPath_)
+        sys.exit(1)
     # 遍历filepath下所有文件，包括子目录
-    files = os.listdir(filepath_)
+    files = os.listdir(folderPath_)
     for fi in files:
-        fi_d = os.path.join(filepath_, fi)
+        fi_d = os.path.join(folderPath_, fi)
         if os.path.isdir(fi_d):
             gci(fi_d, fileFilter_, fileList_)
         else:
-            _filePath = os.path.join(filepath_, fi_d)
+            _filePath = os.path.join(folderPath_, fi_d)
             _fileSuffix = os.path.splitext(_filePath)[1]  # 当前的文件，后缀名
             if fileFilter_:  # 过滤的后缀列表
                 if _filePath and not _fileSuffix == "" and (_fileSuffix in fileFilter_):
@@ -165,11 +168,11 @@ def gci(filepath_: str, fileFilter_: list, fileList_: list = None):
 
 
 # 将符合后缀类型的文件，构成 名称:路径 这样的键值对。
-def getFilePathKeyValue(folder_: str, filters_: list):
-    if not os.path.isdir(folder_):
-        print("ERROR 不是目录 : " + folder_)
+def getFilePathKeyValue(folderPath_: str, filters_: list):
+    if not os.path.isdir(folderPath_):
+        print("ERROR 不是目录 : " + folderPath_)
         sys.exit(1)
-    _filePathList = getFileListInFolder(folder_, filters_)
+    _filePathList = getFileListInFolder(folderPath_, filters_)
     _keyValueDict = {}
     # 文件列表 转换 键值对 <文件名:路径>
     for _i in range(len(_filePathList)):
@@ -308,7 +311,6 @@ def convertFolderFiles(convertFunc_, srcFolderPath_: str, targetFolderPath_: str
     _srcFile = utils.fileUtils.getPath(srcFolderPath_, "")
     _filePathList = getFileListInFolder(_srcFile, filters_)
     for _path in _filePathList:
-        print(_path.split(srcFolderPath_).pop())
         _convertedStr = convertFunc_(_path)  # 路径指定文件内容转换并输出
         _targetFilePath = targetFolderPath_ + _path.split(srcFolderPath_).pop()  # 写入路径
         utils.fileUtils.writeFileWithStr(_targetFilePath, _convertedStr)
@@ -319,7 +321,6 @@ def doFunForeachFileInFolder(func_, srcFolderPath_: str, filters_: list):
     _csCodeFolder = utils.fileUtils.getPath(srcFolderPath_, "")
     _filePathList = getFileListInFolder(_csCodeFolder, filters_)
     for _path in _filePathList:
-        print(_path)
         func_(_path)
 
 
