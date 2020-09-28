@@ -1,0 +1,10 @@
+{
+    "inABSame":"AB",
+    "inABNotSame":"A",
+    "inA":"A",
+    "inABDict":{
+        "notSameBool":true,
+        "notSameInt":0,
+        "sameStr":"AB"
+    }
+}

@@ -28,7 +28,7 @@ def setValueToDataPath(dataPath_: str, value_, dataSet_: dict):
     while len(_dataPathList) > 0:
         _currentKey = listUtils.list_shift(_dataPathList)
         if len(_dataPathList) == 0:
-            if not value_ == "" and not value_:  # Value_ 为空
+            if not value_ == "" and (not value_ == False) and not value_:  # Value_ 为空
                 if str(_currentKey + "[0]") in _dataPosition:
                     _arrayLength = _dataPosition[_currentKey]
                     for i in range(_arrayLength + 1):  # 多清理一个 0 序号。[0]用来标示当前内容为数组
@@ -309,7 +309,7 @@ def dataSetDictToJsonDict(dataSetDict_: dict, jsonDict_: dict):
 
 
 # 获取列表元素
-def getListElementByIdx(listDataPath_: str, idx_: int, dataSet_: dict ):
+def getListElementByIdx(listDataPath_: str, idx_: int, dataSet_: dict):
     if isDataPathExist(listDataPath_ + "[0]", dataSet_):
         _listLength: int = getValueByDataPath(listDataPath_, dataSet_)
         if not _listLength is None:

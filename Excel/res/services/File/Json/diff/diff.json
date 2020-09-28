@@ -1,0 +1,8 @@
+{
+    "inB": "B",
+    "inABNotSame": "B",
+    "inABDict": {
+        "notSameBool": false,
+        "notSameInt": 1
+    }
+}
