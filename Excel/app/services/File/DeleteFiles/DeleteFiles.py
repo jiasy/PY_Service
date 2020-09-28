@@ -50,7 +50,7 @@ class DeleteFiles(ExcelBaseInService):
     def DeleteFolder(self, dParameters_):
         _deleteFolderPath = sysUtils.folderPathFixEnd(dParameters_["deleteFolderPath"])
         self.checkDeleteFolder(_deleteFolderPath)
-        # shutil.rmtree(str(_deleteFolderPath))
+        shutil.rmtree(str(_deleteFolderPath))
 
     # 删除明确要过滤的内容
     def DeleteFileInFolder(self, dParameters_):
