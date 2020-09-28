@@ -16,10 +16,14 @@ class GitBaseOperate(ExcelBaseInService):
     def __init__(self, belongToService_):
         super().__init__(belongToService_)
         self.funcDict = {
-            "CheckOutByPath": {
+            "CheckOut": {
                 "gitFolderPath": "本地路径",
                 "branch": "分支名称",
                 "path": "路径，不填写为全部下载",
+            },
+            "ReCreateTag": {
+                "gitFolderPath": "本地路径",
+                "tag": "tag名",
             },
         }
 
@@ -29,7 +33,15 @@ class GitBaseOperate(ExcelBaseInService):
     def destory(self):
         super(GitBaseOperate, self).destory()
 
-    def CheckOutByPath(self, dParameters_):
+    def ReCreateTag(self, dParameters_):
+        _gitFolderPath = sysUtils.folderPathFixEnd(dParameters_["gitFolderPath"])
+        _tag = dParameters_["tag"]
+        _repo = git.Repo.init(_gitFolderPath)
+        if _tag in _repo.tags:
+            _repo.delete_tag(_tag)  # 删除已有的
+        _repo.create_tag(_tag)  # 创建新的
+
+    def CheckOut(self, dParameters_):
         _gitFolderPath = sysUtils.folderPathFixEnd(dParameters_["gitFolderPath"])
         _branch = dParameters_["branch"]
         _path = dParameters_["path"]
@@ -74,12 +86,18 @@ if __name__ == "__main__":
     _baseServiceName = os.path.split(_folderSplit[0])[1]  # 再切得到上一层文件夹名
     _subBaseInServiceName = _folderSplit[1]  # 切到的后面就是子服务名称资源路径，对应的Excel不存在
 
-    _functionName = "CheckOutByPath"
+    # _functionName = "CheckOut"
+    # _parameterDict = {  # 所需参数
+    #     "gitFolderPath": "/Volumes/18604037792/develop/ShunYuan/protocol_farm/",
+    #     "branch": "remotes/origin/2020年5月27日强更线上版",
+    #     "path": "server/readme.txt",
+    #     # "path": "server",
+    # }
+
+    _functionName = "ReCreateTag"
     _parameterDict = {  # 所需参数
         "gitFolderPath": "/Volumes/18604037792/develop/ShunYuan/protocol_farm/",
-        "branch": "remotes/origin/2020年5月27日强更线上版",
-        "path": "server/readme.txt",
-        # "path": "server",
+        "tag": "publish_1124",
     }
 
     Main.excelProcessStepTest(
