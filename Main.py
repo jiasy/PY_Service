@@ -97,7 +97,7 @@ def execExcelCommand(
         baseServiceName_: str,
         subBaseInServiceName_: str,
         functionName_: str,
-        cmdDict_: dict = None
+        fakeCmdDict_: dict = None
 ):
     # 创建 Excel 工作流
     _main = Main()
@@ -132,10 +132,13 @@ def execExcelCommand(
                               "python '" + _excelCommandPath + "'" + \
                               " --excelPath '" + _sampleExcelFilePath + "'" + \
                               " --sheetName '" + functionName_ + "'"
+        # 从命令行参数中扣除 executeType
+        if "executeType" in fakeCmdDict_:
+            _sampleExcelCommand += " --executeType '" + fakeCmdDict_["executeType"] + "'"
+            del fakeCmdDict_["executeType"]
 
-        # 拼接命令行，
-        for _key in cmdDict_:
-            _sampleExcelCommand += " --" + _key + " '" + cmdDict_[_key] + "'"
+        for _key in fakeCmdDict_:
+            _sampleExcelCommand += " '" + _key + " : " + fakeCmdDict_[_key]+"'"
 
         # 执行命令
         utils.cmdUtils.doStrAsCmd(

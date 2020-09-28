@@ -124,7 +124,7 @@ def removeMacXattr(filePath_: str):
             _idx += 1
 
 
-# 获取校验参数
+# 获取校验参数[参数配置是已知的，无法配置未知的参数]
 def getOps(opsDict_, parse_):
     # 按照参数指定设置参数解析
     for _key in opsDict_:
@@ -132,7 +132,8 @@ def getOps(opsDict_, parse_):
         parse_.add_option('', "--" + _key, dest=_key, help=_val)
 
     # 取得传入的参数
-    _ops = parse_.parse_args()[0]  # 这里参数值对应的参数名存储在这个_ops字典里
+    _argsParseArr = parse_.parse_args()
+    _opsDict = _argsParseArr[0]  # 这里参数值对应的参数名存储在这个_ops字典里
 
     _opsKeyValueDict = {}
     # 解析每一个参数
@@ -141,7 +142,7 @@ def getOps(opsDict_, parse_):
         if _key == "__option__":
             continue
         # 输出参数中没有这个key
-        if not _ops.__dict__[_key]:
+        if not _opsDict.__dict__[_key]:
             # 如果编辑了可选项，那么可选项内的参数缺失，只提示，不报错
             if "__option__" in opsDict_ and _key in opsDict_["__option__"]:
                 print("WARNING : <" + _key + ":" + opsDict_[_key] + "> 空参数")
@@ -150,12 +151,14 @@ def getOps(opsDict_, parse_):
                 print("ERROR : 必须有 " + _key + " -> " + opsDict_[_key])
                 sys.exit(1)
         else:
-            _opsKeyValueDict[_key] = _ops.__dict__[_key]
+            _opsKeyValueDict[_key] = _opsDict.__dict__[_key]
 
-    return _opsKeyValueDict
+    # 返回为指定key的参数列表
+    _opsList = _argsParseArr[1]
+    return _opsKeyValueDict, _opsList
 
 
 if __name__ == "__main__":
     # doStrAsCmd("PWD", "/Users/jiasy/Documents/develop/", True)
     # removeMacXattr("/Volumes/Files/develop/GitHub/PY_Service/Excel/res/services/File/MoveFiles/MoveFiles.xlsx")
-    removeMacXattr("/Volumes/Files/develop/GitHub/PY_Service/Excel/res/services/File/Json/Json.xlsx")
+    removeMacXattr("/Volumes/Files/develop/GitHub/PY_Service/Excel/res/services/Excel/ExcelToJsonFile/source/Data.xlsx")

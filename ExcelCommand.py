@@ -7,14 +7,13 @@ import sys
 
 opsDict = {}
 # 执行参数必须预先定义，所以，可以通过命令行替换的参数是固定的。
-opsDict["projectFolderPath"] = '工程文件夹'
 opsDict["executeType"] = '执行模式'
 opsDict["excelPath"] = 'excel路径'
 opsDict["sheetName"] = '指定执行的sheet名称，不指定就是全执行'
 # 可选项
 opsDict["__option__"] = [
-    "projectFolderPath",  # 工程目录可以不写。
     "sheetName",  # sheet名，可以不指定
+    "executeType",  # 执行模式，可以不指定
 ]
 
 
@@ -25,6 +24,15 @@ def getPythonCmdStr():
     sys.exit(1)  # 获取样例直接退出
 
 
+# 将 "key : value" 这样的字符串合并到字典里。
+def listMergeToDictCmd(list_: list, dict_: dict):
+    for _i in range(len(list_)):
+        _keyValueStr = list_[_i]
+        _keyValueArr = _keyValueStr.split(" : ")
+        dict_[_keyValueArr[0]] = _keyValueArr[1]
+    return dict_
+
+
 if __name__ == "__main__":
     # getPythonCmdStr()  # 放开注释，获取执行命令的样例。
 
@@ -33,23 +41,26 @@ if __name__ == "__main__":
     _pwd = sysUtils.folderPathFixEnd(os.getcwd())
     print("执行路径 : " + _pwd)
 
-    _ops = cmdUtils.getOps(opsDict, OptionParser())
+    # 参数合并构建
+    _opsDict, _opsList = cmdUtils.getOps(opsDict, OptionParser())
+    _opsDict = listMergeToDictCmd(_opsList, _opsDict)
+
     print("脚本参数 : ")
-    for _key in _ops:
-        print("    " + _key + " : " + _ops[_key])
+    for _key in _opsDict:
+        print("    " + _key + " : " + _opsDict[_key])
 
     _main = Main()  # 创建 Excel 工作流
     _excelApp = _main.createAppByName("Excel")
     _excelApp.start()
 
-    _excelPath = _ops["excelPath"]  # excel 路径
-    _sheetName = _ops["sheetName"]  # sheetName 页名
+    _excelPath = _opsDict["excelPath"]  # excel 路径
+    _sheetName = _opsDict["sheetName"]  # sheetName 页名
     if os.path.exists(_excelPath):  # 通过 解析 Excel 获得 执行命令信息
         try:
             _excelApp.runExcel(
                 _excelPath,  # excel路径
                 _pwd,  # 执行命令路径
-                _ops,  # 命令行参数
+                _opsDict,  # 命令行参数
                 _sheetName,  # Sheet页名
             )
         except Exception as e:
