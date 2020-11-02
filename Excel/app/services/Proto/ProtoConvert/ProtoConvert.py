@@ -34,14 +34,14 @@ class ProtoConvert(ExcelBaseInService):
     def PbStructure(self, dParameters_: dict):
         '''
         1.文件夹结构，必须是二级结构
-        Folder
-        |____Type
-             |____xxRes.proto
-             |____xxReq.proto
-             |____xxSync.proto
+        Folder                         [放置proto文件的文件夹]
+        |____Type                      [proto根据功能模块分组的文件夹]
+             |____xxRes.proto          [发送]
+             |____xxReq.proto          [接收]
+             |____xxSync.proto         [同步或其他]
         2.将文件夹内的proto文件结构整理成文本
-            1.按照文件夹分类
-            2.按照后缀区分类型
+            1.按照文件夹分类，也就是 Type 。
+            2.按照后缀区分类型，也就是发送、接收、其他。
                 请求种类
                     Req 为请求
                     Res 为相应
@@ -111,7 +111,7 @@ if __name__ == "__main__":
         "protoFolderPath": "{resFolderPath}/proto",
         "structureDescriptionFilePath": "{resFolderPath}/pbStructure/structure.txt",
     }
-    #
+
     # Main.excelProcessStepTest(
     #     _baseServiceName,
     #     _subBaseInServiceName,

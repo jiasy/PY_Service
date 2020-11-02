@@ -25,6 +25,19 @@ class GitBaseOperate(ExcelBaseInService):
                 "gitFolderPath": "本地路径",
                 "tag": "tag名",
             },
+            #         changed
+            #             修改 但未 add:    需要把指定文件在工作区的修改全部撤销
+            # 　　　　　　　　　　git checkout -- <filename>   (注意: --后面要空一格)
+            #         added
+            #             add 但未 commit:　需要把暂存区的修改撤销掉（unstage），重新放回工作区
+            # 　　　　　　　　　　 git reset <filename>
+            # 　　　　　　　　　　 git reset HEAD <filename>
+            #         committed
+            #             add 且已 commit 但未 push:　需要版本切换
+            #                  git reset --hard <commitID>
+            "Undo": {
+                "type": "类型，支持changed/added/committed",
+            },
         }
 
     def create(self):

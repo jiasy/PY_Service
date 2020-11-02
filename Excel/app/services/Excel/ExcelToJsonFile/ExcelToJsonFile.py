@@ -69,18 +69,18 @@ if __name__ == "__main__":
     _baseServiceName = os.path.split(_folderSplit[0])[1]  # 再切得到上一层文件夹名
     _subBaseInServiceName = _folderSplit[1]  # 切到的后面就是子服务名称
 
-    # _functionName = "Folder"
-    # _parameterDict = {  # 所需参数
-    #     "sourceFolder": "{resFolderPath}/source",
-    #     # "sourceFolder": "{resFolderPath}/../../CMD/ExecCMD/plistUnpack/",
-    #     "targetFolder": "{resFolderPath}/target"
-    # }
-
-    _functionName = "File"
+    _functionName = "Folder"
     _parameterDict = {  # 所需参数
-        "xlsxPath": "{resFolderPath}/../../File/MoveFiles/MoveFiles.xlsx",
+        "sourceFolder": "{resFolderPath}/source",
+        # "sourceFolder": "{resFolderPath}/../../CMD/ExecCMD/plistUnpack/",
         "targetFolder": "{resFolderPath}/target"
     }
+
+    # _functionName = "File"
+    # _parameterDict = {  # 所需参数
+    #     "xlsxPath": "{resFolderPath}/../../File/MoveFiles/MoveFiles.xlsx",
+    #     "targetFolder": "{resFolderPath}/target"
+    # }
 
     Main.excelProcessStepTest(
         _baseServiceName,
@@ -91,6 +91,8 @@ if __name__ == "__main__":
             "executeType": "单体测试"
         }
     )
+
+    sys.exit(1)
 
     Main.execExcelCommand(
         _baseServiceName,

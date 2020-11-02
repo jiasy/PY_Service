@@ -42,6 +42,14 @@ def getParameterStr(prefix_, str_, isStringBoo):
         return _returnStr
 
 
+# 执行 cmdStr_ ，根据命令行结果，实时终止进程。
+def doOsCmd(cmdStr_: str):
+    print("Running cmd : " + cmdStr_)
+    if os.system(cmdStr_) != 0:
+        print("Execute cmd error : \n    " + cmdStr_)
+        sys.exit(1)
+
+
 # 执行 cmd_ 并且记录输出 log 生成 logPath_ 文件
 def doCmd(cmd_: str, logPath_: str = None):
     _exeLog = "\n".join(os.popen(cmd_).readlines())
@@ -55,11 +63,25 @@ def doCmd(cmd_: str, logPath_: str = None):
 def doStrAsCmd(cmdStr_: str, whichFolder_: str, printPipeLines_: bool = False):
     _tabeSpace = " " * 4
     print(_tabeSpace + "Running cmd : " + cmdStr_)  # 提示正在执行
-    _cmdResult = subprocess.Popen(cmdStr_, shell=True, cwd=whichFolder_, stdout=subprocess.PIPE, encoding='utf-8')
+    # shell：如果该参数为 True，将通过操作系统的 shell 执行指定的命令。
+    # cwd：用于设置子进程的当前目录。
+    _cmdResult = subprocess.Popen(
+        cmdStr_, shell=True,
+        cwd=whichFolder_,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        encoding='utf-8'
+    )
+    # 子进程的PID : _cmdResult.pid
+    # 发送信号到子进程 : send_signal
+    # communicate 该方法会阻塞父进程，直到子进程完成
     _out, _err = _cmdResult.communicate()
+    # 结果转换成行数组
     _pipeLines = _out.splitlines()
-    if _err is not None:
-        print(_tabeSpace + "- ERROR -")  # 打印错误
+    if _cmdResult.returncode != 0:
+        print(_tabeSpace + 'ERROR CODE : ' + str(_cmdResult.returncode))
+        print(_tabeSpace + 'ERROR INFO : ' + str(_err))
         for _i in range(len(_pipeLines)):
             print(_tabeSpace * 2 + _pipeLines[_i])
         sys.exit(1)
@@ -85,8 +107,10 @@ def showXattr(folderPath_: str):
     if sysUtils.os_is_mac():
         listUtils.printList(doStrAsCmdAndGetPipeline("ls -laeO@", folderPath_))
 
-
-# 去掉mac的xattr权限
+# 查权限
+# ls -laeO@
+# 去掉mac的xattr权限，rwx -> 111 -> 7
+# chmod -R 777 'file'
 def removeMacXattr(filePath_: str):
     if sysUtils.os_is_mac():
         _pipelines = doStrAsCmdAndGetPipeline("ls -laeO@", os.path.dirname(filePath_))

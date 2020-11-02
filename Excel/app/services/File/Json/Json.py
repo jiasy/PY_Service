@@ -188,16 +188,15 @@ if __name__ == "__main__":
         "diffJsonFilePath": "{resFolderPath}/diff/diff.json",
     }
 
-
-    # Main.excelProcessStepTest(
-    #     _baseServiceName,
-    #     _subBaseInServiceName,
-    #     _functionName,
-    #     _parameterDict,
-    #     {  # 命令行参数
-    #         "executeType": "单体测试"
-    #     }
-    # )
+    Main.excelProcessStepTest(
+        _baseServiceName,
+        _subBaseInServiceName,
+        _functionName,
+        _parameterDict,
+        {  # 命令行参数
+            "executeType": "单体测试"
+        }
+    )
 
     Main.execExcelCommand(
         _baseServiceName,
