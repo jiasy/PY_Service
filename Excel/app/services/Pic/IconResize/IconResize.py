@@ -5,7 +5,6 @@ from Excel.ExcelBaseInService import ExcelBaseInService
 import os
 from utils import sysUtils
 from utils import folderUtils
-from utils import listUtils
 from utils import pyUtils
 from PIL import Image
 
@@ -35,16 +34,22 @@ class IconResize(ExcelBaseInService):
         _sizeList = dParameters_["sizeList"]
         _targetType = dParameters_["type"]
         _sourcePicList = folderUtils.getFilterFilesInPath(_sourceFolder, [".jpg", ".png"])
+        
         _imList = []  # image信息列表
         for _sourcePicPath in _sourcePicList:  # 要放缩的Icon
             _im = Image.open(_sourcePicPath)  # 加载内存，方便获取信息
             _sizeCompareValue = _im.width / _im.height
             if _sizeCompareValue > 1.1 or _sizeCompareValue < 0.9:  # 校验宽高比，差太多提示一下
                 self.raiseError(pyUtils.getCurrentRunningFunctionName(),
-                                "作为图标，宽高比相差有点儿大")
+                                _sourcePicPath + " 作为图标，宽高比相差有点儿大")
             _imList.append(_im)
         _imList.sort(key=lambda _im: _im.width, reverse=True)  # 按照由大到小的顺序
         _sizeList.sort(key=lambda _size: _size, reverse=True)  # 由大到小
+
+        if _sizeList[0] > _imList[0].width:
+            self.raiseError(pyUtils.getCurrentRunningFunctionName(),
+                            "索取大小的最大值(" + str(_sizeList[0]) + ")大于给与大小的最大值(" + str(_imList[0].width) + ")")
+
         # Image实例.thumbnail((宽, 高))会改变Image实例本身，所以，又大到小进行逐步变化。
         # 由大到小的，将每一个小于自己尺寸的ICON生成一遍。小的会覆盖大的生成的ICON，最后达到想要的结果。
         for _im in _imList:  # 先比大的，后比小的，小于等于最接近的会最后成为目标图片
@@ -58,7 +63,7 @@ class IconResize(ExcelBaseInService):
                         _im.save(_targetIconPath, quality=95, subsampling=0)
                     else:
                         self.raiseError(pyUtils.getCurrentRunningFunctionName(),
-                                        "目标格式，只能是.png和.jpg中的一种")
+                                        _targetType + " 格式无效，目标格式，只能是.png和.jpg中的一种")
 
 
 import Main
@@ -74,7 +79,7 @@ if __name__ == "__main__":
     _parameterDict = {  # 所需参数
         "sourceFolder": "/Volumes/Files/develop/selfDevelop/Swift/AllTest/icon/sourceIcons/",
         "targetFolder": "/Volumes/Files/develop/selfDevelop/Swift/AllTest/icon/targetIcons/",
-        "sizeList": [16, 20, 29, 32, 40, 58, 60, 64, 76, 80, 120, 128, 152, 167, 180, 256, 512, 1024],  # IOS + MAC
+        "sizeList": [16, 20, 29, 32, 40, 58, 60, 64, 76, 80, 87, 120, 128, 152, 167, 180, 256, 512, 1024],  # IOS + MAC
         "type": ".jpg",
     }
 
