@@ -6,35 +6,6 @@ import utils.sysUtils
 import utils.folderUtils
 
 
-# 单一文件，按照相对文件路径平移
-def fileTransformWithFolderStructure(sourceFilePath_, sourceMainFolderPath_, targetMainFolderPath_):
-    sourceMainFolderPath_ = utils.sysUtils.folderPathFixEnd(sourceMainFolderPath_)
-    targetMainFolderPath_ = utils.sysUtils.folderPathFixEnd(targetMainFolderPath_)
-    # 相对路径
-    _relativeFolderPath = utils.sysUtils.getRelativePath(sourceMainFolderPath_, sourceFilePath_)
-    _fileName = None
-    # 不是一个文件夹，就取得它的上一级文件夹路径
-    if not os.path.isdir(_relativeFolderPath):
-        _fileName = os.path.basename(_relativeFolderPath)
-        _relativeFolderPath = os.path.dirname(_relativeFolderPath)
-    # 平移结构后的文件夹目录结构
-    _targetFolderPath = utils.sysUtils.folderPathFixEnd(
-        (targetMainFolderPath_ + _relativeFolderPath).replace('//', '/')
-    )
-    # 路径不存在的话，就创建这个路径
-    utils.folderUtils.makeSureDirIsExists(_targetFolderPath)
-    # 如果是一个文件的话，进行实际的拷贝
-    if _fileName:
-        _sourceFilePath = sourceFilePath_
-        _targetFilePath = os.path.join(_targetFolderPath, _fileName)
-        shutil.copy(_sourceFilePath, _targetFilePath)
-        # 返回拷贝后的路径
-        return _targetFilePath
-    else:
-        # 返回文件夹目录
-        return _targetFolderPath
-
-
 # 文件夹 同结构拷贝
 # fileCopyUtils.copyFilesInFolderTo([".jpg",".png"],"原路径","目标路径","include",false) # 只拷贝后缀列表中的
 # fileCopyUtils.copyFilesInFolderTo([".meta"],"原路径","目标路径","exclude",false)
@@ -45,7 +16,7 @@ def copyFilesInFolderTo(suffixList_: list, src_root: str, dst_root: str, type_: 
     _configObject[type_] = []
     for _i in range(len(suffixList_)):
         _suffix = suffixList_[_i]
-        _configObject[type_].append("*" + _suffix + "$")
+        _configObject[type_].append("*" + _suffix + "$F")
     copyFilesWithConfig([_configObject], src_root, dst_root, log_)
 
 
@@ -128,7 +99,7 @@ def copyFilesWithRules(srcRootDir_, src_, dst_, log_, include_=None, exclude_=No
             _relPath = os.path.relpath(_absPath, srcRootDir_)
             if os.path.isdir(_absPath):
                 _subDst = os.path.join(dst_, _name)
-                copyFilesWithRules(srcRootDir_, _absPath, _subDst, exclude_=exclude_)
+                copyFilesWithRules(srcRootDir_, _absPath, _subDst, log_, exclude_=exclude_)
             elif os.path.isfile(_absPath):
                 if not _in_rules(_relPath, exclude_):
                     _copyDst = utils.sysUtils.folderPathFixEnd(dst_)

@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 from base.supports.App.App import App
 from utils import listUtils
+from utils import folderUtils
+import re
+import os
 
 
 class ExcelWorkFlowApp(App):
@@ -14,8 +17,8 @@ class ExcelWorkFlowApp(App):
         self.start()
 
         # self.ProtoStructAnalyse()  # 解析Proto
-        # self.FileOperate()  # 文件操作
-        self.CopyFiles()  # 拷贝文件夹内容
+        self.FileOperate()  # 文件操作
+        # self.CopyFiles()  # 拷贝文件夹内容
 
         # self.changeAppState("SwiftCodeAnalyse")
         # self.changeAppState("CocosCreatorCodeAnalyse") # 解析 CocosCreator的结构
@@ -38,6 +41,15 @@ class ExcelWorkFlowApp(App):
         # _service.removeFirstCharsInEveryLine("/Users/jiasy/Desktop/BuildAndroid_Fail", 9)
         # _service.removeFirstCharsInEveryLine("/Users/jiasy/Desktop/BuildAndroid_Success", 9)
         # _service.removeFirstCharsInEveryLine("/Users/jiasy/Desktop/BuildIOS", 9)
+
+        _folderPath = "/Volumes/Files/develop/selfDevelop/Swift/未命名文件夹/"
+        files = os.listdir(_folderPath)
+        for _file in files:
+            _filePath = os.path.join(_folderPath, _file)
+            if not os.path.isdir(_filePath):
+                _shortPath = _filePath.split(_folderPath)[1]
+                _newName = _shortPath + ".txt"
+                folderUtils.renameFileInFolder(_folderPath, _shortPath, _newName)
 
     def CopyFiles(self):
         _service = self.getSingleRunningService("CopyFiles")

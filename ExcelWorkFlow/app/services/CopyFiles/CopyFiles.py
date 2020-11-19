@@ -14,7 +14,7 @@ class CopyFiles(BaseService):
         super(CopyFiles, self).create()
 
     # 拷贝，只拷贝并替换已经存在的文件
-    def coverFiles(self, typeFilters_: list, sourceFolderPath_: str, targetFolderPath_: str, isInclode_: bool):
+    def coverFiles(self, typeFilters_: list, sourceFolderPath_: str, targetFolderPath_: str):
         print("CopyFiles -> coverFiles : \n    " + sourceFolderPath_ + " -> " + targetFolderPath_)
         _filePathDict = folderUtils.getFilePathKeyValue(targetFolderPath_, typeFilters_)
         for _fileName, _filePath in _filePathDict.items():
@@ -26,7 +26,7 @@ class CopyFiles(BaseService):
                 print('        copy : ' + str(_fileName))
                 shutil.copy(_sourcefilePath, _tarfilePath)
             else:
-                print('x-      pass : ' + str(_fileName)+" not exist.")
+                print('x-      pass : ' + str(_fileName) + " not exist.")
 
     def destory(self):
         super(CopyFiles, self).destory()

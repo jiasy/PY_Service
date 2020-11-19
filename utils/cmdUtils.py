@@ -42,23 +42,6 @@ def getParameterStr(prefix_, str_, isStringBoo):
         return _returnStr
 
 
-# 执行 cmdStr_ ，根据命令行结果，实时终止进程。
-def doOsCmd(cmdStr_: str):
-    print("Running cmd : " + cmdStr_)
-    if os.system(cmdStr_) != 0:
-        print("Execute cmd error : \n    " + cmdStr_)
-        sys.exit(1)
-
-
-# 执行 cmd_ 并且记录输出 log 生成 logPath_ 文件
-def doCmd(cmd_: str, logPath_: str = None):
-    _exeLog = "\n".join(os.popen(cmd_).readlines())
-    if logPath_:
-        fileUtils.writeFileWithStr(logPath_, _exeLog)
-    # 返回输出，可能调用者会有对它的判断处理
-    return _exeLog
-
-
 # 在 whichFolder_ 路径下，执行 cmdStr_ ，printPipeLines_ 为 True 并将内容输出
 def doStrAsCmd(cmdStr_: str, whichFolder_: str, printPipeLines_: bool = False):
     _tabeSpace = " " * 4
