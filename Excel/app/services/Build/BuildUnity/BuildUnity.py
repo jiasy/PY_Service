@@ -7,6 +7,43 @@ from utils import sysUtils
 from utils import cmdUtils
 from utils import pyUtils
 
+'''
+Unity C# 相关 API
+平台
+    当前的平台
+        EditorUserBuildSettings.activeBuildTarget
+    平台参数
+        BuildTarget.Android
+        BuildTarget.iOS
+        BuildTarget.StandaloneWindows
+            IntPtr.Size == 4 // 32 位
+            IntPtr.Size == 8 // 64 位
+     判断平台
+        EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android
+     切换平台
+        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
+命令行获取和判断
+    static string GetCommandValueByKey(string parameterKey_){
+        foreach (var _keyAndValue in Environment.GetCommandLineArgs()){
+            if (_keyAndValue.ToLower().StartsWith(parameterKey_ + "=")){
+                return _keyAndValue.Split('=')[1];
+            }
+        }
+        return null
+    }
+    var _parameterValue = GetCommandValueByKey("parameterKey");
+    bool _boolValue = false;//默认值
+    if (!string.IsNullOrEmpty(_parameterValue)){
+        _boolValue = bool.Parse(_parameterValue);//设定值
+    }
+    string _strValue = "default";//默认值
+    if (!string.IsNullOrEmpty(_parameterValue)){
+        _strValue = _parameterValue;//设定值
+        if(_strValue.ToLower().Equals("ios")){//平台或其他指定
+            //平台指定操作
+        }
+    }
+'''
 
 class BuildUnity(ExcelBaseInService):
 
