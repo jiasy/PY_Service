@@ -146,6 +146,19 @@ def getSuffixsInFolder(filePath_: str):
     return _suffixList
 
 
+# 获取文件夹中，给定后缀的文件路径列表
+def getFilePathWithSuffixInFolder(filePath_: str, suffix_: str):
+    # 文件夹内所有的文件
+    _fileList = getFileListInFolder(filePath_)
+    _fileWithSuffixList = []
+    for _i in range(len(_fileList)):
+        _filePath = _fileList[_i]
+        _suffix = utils.fileUtils.getSuffix(_filePath)
+        if _suffix == suffix_:
+            _fileWithSuffixList.append(_filePath)
+    return _fileWithSuffixList
+
+
 # 遍历文件夹，按照后缀获取文件列表
 def gci(folderPath_: str, fileFilter_: list, fileList_: list = None):
     if not os.path.isdir(folderPath_):
@@ -243,6 +256,26 @@ def getFileListInFolder(folder_: str, filters_: list = None):
     return _filePathList
 
 
+# 输出后缀种类，以及每种后缀的文件列表
+def printFilePathWithSuffixInFolder(filePath_: str, excludeSuffixList_: list = []):
+    _targetFolder = filePath_
+    _suffixList = getSuffixsInFolder(_targetFolder)
+    print("suffix -------------------------------------------------------")
+    for _i in range(len(_suffixList)):
+        _suffix = _suffixList[_i]
+        print("    " + _suffix)
+    print("suffix and files ---------------------------------------------")
+    for _i in range(len(_suffixList)):
+        _suffix = _suffixList[_i]
+        print("  " + _suffix + " ----------------------")
+        if not _suffix in excludeSuffixList_:
+            _filePathWithSuffixList = getFilePathWithSuffixInFolder(_targetFolder, _suffix)
+            for _j in range(len(_filePathWithSuffixList)):
+                print("    " + _filePathWithSuffixList[_j])
+        else:
+            print("    " + "pass")
+
+
 # 文件夹中查找字符串------------------------------------------------------------------------------------------------------------------------
 # strList_ 要找的字符串的列表
 # fileFilters_ 在什么类型的文件中找
@@ -325,12 +358,11 @@ def doFunForeachFileInFolder(func_, srcFolderPath_: str, filters_: list):
 
 
 if __name__ == "__main__":
-    # 输出某个文件夹内文件种类构成以及大小分别是多少。
-    _targetFolder = "/Volumes/Files/develop/loho/mini-game/miniclient/build/wechatgame/res/"
-    getFolderSizeInfo(_targetFolder)
-
-    # # 获取目标文件夹内，有哪些种类的文件
+    # # 输出某个文件夹内文件种类构成以及大小分别是多少。
     # _targetFolder = "/Volumes/Files/develop/loho/mini-game/miniclient/build/wechatgame/res/"
-    # _suffixList = getSuffixsInFolder(_targetFolder)
-    # for _i in range(len(_suffixList)):
-    #     print(str(_suffixList[_i]))
+    # getFolderSizeInfo(_targetFolder)
+
+    # 获取目标文件夹内，有哪些种类的文件
+    _targetFolder = "/Volumes/18604037792/develop/ShunYuan/NewFarm/Assets/"
+    _withOutFilter = [".meta"]
+    printFilePathWithSuffixInFolder(_targetFolder, _withOutFilter)

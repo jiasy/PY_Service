@@ -127,6 +127,17 @@ def convert_rules(rules):
     return _retRules
 
 
+# 复制文件去文件夹
+def copyFilesToFolder(fileList_: list, folderPath_: str):
+    _folderPath = utils.sysUtils.folderPathFixEnd(folderPath_)
+    utils.folderUtils.makeSureDirIsExists(folderPath_)
+    for _i in range(len(fileList_)):
+        _filePath = fileList_[_i]
+        _baseName = os.path.basename(_filePath)
+        _targetPath = _folderPath + _baseName
+        shutil.copy(_filePath, _targetPath)
+
+
 if __name__ == "__main__":
     # 拷贝图片
     copyFilesInFolderTo(
