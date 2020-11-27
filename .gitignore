@@ -4,3 +4,4 @@
 .idea
 metastore_db
 *.log
+/Excel/res/services/TestTools/AirTest/ROK

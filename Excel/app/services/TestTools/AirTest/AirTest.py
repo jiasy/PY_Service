@@ -5,11 +5,13 @@ from Excel.ExcelBaseInService import ExcelBaseInService
 import os
 import re
 import sys
+import shutil
 from utils import sysUtils
 from utils import fileUtils
 from utils import regUtils
 from utils import fileCopyUtils
 from utils import folderUtils
+from pathlib import Path
 
 
 class AirTest(ExcelBaseInService):
@@ -20,8 +22,9 @@ class AirTest(ExcelBaseInService):
             "ClearCreateJpg": {  # 清理用来识别图像的截屏文件。
                 "createJpgFolder": "用来识别图片的手机截屏存放文件夹",
             },
-            "GetPngUseByCode": {  # 将代码中使用到的png图片获取到新文件夹。删除或备份png文件，将新文件夹下的文件拷贝回去，就做到了去除无用png。
-                "projectFolder": ".air .py .png 所在的工程文件夹"
+            "BackupCodesAndPngs": {  # 将代码中使用到的png图片获取到新文件夹。删除或备份png文件，将新文件夹下的文件拷贝回去，就做到了去除无用png。
+                "projectFolder": ".air .py .png 所在的工程文件夹",
+                "projectName": "测试工程名",
             }
         }
 
@@ -41,8 +44,9 @@ class AirTest(ExcelBaseInService):
             if _jpgResult:
                 fileUtils.removeExistFile(_jpgPath)
 
-    def GetPngUseByCode(self, dParameters_):
+    def BackupCodesAndPngs(self, dParameters_):
         _projectFolderPath = sysUtils.folderPathFixEnd(dParameters_["projectFolder"])
+        _projectName = dParameters_["projectName"]
         _airAndPyPathList = folderUtils.getFilterFilesInPath(_projectFolderPath, [".air", ".py"])
         # 匹配 r"tpl1606022416813.png" 这样的内容
         _groupReg = r"r\"(.*)\.png\""
@@ -56,7 +60,28 @@ class AirTest(ExcelBaseInService):
                 _pngPath = _projectFolderPath + "/" + _pngNameWithOutSuffix + ".png"
                 if not _pngPath in _pngPathList:  # 没有记录过，就记录
                     _pngPathList.append(_pngPath)
-        fileCopyUtils.copyFilesToFolder(_pngPathList, _projectFolderPath + "tempPics/")
+        _tempPicsFolderPath = _projectFolderPath + "tempPics/"
+        print("    拷贝代码实际使用图片到临时目录 : " + _tempPicsFolderPath)
+        fileCopyUtils.copyFilesToFolder(_pngPathList, _tempPicsFolderPath)
+        _backupProjectFolderPath = str(Path(self.subResPath + "/" + _projectName))  # 在资源文件内备份
+        print('    备份位置 : ' + str(_backupProjectFolderPath))
+        folderUtils.makeSureDirIsExists(_backupProjectFolderPath)
+        print('    备份代码')
+        fileCopyUtils.copyFilesInFolderTo(
+            [".py", ".air"],
+            _projectFolderPath,
+            _backupProjectFolderPath,
+            "include"
+        )
+        print('    备份图片')
+        fileCopyUtils.copyFilesInFolderTo(
+            [".png"],
+            _tempPicsFolderPath,
+            _backupProjectFolderPath,
+            "include"
+        )
+        print('    删除临时目录')
+        shutil.rmtree(_tempPicsFolderPath)
 
 
 import Main
@@ -82,10 +107,11 @@ if __name__ == "__main__":
             "executeType": "单体测试"
         }
     )
-
-    _functionName = "GetPngUseByCode"
-    _parameterDict = {  # 所需参数
+    # sys.exit(1)
+    _functionName = "BackupCodesAndPngs"
+    _parameterDict = {  #
         "projectFolder": "/Volumes/18604037792/develop/AirTest/ROK/",
+        "projectName": "ROK"
     }
 
     Main.excelProcessStepTest(
@@ -97,7 +123,6 @@ if __name__ == "__main__":
             "executeType": "单体测试"
         }
     )
-
 
     sys.exit(1)
     Main.execExcelCommand(

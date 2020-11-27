@@ -16,7 +16,7 @@ def copyFilesInFolderTo(suffixList_: list, src_root: str, dst_root: str, type_: 
     _configObject[type_] = []
     for _i in range(len(suffixList_)):
         _suffix = suffixList_[_i]
-        _configObject[type_].append("*" + _suffix + "$F")
+        _configObject[type_].append("*" + _suffix + "$")
     copyFilesWithConfig([_configObject], src_root, dst_root, log_)
 
 
