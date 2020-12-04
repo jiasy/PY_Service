@@ -51,7 +51,9 @@ class ProtoStructAnalyse(BaseService):
     #      |____xxSync.proto
     # 这样的结构，嵌套的结构。
     def analyseProtoStructureInFolder(self, protobufFolderPath_):
+        # 整个文件夹中的所有proto的结构
         self.buildProtoStructure(protobufFolderPath_)
+        # 展开结构成结构列表，逐行保存成字符串数组
         _tableStructureStrList = self.expandTableStructureInFolder(protobufFolderPath_)
         return _tableStructureStrList
 
@@ -162,7 +164,7 @@ class ProtoStructAnalyse(BaseService):
         _tableInfo = self._tableFullNameDict[tableName_]
         _logStrList = []
         if depth_ == 0:
-            _common = _tableInfo["common"]
+            _common = _tableInfo["common"]  # 注释
             if not _common == "":
                 _logStrList.append("{0}{1} // {2}".format(
                     baseStr_,
@@ -194,12 +196,12 @@ class ProtoStructAnalyse(BaseService):
                     _index = _property["index"]
 
                     _logStrList.append("{0}{1}{2} {3} {4} {5}".format(
-                        baseStr_,
-                        "|      " * (depth_ + 1),
-                        _index,
-                        _needTypeStr,
-                        _propertyName,
-                        _dataType
+                        baseStr_,  # TAB间隔
+                        "|      " * (depth_ + 1),  # 层级间隔
+                        _index,  # 字段序号
+                        _needTypeStr,  # proto 字段类型 转换后 的标示
+                        _propertyName,  # 字段名
+                        _dataType  # 类型
                     ))
                     if not self.isNormalProperty(_dataType):
                         _subLogStrList = self.expandTableStructure(_dataType, (depth_ + 1), baseStr_)
@@ -266,19 +268,20 @@ class ProtoStructAnalyse(BaseService):
 
     def buildProtoStructure(self, protoFolderPath_: str):
         _printInfo = False
+        # 获取文件夹内所有proto文件定义的协议格式，做成键值对
         _tableDict = self.getTableInfoDictFormFolder(protoFolderPath_)
-
+        # 表结构文件名 和 表结构内容 的循环
         for _shortTableName, _tableInfo in _tableDict.items():
             _protoName = _tableInfo["protoName"]
+            # < 协议名 : 协议结构 > 缓存到当前运行时构成的键值表中
             self._tableFullNameDict[_protoName] = _tableInfo
 
         # 整理成全名字典
         for _tableFullName, _tableInfo in self._tableFullNameDict.items():
-            _type = _tableInfo["type"]
-
+            _type = _tableInfo["type"]  # 获取 表的 类型
             if _type == "enum":
                 if not (_tableFullName in self._enumTableList):
-                    self._enumTableList.append(_tableFullName)
+                    self._enumTableList.append(_tableFullName)  # 枚举类的记录到枚举列表中
 
             _common = ''
             if "common" in _tableInfo:

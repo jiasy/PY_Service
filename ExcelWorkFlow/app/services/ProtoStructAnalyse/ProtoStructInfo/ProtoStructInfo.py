@@ -212,7 +212,7 @@ class ProtoStructInfo(BaseInService):
     '''
     解析protobuf，返回这样的结构
         +--tableList [0]                             - 包含的表列表
-        |      +--type
+        |      +--type                               - table/enum
         |      +--propertyList [0]                   - 属性列表 
         |      |      +--propertyName                - 属性名
         |      |      +--needType                    - 需求类型
@@ -317,7 +317,7 @@ class ProtoStructInfo(BaseInService):
                         # _currentEnumDict["tableName"] = _enumReg.group(1)
                         # _currentEnumDict["lowerTableName"] = _currentEnumDict["tableName"].lower()
                     else:
-                        _enumTypeReg = re.search(r'\t*([0-9a-z-A-Z_\.]+)\s*=\s*([0-9])\s*;\s*(//\s*(.*)|)', _line)
+                        _enumTypeReg = re.search(r'\t*([0-9a-z-A-Z_\.]+)\s*=\s*([0-9]+)\s*;\s*(//\s*(.*)|)', _line)
                         if _enumTypeReg:
                             _currentProperty = {}
                             _currentProperty["propertyName"] = _enumTypeReg.group(1)
